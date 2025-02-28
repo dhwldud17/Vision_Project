@@ -18,13 +18,18 @@ namespace JidamVision.Core
         public static readonly int MAX_GRAB_BUF = 5;
 
         private ImageSpace _imageSpace = null;
-        private HikRobotCam _grabManager = null;
+        private GrabModel _grabManager = null;
+        private CameraType _camType = CameraType.WebCam;  //카메라 정해줌
         private PreviewImage _previewImage = null;
+
         public ImageSpace ImageSpace
         {
             get => _imageSpace;
         }
-
+        public PreviewImage PreView
+        {
+            get => _previewImage;
+        }
         public bool LiveMode { get; set; } = false;
 
         public InspStage() { }
@@ -33,27 +38,39 @@ namespace JidamVision.Core
         {
             _imageSpace = new ImageSpace();
             _previewImage = new PreviewImage();
-            _grabManager = new HikRobotCam();
-
-            if (_grabManager.Create() == false)
+            switch (_camType)
             {
-                return false;
+                case CameraType.WebCam:
+                    {
+                        _grabManager = new WebCam();//카메라가 webcam이면 webcam객체 _grabManager에 할당
+                        break;
+                    }
+                case CameraType.HikRobotCam:
+                    {
+                        _grabManager = new HikRobotCam();
+                        break;
+                    }
+                default:
+                    {
+                        Console.WriteLine("Not supported camera type!");
+                        return false;
+                    }
             }
-            if (_grabManager.Open() == false)
+
+            if (_grabManager.InitGrab() == true) //
             {
-                return false;
+                _grabManager.TransferCompleted += _multiGrab_TransferCompleted;
+
+                InitModelGrab(MAX_GRAB_BUF);
             }
-
-
-            _grabManager.TransferCompleted += _multiGrab_TransferCompleted;
-
-            InitModelGrab(MAX_GRAB_BUF);
+           
 
 
             return true;
         }
         private void _multiGrab_TransferCompleted(object sender, object e)
         {
+
             int bufferIndex = (int)e;
             Console.WriteLine($"_multiGrab_TransferCompleted {bufferIndex}");
 
@@ -61,15 +78,30 @@ namespace JidamVision.Core
 
             DisplayGrabImage(bufferIndex);
 
+            if (_previewImage != null)
+            {
+                Bitmap bitmap = ImageSpace.GetBitmap(0);
+                _previewImage.SetImage(BitmapConverter.ToMat(bitmap));
+            }
+
+            if (LiveMode == true)
+            {
+                Task.Factory.StartNew(() =>
+                {
+                    System.Threading.Thread.Sleep(100);
+                    _grabManager.Grab(bufferIndex, true);
+                });
+            }
+
         }
 
-        public void InitModelGrab(int bufferCount)
+        public void InitModelGrab(int bufferCount)//
         {
             if (_grabManager == null)
                 return;
 
             int pixelBpp = 8;
-            //_grabManager.GetPixelBpp(out pixelBpp);
+            _grabManager.GetPixelBpp(out pixelBpp); //한픽셀당 비트수
 
             int inspectionWidth;
             int inspectionHeight;
@@ -83,7 +115,7 @@ namespace JidamVision.Core
 
             SetBuffer(bufferCount);
 
-            //_grabManager.SetExposureTime(25000);
+            _grabManager.SetExposureTime(25000);
 
         }
 
@@ -113,8 +145,8 @@ namespace JidamVision.Core
             if (_grabManager == null)
                 return;
 
-            // _grabManager.Grab(bufferIndex, true);
-            _grabManager.Grab();
+            _grabManager.Grab(bufferIndex, true);
+           
         }
 
 

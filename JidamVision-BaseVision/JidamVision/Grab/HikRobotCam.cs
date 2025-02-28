@@ -1,5 +1,6 @@
 ﻿using MvCamCtrl.NET; //MyCamera 라이브러리
 using OpenCvSharp.Dnn;
+using OpenCvSharp.LineDescriptor;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,64 +8,24 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using static MvCamCtrl.NET.MyCamera;
+using System.Threading;
+using OpenCvSharp;
 
 namespace JidamVision.Grab
 {
-    struct GrabUserBuffer
+    
+    internal class HikRobotCam : GrabModel
     {
-        private byte[] _imageBuffer;
-        private IntPtr _imageBufferPtr;
-        private GCHandle _imageHandle;
-
-        public byte[] ImageBuffer
-        {
-            get
-            {
-                return _imageBuffer;
-            }
-            set
-            {
-                _imageBuffer = value;
-            }
-        }
-        public IntPtr ImageBufferPtr
-        {
-            get
-            {
-                return _imageBufferPtr;
-            }
-            set
-            {
-                _imageBufferPtr = value;
-            }
-        }
-        public GCHandle ImageHandle
-        {
-            get
-            {
-                return _imageHandle;
-            }
-            set
-            {
-                _imageHandle = value;
-            }
-        }
-    }
-    internal class HikRobotCam
-    {
+        //카메라가 HikRobotCam 일 때 
         private MyCamera _camera = null;
 
-        public delegate void GrabEventHandler<T>(object sender, T obj = null) where T : class; 
-        //delegate: 외부에서 만든 함수 불러와서 사용 / 메서드의 참조를 저장하는 타입(특정한 형태의 메서드 가리키는 변수처럼 사용)
-        public event GrabEventHandler<object> GrabCompleted;
-        public event GrabEventHandler<object> TransferCompleted;
+        
 
         int nRet = MyCamera.MV_OK;
         IntPtr pBufForConvert = IntPtr.Zero;
         public static MyCamera.cbOutputExdelegate ImageCallback;
-
-        protected GrabUserBuffer[] _userImageBuffer = null;
-        public int BufferIndex { get; set; } = 0; //변수가 아니라 프로포티(?)이기때문에 대문자로시작
+        
+        
 
         // 이미지 캡처 시 자동 호출되는 콜백 함수
         private void ImageCallbackFunc(IntPtr pData, ref MyCamera.MV_FRAME_OUT_INFO_EX pFrameInfo, IntPtr pUser)
@@ -100,152 +61,190 @@ namespace JidamVision.Grab
 
             OnTransferCompleted(BufferIndex);
         }
-
-        internal bool Create() //성공하면(끝까지 갔을 때) true, 실패시 false
+        private string _strIpAddr = "";
+        private bool _disposed = false;
+        internal override bool Create(string strIpAddr = null)
         {
+            Environment.SetEnvironmentVariable("PYLON_GIGE_HEARTBEAT", "5000" /*ms*/);
 
-            MyCamera _camera = new MyCamera();
+            _strIpAddr = strIpAddr;
 
-            // ch:枚举设备 | en:Enum deivce
-            MyCamera.MV_CC_DEVICE_INFO_LIST stDevList = new MyCamera.MV_CC_DEVICE_INFO_LIST();
-            nRet = MyCamera.MV_CC_EnumDevices_NET(MyCamera.MV_GIGE_DEVICE | MyCamera.MV_USB_DEVICE, ref stDevList);
-            if (MyCamera.MV_OK != nRet)
-            {
-                Console.WriteLine("Enum device failed:{0:x8}", nRet);
-                return false; //break대신
-            }
-            Console.WriteLine("Enum device count :{0} \n", stDevList.nDeviceNum);
-            if (0 == stDevList.nDeviceNum)
-            {
-                return false;
-            }
-
-            MyCamera.MV_CC_DEVICE_INFO stDevInfo;
-
-            // ch:打印设备信息 | en:Print device info
-            for (Int32 i = 0; i < stDevList.nDeviceNum; i++)
-            {
-                stDevInfo = (MyCamera.MV_CC_DEVICE_INFO)Marshal.PtrToStructure(stDevList.pDeviceInfo[i], typeof(MyCamera.MV_CC_DEVICE_INFO));
-
-                if (MyCamera.MV_GIGE_DEVICE == stDevInfo.nTLayerType)
-                {
-                    MyCamera.MV_GIGE_DEVICE_INFO stGigEDeviceInfo = (MyCamera.MV_GIGE_DEVICE_INFO)MyCamera.ByteToStruct(stDevInfo.SpecialInfo.stGigEInfo, typeof(MyCamera.MV_GIGE_DEVICE_INFO));
-                    uint nIp1 = ((stGigEDeviceInfo.nCurrentIp & 0xff000000) >> 24);
-                    uint nIp2 = ((stGigEDeviceInfo.nCurrentIp & 0x00ff0000) >> 16);
-                    uint nIp3 = ((stGigEDeviceInfo.nCurrentIp & 0x0000ff00) >> 8);
-                    uint nIp4 = (stGigEDeviceInfo.nCurrentIp & 0x000000ff);
-                    Console.WriteLine("[device " + i.ToString() + "]:");
-                    Console.WriteLine("DevIP:" + nIp1 + "." + nIp2 + "." + nIp3 + "." + nIp4);
-                    Console.WriteLine("UserDefineName:" + stGigEDeviceInfo.chUserDefinedName + "\n");
-                }
-                else if (MyCamera.MV_USB_DEVICE == stDevInfo.nTLayerType)
-                {
-                    MyCamera.MV_USB3_DEVICE_INFO stUsb3DeviceInfo = (MyCamera.MV_USB3_DEVICE_INFO)MyCamera.ByteToStruct(stDevInfo.SpecialInfo.stUsb3VInfo, typeof(MyCamera.MV_USB3_DEVICE_INFO));
-                    Console.WriteLine("[device " + i.ToString() + "]:");
-                    Console.WriteLine("SerialNumber:" + stUsb3DeviceInfo.chSerialNumber);
-                    Console.WriteLine("UserDefineName:" + stUsb3DeviceInfo.chUserDefinedName + "\n");
-                }
-            }
-
-            Int32 nDevIndex = 0;
-            Console.Write("Please input index(0-{0:d}):", stDevList.nDeviceNum - 1);
             try
             {
-                nDevIndex = Convert.ToInt32(Console.ReadLine());
-            }
-            catch
-            {
-                Console.Write("Invalid Input!\n");
-                return false;
-            }
+                Int32 nDevIndex = 0;
 
-            if (nDevIndex > stDevList.nDeviceNum - 1 || nDevIndex < 0)
-            {
-                Console.Write("Input Error!\n");
-                return false;
-            }
-            stDevInfo = (MyCamera.MV_CC_DEVICE_INFO)Marshal.PtrToStructure(stDevList.pDeviceInfo[nDevIndex], typeof(MyCamera.MV_CC_DEVICE_INFO));
+                int nRet = MyCamera.MV_OK;
 
-            // ch:创建设备 | en: Create device
-            nRet = _camera.MV_CC_CreateDevice_NET(ref stDevInfo);
-            if (MyCamera.MV_OK != nRet)
+                // Enum deivce
+                MyCamera.MV_CC_DEVICE_INFO_LIST stDevList = new MyCamera.MV_CC_DEVICE_INFO_LIST();
+                nRet = MyCamera.MV_CC_EnumDevices_NET(MyCamera.MV_GIGE_DEVICE, ref stDevList);
+                if (MyCamera.MV_OK != nRet)
+                {
+                    Console.WriteLine("Enum device failed:{0:x8}", nRet);
+                    return false;
+                }
+                Console.WriteLine("Enum device count :{0}", stDevList.nDeviceNum);
+                if (0 == stDevList.nDeviceNum)
+                {
+                    return false;
+                }
+
+                MyCamera.MV_CC_DEVICE_INFO stDevInfo;
+
+                // ch:打印设备信息 | en:Print device info
+                for (Int32 i = 0; i < stDevList.nDeviceNum; i++)
+                {
+                    stDevInfo = (MyCamera.MV_CC_DEVICE_INFO)Marshal.PtrToStructure(stDevList.pDeviceInfo[i], typeof(MyCamera.MV_CC_DEVICE_INFO));
+
+                    if (MyCamera.MV_GIGE_DEVICE == stDevInfo.nTLayerType)
+                    {
+                        MyCamera.MV_GIGE_DEVICE_INFO stGigEDeviceInfo = (MyCamera.MV_GIGE_DEVICE_INFO)MyCamera.ByteToStruct(stDevInfo.SpecialInfo.stGigEInfo, typeof(MyCamera.MV_GIGE_DEVICE_INFO));
+                        uint nIp1 = ((stGigEDeviceInfo.nCurrentIp & 0xff000000) >> 24);
+                        uint nIp2 = ((stGigEDeviceInfo.nCurrentIp & 0x00ff0000) >> 16);
+                        uint nIp3 = ((stGigEDeviceInfo.nCurrentIp & 0x0000ff00) >> 8);
+                        uint nIp4 = (stGigEDeviceInfo.nCurrentIp & 0x000000ff);
+
+                        Console.WriteLine("[device " + i.ToString() + "]:");
+                        Console.WriteLine("DevIP:" + nIp1 + "." + nIp2 + "." + nIp3 + "." + nIp4);
+                        Console.WriteLine("UserDefineName:" + stGigEDeviceInfo.chUserDefinedName + "\n");
+
+                        string strDevice = "[device " + i.ToString() + "]:";
+                        string strIP = nIp1 + "." + nIp2 + "." + nIp3 + "." + nIp4;
+
+                        if (strIP == strIpAddr)
+                        {
+                            nDevIndex = i;
+                            break;
+                        }
+                    }
+                }
+
+                if (nDevIndex < 0 || nDevIndex > stDevList.nDeviceNum - 1)
+                {
+                    Console.WriteLine("Invalid selected device number:{0}", nDevIndex);
+                    return false;
+                }
+
+                // Open device
+                if (_camera == null)
+                {
+                    _camera = new MyCamera();
+                }
+
+                stDevInfo = (MyCamera.MV_CC_DEVICE_INFO)Marshal.PtrToStructure(stDevList.pDeviceInfo[nDevIndex], typeof(MyCamera.MV_CC_DEVICE_INFO));
+
+                // Create device
+                nRet = _camera.MV_CC_CreateDevice_NET(ref stDevInfo);
+                if (MyCamera.MV_OK != nRet)
+                {
+                    Console.WriteLine("Create device failed:{0:x8}", nRet);
+                    return false;
+                }
+
+                _disposed = false;
+            }
+            catch (Exception ex)
             {
-                Console.WriteLine("Create device failed:{0:x8}", nRet);
+                //MessageBox.Show(ex.Message);
+                ex.ToString();
                 return false;
             }
             return true;
         }
 
-        internal bool Open()
+        internal override bool Open()
         {
-            int nRet = MyCamera.MV_OK;
-
-
-
-            // ch:打开设备 | en:Open device
-            nRet = _camera.MV_CC_OpenDevice_NET();
-            if (MyCamera.MV_OK != nRet)
+            Thread.Sleep(500);
+            try
             {
-                Console.WriteLine("Open device failed:{0:x8}", nRet);
-                return false;
-            }
+                if (_camera == null)
+                    return false;
 
-            // ch:探测网络最佳包大小(只对GigE相机有效) | en:Detection network optimal package size(It only works for the GigE camera)
-            //GiGe Camera만 사용할거라 Gige camera if문 삭제함
-            int nPacketSize = _camera.MV_CC_GetOptimalPacketSize_NET();
-            if (nPacketSize > 0)
-            {
-                nRet = _camera.MV_CC_SetIntValue_NET("GevSCPSPacketSize", (uint)nPacketSize);
-                if (nRet != MyCamera.MV_OK)
+                if (!_camera.MV_CC_IsDeviceConnected_NET())
                 {
-                    Console.WriteLine("Warning: Set Packet Size failed {0:x8}", nRet);
+                    int nRet = _camera.MV_CC_OpenDevice_NET();
+                    if (MyCamera.MV_OK != nRet)
+                    {
+                        _camera.MV_CC_DestroyDevice_NET();
+                        Console.WriteLine("Device open fail!", nRet);
+                        return false;
+                    }
+
+                    //Detection network optimal package size(It only works for the GigE camera)
+                    int nPacketSize = _camera.MV_CC_GetOptimalPacketSize_NET();
+                    if (nPacketSize > 0)
+                    {
+                        nRet = _camera.MV_CC_SetIntValue_NET("GevSCPSPacketSize", (uint)nPacketSize);
+                        if (nRet != MyCamera.MV_OK)
+                        {
+                            Console.WriteLine("Set Packet Size failed!", nRet);
+                        }
+                    }
+
+                    _camera.MV_CC_SetEnumValue_NET("TriggerMode", (uint)MyCamera.MV_CAM_TRIGGER_MODE.MV_TRIGGER_MODE_ON);
+
+                    if (HardwareTrigger)
+                    {
+                        _camera.MV_CC_SetEnumValue_NET("TriggerSource", (uint)MyCamera.MV_CAM_TRIGGER_SOURCE.MV_TRIGGER_SOURCE_LINE0);
+                    }
+                    else
+                    {
+                        _camera.MV_CC_SetEnumValue_NET("TriggerSource", (uint)MyCamera.MV_CAM_TRIGGER_SOURCE.MV_TRIGGER_SOURCE_SOFTWARE);
+                    }
+
+                    //Register image callback
+                    ImageCallback = new cbOutputExdelegate(ImageCallbackFunc);
+                    nRet = _camera.MV_CC_RegisterImageCallBackEx_NET(ImageCallback, IntPtr.Zero);
+                    if (MyCamera.MV_OK != nRet)
+                    {
+                        Console.WriteLine("Register image callback failed!");
+                        return false;
+                    }
+
+                    // start grab image
+                    nRet = _camera.MV_CC_StartGrabbing_NET();
+                    if (MyCamera.MV_OK != nRet)
+                    {
+                        Console.WriteLine("Start grabbing failed:{0:x8}", nRet);
+                        return false;
+                    }
                 }
             }
-            else
+            catch (Exception ex)
             {
-                Console.WriteLine("Warning: Get Packet Size failed {0:x8}", nPacketSize);
-            }
-
-
-            // ch:设置触发模式为on || en:set trigger mode as on //동영상말고 grab할거라 트리거모드 ON 으로해놈
-            nRet = _camera.MV_CC_SetEnumValue_NET("TriggerMode", (uint)MyCamera.MV_CAM_TRIGGER_MODE.MV_TRIGGER_MODE_ON); //1대신에 직관적으로 
-            if (MyCamera.MV_OK != nRet)
-            {
-                Console.WriteLine("Set TriggerMode failed:{0:x8}", nRet);
+                Console.WriteLine(ex.ToString());
                 return false;
             }
 
-
-            // 9. 이미지 캡처 시 호출할 콜백 함수 등록  //Grab_callback.s에서 가져옴
-            ImageCallback = new MyCamera.cbOutputExdelegate(ImageCallbackFunc);
-            nRet = _camera.MV_CC_RegisterImageCallBackEx_NET(ImageCallback, IntPtr.Zero);
-            if (MyCamera.MV_OK != nRet)
-            {
-                Console.WriteLine("Register image callback failed!");
-                return false;
-            }
-
-            // ch:开启抓图 || en: start grab image
-            nRet = _camera.MV_CC_StartGrabbing_NET();
-            if (MyCamera.MV_OK != nRet)
-            {
-                Console.WriteLine("Start grabbing failed:{0:x8}", nRet);
-                return false;
-            }
             return true;
         }
-        internal bool Grab()
+        internal override bool Grab(int bufferIndex, bool waitDone)
         {
+            if (_camera == null)
+                return false;
 
-            // ch:触发命令 | en:Trigger command  //찍기
-            int nRet = _camera.MV_CC_SetCommandValue_NET("TriggerSoftware");
-            if (MyCamera.MV_OK != nRet)
+            BufferIndex = bufferIndex;
+            bool err = true;
+
+            if (!HardwareTrigger)
             {
-                Console.WriteLine("Trigger Software Fail!", nRet);
+                try
+                {
+                    int nRet = _camera.MV_CC_SetCommandValue_NET("TriggerSoftware");
+                    if (MyCamera.MV_OK != nRet)
+                    {
+                        err = false;
+                    }
+                }
+                catch
+                {
+                    err = false;
+                }
             }
-            return true;
+
+            return err;
         }
-        internal bool Close()
+        internal override bool Close()
         { // ch:停止抓图 | en:Stop grabbing
             nRet = _camera.MV_CC_StopGrabbing_NET();
             if (MyCamera.MV_OK != nRet)
@@ -271,7 +270,7 @@ namespace JidamVision.Grab
             }
             return true;
         }
-        internal bool GetResolution(out int width, out int height, out int stride)
+        internal override bool GetResolution(out int width, out int height, out int stride)
         {
             width = 0;
             height = 0;
@@ -312,30 +311,131 @@ namespace JidamVision.Grab
 
             return true;
         }
-        internal bool InitBuffer(int bufferCount = 1)
+
+       
+        
+        internal override bool SetExposureTime(long exposureTime)//사용자가 지정한 Exposure 값을 카메라에 설정
         {
-            if (bufferCount < 1)
+            if (_camera == null)
+                return false;
+            _camera.MV_CC_SetEnumValue_NET("ExposureAuto", 0);
+            int nRet = _camera.MV_CC_SetFloatValue_NET("ExposureTime", exposureTime);//노출값 입력받아옴
+            if (nRet != MyCamera.MV_OK)
+            {
+                Console.WriteLine("Set Exposure Time Fail!");
+            }
+            return true;
+        }
+
+        internal override bool SetGain(long gain)//사용자가 지정한 Gain 값을 카메라에 설정
+        {
+            if (_camera == null)
+                return false;
+            _camera.MV_CC_SetEnumValue_NET("GainAuto", 0); //설정을 0으로 설정하여 자동 Gain 조정을 비활성화
+
+            int nRet = _camera.MV_CC_SetFloatValue_NET("Gain", gain); //해당 메서드를 사용하여 카메라의 Gain 값을 설정
+
+            if (nRet != MyCamera.MV_OK)
+            {
+                Console.WriteLine("Set Gain Fail!"); //실패 시 콘솔에 오류메세지 출력
+            }
+            return true;
+        }
+        internal override bool GetExposureTime(out long exposureTime)//카메라에 현재 설정된 Exposure 값을 가져와서 문자열로 반환
+        { //파라미터 out: out 키워드를 사용하면 메서드가 여러 개의 값을 반환
+            exposureTime = 0;
+            if (_camera == null)
+                return false;
+            MyCamera.MVCC_FLOATVALUE stParam = new MyCamera.MVCC_FLOATVALUE();
+            int nRet = _camera.MV_CC_GetFloatValue_NET("ExposureTime", ref stParam);
+            if (MyCamera.MV_OK == nRet)
+            {
+                exposureTime = (long)stParam.fCurValue;
+            }
+
+            return true;
+        }
+        internal override bool GetGain(out long gain)  //카메라에 현재 설정된 Gain 값을 가져와서 문자열로 반환
+        {
+            MyCamera.MVCC_FLOATVALUE stParam = new MyCamera.MVCC_FLOATVALUE();
+            gain = 0;
+            if (_camera == null)
                 return false;
 
-            _userImageBuffer = new GrabUserBuffer[bufferCount];
+            nRet = _camera.MV_CC_GetFloatValue_NET("Gain", ref stParam); //해당 메서드를 사용하여 카메라의 Gain 값을 가져옴
+
+            if (MyCamera.MV_OK == nRet) //가져온 Gain 값이 성공적으로 반환되면, gain 문자열에 현재 Gain 값을 소수점 한 자리까지 문자열로 변환하여 저장
+            {
+                gain = (long)stParam.fCurValue;
+            }
+            return true;
+        }
+        internal override bool SetTriggerMode(bool hardwareTrigger)
+        {
+            if (_camera is null)
+                return false;
+
+            HardwareTrigger = hardwareTrigger;
+
+            if (HardwareTrigger)
+            {
+                _camera.MV_CC_SetEnumValue_NET("TriggerSource", (uint)MyCamera.MV_CAM_TRIGGER_SOURCE.MV_TRIGGER_SOURCE_LINE0);
+            }
+            else
+            {
+                _camera.MV_CC_SetEnumValue_NET("TriggerSource", (uint)MyCamera.MV_CAM_TRIGGER_SOURCE.MV_TRIGGER_SOURCE_SOFTWARE);
+            }
+
+            return true;
+        }
+        internal override bool GetPixelBpp(out int pixelBpp)
+        {
+            pixelBpp = 8;
+            if (_camera == null)
+                return false;
+
+            //Get Pixel Format
+            MyCamera.MVCC_ENUMVALUE stEnumValue = new MyCamera.MVCC_ENUMVALUE();
+            int nRet = _camera.MV_CC_GetEnumValue_NET("PixelFormat", ref stEnumValue);
+            if (MyCamera.MV_OK != nRet)
+            {
+                Console.WriteLine("Get PixelFormat failed: nRet {0:x8}", nRet);
+                return false;
+            }
+
+            MyCamera.MvGvspPixelType ePixelFormat = (MyCamera.MvGvspPixelType)stEnumValue.nCurValue;
+
+            if (ePixelFormat == MvGvspPixelType.PixelType_Gvsp_Mono8)
+                pixelBpp = 8;
+            else
+                pixelBpp = 24; //(컬러니까 *3)
+
             return true;
         }
 
-        internal bool SetBuffer(byte[] buffer, IntPtr bufferPtr, GCHandle bufferHandle, int bufferIndex = 0)
+        #region Dispose
+        internal override void Dispose()
         {
-            _userImageBuffer[bufferIndex].ImageBuffer = buffer;
-            _userImageBuffer[bufferIndex].ImageBufferPtr = bufferPtr;
-            _userImageBuffer[bufferIndex].ImageHandle = bufferHandle;
+            Dispose(disposing: true);
+        }
 
-            return true;
-        }
-        protected void OnGrabCompleted(object obj = null)
+        internal void Dispose(bool disposing)
         {
-            GrabCompleted?.Invoke(this, obj);
+            if (_disposed)
+                return;
+
+            if (disposing)
+            {
+                _camera.MV_CC_CloseDevice_NET();
+                _camera.MV_CC_DestroyDevice_NET();
+            }
+            _disposed = true;
         }
-        protected void OnTransferCompleted(object obj = null) //전송 처리가됬다
+
+        ~HikRobotCam()
         {
-            TransferCompleted?.Invoke(this, obj);
+            Dispose(disposing: false);
         }
+        #endregion
     }
 }

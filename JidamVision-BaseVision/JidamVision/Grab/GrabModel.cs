@@ -1,11 +1,9 @@
-﻿using MvCamCtrl.NET;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
-using static MvCamCtrl.NET.MyCamera;
 
 namespace JidamVision.Grab
 {
@@ -56,7 +54,7 @@ namespace JidamVision.Grab
             }
         }
     }
-    
+
     internal abstract class GrabModel
     {
         public delegate void GrabEventHandler<T>(object sender, T obj = null) where T : class;
@@ -94,9 +92,33 @@ namespace JidamVision.Grab
 
         internal virtual bool SetTriggerMode(bool hardwareTrigger) { return true; }
 
-        internal abstract bool InitGrab();
-        internal abstract bool InitBuffer(int bufferCount = 1);
-        internal abstract bool SetBuffer(byte[] buffer, IntPtr bufferPtr, GCHandle bufferHandle, int bufferIndex = 0);
+        internal  bool InitGrab()
+        {
+            if (!Create())
+                return false;
+
+            if (!Open())
+                return false;
+
+            return true;
+        }
+        internal  bool InitBuffer(int bufferCount = 1)
+        {
+            if (bufferCount < 1)
+                return false;
+
+            _userImageBuffer = new GrabUserBuffer[bufferCount];
+            return true;
+        }
+
+        internal  bool SetBuffer(byte[] buffer, IntPtr bufferPtr, GCHandle bufferHandle, int bufferIndex = 0)
+        {
+            _userImageBuffer[bufferIndex].ImageBuffer = buffer;
+            _userImageBuffer[bufferIndex].ImageBufferPtr = bufferPtr;
+            _userImageBuffer[bufferIndex].ImageHandle = bufferHandle;
+
+            return true;
+        }
 
         protected virtual void OnGrabCompleted(object obj = null)
         {
