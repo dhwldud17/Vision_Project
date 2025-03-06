@@ -55,7 +55,7 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-   	<Reference Include="MvCameraControl.Net">
+    <Reference Include="MvCameraControl.Net">
       <HintPath>..\ExternalLib\Dll\HikRobot\MvCameraControl.Net.dll</HintPath>
     </Reference>
     <Reference Include="OpenCvSharp">
@@ -141,6 +141,24 @@
       <DependentUpon>PropertiesForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Property\BinaryInspProp.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Property\BinaryInspProp.Designer.cs">
+      <DependentUpon>BinaryInspProp.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Property\FMInsProp.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Property\FMInsProp.Designer.cs">
+      <DependentUpon>FMInsProp.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Property\MatchInspProp.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Property\MatchInspProp.Designer.cs">
+      <DependentUpon>MatchInspProp.cs</DependentUpon>
+    </Compile>
     <Compile Include="ResultForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -178,6 +196,15 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Property\BinaryInspProp.resx">
+      <DependentUpon>BinaryInspProp.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Property\FMInsProp.resx">
+      <DependentUpon>FMInsProp.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Property\MatchInspProp.resx">
+      <DependentUpon>MatchInspProp.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ResultForm.resx">
       <DependentUpon>ResultForm.cs</DependentUpon>
     </EmbeddedResource>

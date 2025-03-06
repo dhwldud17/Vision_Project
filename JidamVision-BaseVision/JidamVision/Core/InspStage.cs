@@ -19,7 +19,7 @@ namespace JidamVision.Core
 
         private ImageSpace _imageSpace = null;
         private GrabModel _grabManager = null;
-        private CameraType _camType = CameraType.WebCam;  //카메라 정해줌
+        private CameraType _camType = CameraType.WebCam;  //카메라 정해줌  
         private PreviewImage _previewImage = null;
 
         public ImageSpace ImageSpace
@@ -63,12 +63,18 @@ namespace JidamVision.Core
 
                 InitModelGrab(MAX_GRAB_BUF);
             }
-           
+
+            _grabManager.SetExposureTime(-2);
+
+            _grabManager.SetGain(1);
 
 
             return true;
         }
-        private void _multiGrab_TransferCompleted(object sender, object e)
+
+
+
+        private async void _multiGrab_TransferCompleted(object sender, object e)
         {
 
             int bufferIndex = (int)e;
@@ -84,13 +90,19 @@ namespace JidamVision.Core
                 _previewImage.SetImage(BitmapConverter.ToMat(bitmap));
             }
 
-            if (LiveMode == true)
+            //if (LiveMode == true)
+            //{
+            //    Task.Factory.StartNew(() => //비동기로 작업시작
+            //    {
+            //        System.Threading.Thread.Sleep(100); 
+            //        _grabManager.Grab(bufferIndex, true); //계속 grab 반복
+            //    });
+            //}
+
+            if(LiveMode == true)   
             {
-                Task.Factory.StartNew(() =>
-                {
-                    System.Threading.Thread.Sleep(100);
-                    _grabManager.Grab(bufferIndex, true);
-                });
+                await Task.Delay(1);//비동기 대기 (async 통해 앞 작업 긑나지 않아도 다음작업시작될수있도록 함)
+                _grabManager.Grab(bufferIndex, true);
             }
 
         }
@@ -115,7 +127,7 @@ namespace JidamVision.Core
 
             SetBuffer(bufferCount);
 
-            _grabManager.SetExposureTime(25000);
+           
 
         }
 
@@ -146,7 +158,7 @@ namespace JidamVision.Core
                 return;
 
             _grabManager.Grab(bufferIndex, true);
-           
+
         }
 
 
