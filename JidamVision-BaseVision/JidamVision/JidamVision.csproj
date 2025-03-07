@@ -147,12 +147,6 @@
     <Compile Include="Property\BinaryInspProp.Designer.cs">
       <DependentUpon>BinaryInspProp.cs</DependentUpon>
     </Compile>
-    <Compile Include="Property\FMInsProp.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Property\FMInsProp.Designer.cs">
-      <DependentUpon>FMInsProp.cs</DependentUpon>
-    </Compile>
     <Compile Include="Property\MatchInspProp.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -198,9 +192,6 @@
     </Compile>
     <EmbeddedResource Include="Property\BinaryInspProp.resx">
       <DependentUpon>BinaryInspProp.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Property\FMInsProp.resx">
-      <DependentUpon>FMInsProp.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Property\MatchInspProp.resx">
       <DependentUpon>MatchInspProp.cs</DependentUpon>

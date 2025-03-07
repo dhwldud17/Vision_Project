@@ -31,18 +31,19 @@
             this.btnGrab = new System.Windows.Forms.Button();
             this.btnLive = new System.Windows.Forms.Button();
             this.grbChannel = new System.Windows.Forms.GroupBox();
-            this.rbtRed = new System.Windows.Forms.RadioButton();
-            this.rbtBlue = new System.Windows.Forms.RadioButton();
-            this.rbtGreen = new System.Windows.Forms.RadioButton();
             this.rbtGray = new System.Windows.Forms.RadioButton();
+            this.rbtGreen = new System.Windows.Forms.RadioButton();
+            this.rbtBlue = new System.Windows.Forms.RadioButton();
+            this.rbtRed = new System.Windows.Forms.RadioButton();
             this.imageViewer = new JidamVision.ImageViewCCtrl();
+            this.btnSetRoi = new System.Windows.Forms.Button();
             this.grbChannel.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnGrab
             // 
             this.btnGrab.Location = new System.Drawing.Point(500, 18);
-            this.btnGrab.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnGrab.Margin = new System.Windows.Forms.Padding(4);
             this.btnGrab.Name = "btnGrab";
             this.btnGrab.Size = new System.Drawing.Size(107, 34);
             this.btnGrab.TabIndex = 1;
@@ -74,27 +75,16 @@
             this.grbChannel.TabStop = false;
             this.grbChannel.Text = "Channel";
             // 
-            // rbtRed
+            // rbtGray
             // 
-            this.rbtRed.AutoSize = true;
-            this.rbtRed.Location = new System.Drawing.Point(7, 28);
-            this.rbtRed.Name = "rbtRed";
-            this.rbtRed.Size = new System.Drawing.Size(64, 22);
-            this.rbtRed.TabIndex = 0;
-            this.rbtRed.TabStop = true;
-            this.rbtRed.Text = "Red";
-            this.rbtRed.UseVisualStyleBackColor = true;
-            // 
-            // rbtBlue
-            // 
-            this.rbtBlue.AutoSize = true;
-            this.rbtBlue.Location = new System.Drawing.Point(6, 66);
-            this.rbtBlue.Name = "rbtBlue";
-            this.rbtBlue.Size = new System.Drawing.Size(67, 22);
-            this.rbtBlue.TabIndex = 1;
-            this.rbtBlue.TabStop = true;
-            this.rbtBlue.Text = "Blue";
-            this.rbtBlue.UseVisualStyleBackColor = true;
+            this.rbtGray.AutoSize = true;
+            this.rbtGray.Location = new System.Drawing.Point(7, 146);
+            this.rbtGray.Name = "rbtGray";
+            this.rbtGray.Size = new System.Drawing.Size(71, 22);
+            this.rbtGray.TabIndex = 3;
+            this.rbtGray.TabStop = true;
+            this.rbtGray.Text = "Gray";
+            this.rbtGray.UseVisualStyleBackColor = true;
             // 
             // rbtGreen
             // 
@@ -107,16 +97,27 @@
             this.rbtGreen.Text = "Green";
             this.rbtGreen.UseVisualStyleBackColor = true;
             // 
-            // rbtGray
+            // rbtBlue
             // 
-            this.rbtGray.AutoSize = true;
-            this.rbtGray.Location = new System.Drawing.Point(7, 146);
-            this.rbtGray.Name = "rbtGray";
-            this.rbtGray.Size = new System.Drawing.Size(71, 22);
-            this.rbtGray.TabIndex = 3;
-            this.rbtGray.TabStop = true;
-            this.rbtGray.Text = "Gray";
-            this.rbtGray.UseVisualStyleBackColor = true;
+            this.rbtBlue.AutoSize = true;
+            this.rbtBlue.Location = new System.Drawing.Point(6, 66);
+            this.rbtBlue.Name = "rbtBlue";
+            this.rbtBlue.Size = new System.Drawing.Size(67, 22);
+            this.rbtBlue.TabIndex = 1;
+            this.rbtBlue.TabStop = true;
+            this.rbtBlue.Text = "Blue";
+            this.rbtBlue.UseVisualStyleBackColor = true;
+            // 
+            // rbtRed
+            // 
+            this.rbtRed.AutoSize = true;
+            this.rbtRed.Location = new System.Drawing.Point(7, 28);
+            this.rbtRed.Name = "rbtRed";
+            this.rbtRed.Size = new System.Drawing.Size(64, 22);
+            this.rbtRed.TabIndex = 0;
+            this.rbtRed.TabStop = true;
+            this.rbtRed.Text = "Red";
+            this.rbtRed.UseVisualStyleBackColor = true;
             // 
             // imageViewer
             // 
@@ -129,16 +130,27 @@
             this.imageViewer.Size = new System.Drawing.Size(473, 406);
             this.imageViewer.TabIndex = 2;
             // 
+            // btnSetRoi
+            // 
+            this.btnSetRoi.Location = new System.Drawing.Point(505, 358);
+            this.btnSetRoi.Name = "btnSetRoi";
+            this.btnSetRoi.Size = new System.Drawing.Size(102, 38);
+            this.btnSetRoi.TabIndex = 5;
+            this.btnSetRoi.Text = "SetRoi";
+            this.btnSetRoi.UseVisualStyleBackColor = true;
+            this.btnSetRoi.Click += new System.EventHandler(this.btnSetRoi_Click);
+            // 
             // CameraForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(670, 444);
+            this.Controls.Add(this.btnSetRoi);
             this.Controls.Add(this.grbChannel);
             this.Controls.Add(this.btnLive);
             this.Controls.Add(this.imageViewer);
             this.Controls.Add(this.btnGrab);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "CameraForm";
             this.Text = "CameraForm";
             this.Load += new System.EventHandler(this.CameraForm_Load);
@@ -159,5 +171,6 @@
         private System.Windows.Forms.RadioButton rbtGreen;
         private System.Windows.Forms.RadioButton rbtBlue;
         private System.Windows.Forms.RadioButton rbtRed;
+        private System.Windows.Forms.Button btnSetRoi;
     }
 }

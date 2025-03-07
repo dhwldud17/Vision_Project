@@ -24,11 +24,18 @@ namespace JidamVision
         public PropertiesForm()
         {
             InitializeComponent();
-            SetInspType(InspPropType.InspBinary); //InspType을 설정
+            //속성창 설정
+            SetInspType(InspPropType.InspBinary);
         }
         public void SetInspType(InspPropType inspPropType)
         {
-            //Panel 초기화
+            LoadOptionControl(inspPropType);
+        }
+
+        //옵션창에서 입력된 타입의 속성창 생성
+        private void LoadOptionControl(InspPropType inspPropType)
+        {
+            // Panel 초기화
             panelContainer.Controls.Clear();
             UserControl _inspProp = null;
 
@@ -47,21 +54,19 @@ namespace JidamVision
                     return;
             }
 
-            //Panel에 UserControl 추가
-            if(_inspProp != null)
+            // UserControl을 Panel에 추가
+            if (_inspProp != null)
             {
-                _inspProp.Dock = DockStyle.Fill; //패널을 꽉 채움
+                _inspProp.Dock = DockStyle.Fill; // 패널을 꽉 채움
                 panelContainer.Controls.Add(_inspProp);
             }
         }
         private void RangeSlider_RangeChanged(object sender, RangeChangedEventArgs e)
         {
-            //RangeChanged 이벤트 발생 시 처리할 내용
-            //속성값을 이용하여 이진화 임계값 설정
+            // 속성값을 이용하여 이진화 임계값 설정
             int lowerValue = e.LowerValue;
             int upperValue = e.UpperValue;
-
-            Global.Inst.InspStage.PreView?.SetBinary(lowerValue, upperValue); //InspStage의 PreView에 있는 SetBinary함수를 호출하여 lowerValue와 upperValue를 전달
+            Global.Inst.InspStage.PreView?.SetBinary(lowerValue, upperValue);
         }
     }
 }

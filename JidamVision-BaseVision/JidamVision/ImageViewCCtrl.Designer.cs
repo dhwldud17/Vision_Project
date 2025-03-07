@@ -42,6 +42,7 @@
             this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.ImageViewCCtrl_MouseDown);
             this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.ImageViewCCtrl_MouseMove);
             this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ImageViewCCtrl_MouseUp);
+            this.Resize += new System.EventHandler(this.ImageViewCCtrl_Resize);
             this.ResumeLayout(false);
 
         }
