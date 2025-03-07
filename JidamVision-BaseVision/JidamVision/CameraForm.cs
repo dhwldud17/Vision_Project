@@ -23,7 +23,17 @@ namespace JidamVision
         {
             if (bitmap == null)
             {
-                bitmap = Global.Inst.InspStage.ImageSpace.GetBitmap(0);
+                if (rbtRed.Checked)
+                    bitmap = Global.Inst.InspStage.ImageSpace.GetBitmap(0, eImageChannel.Red);
+                else if (rbtGreen.Checked)
+                    bitmap = Global.Inst.InspStage.ImageSpace.GetBitmap(0, eImageChannel.Green);
+                else if (rbtBlue.Checked)
+                    bitmap = Global.Inst.InspStage.ImageSpace.GetBitmap(0, eImageChannel.Blue);
+                else if (rbtGray.Checked)
+                    bitmap = Global.Inst.InspStage.ImageSpace.GetBitmap(0, eImageChannel.Gray);
+                else
+                    bitmap = Global.Inst.InspStage.ImageSpace.GetBitmap(0);
+
                 if (bitmap == null)
                     return;
             }
@@ -33,6 +43,19 @@ namespace JidamVision
 
         private void CameraForm_Resize(object sender, EventArgs e)
         {
+            int margin = 10;
+            int xPos = Location.X + this.Width - btnGrab.Width - margin;
+
+            btnGrab.Location = new Point(xPos, btnGrab.Location.Y);
+            btnLive.Location = new Point(xPos, btnLive.Location.Y);
+            grbChannel.Location = new Point(xPos, btnLive.Location.Y+ btnLive.Height*2);
+            //btnSetROI.Location = new Point(xPos, btnSetROI.Location.Y);
+
+            imageViewer.Width = this.Width - btnGrab.Width - margin * 2;
+            imageViewer.Height = this.Height - margin * 2;
+
+            imageViewer.Location = new Point(margin, margin);
+
         }
 
         private void btnGrab_Click(object sender, EventArgs e)
@@ -46,6 +69,11 @@ namespace JidamVision
             //Global.Inst.InspStage는 애플리케이션 내에서 유일한 InspStage 인스턴스를 의미하며, 이를 통해 카메라나 이미지 캡처, 검사 기능 등을 관리하는 객체에 접근
             if (Global.Inst.InspStage.LiveMode) //LiveMode가 true면
                 Global.Inst.InspStage.Grab(0); //Grab함수 실행 // 실시간 영상 캡처
+        }
+
+        private void CameraForm_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

@@ -101,7 +101,7 @@ namespace JidamVision.Core
 
             if(LiveMode == true)   
             {
-                await Task.Delay(1);//비동기 대기 (async 통해 앞 작업 긑나지 않아도 다음작업시작될수있도록 함)
+                await Task.Delay(30);//비동기 대기 (async 통해 앞 작업 긑나지 않아도 다음작업시작될수있도록 함)
                 _grabManager.Grab(bufferIndex, true);
             }
 

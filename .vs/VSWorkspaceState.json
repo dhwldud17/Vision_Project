@@ -4,8 +4,11 @@
     "\\JidamVision-BaseVision",
     "\\JidamVision-BaseVision\\ExternalLib",
     "\\JidamVision-BaseVision\\ExternalLib\\Dll",
+    "\\JidamVision-BaseVision\\JidamVision",
     "\\JidamVision-BaseVision\\JidamVision\\Core",
-    "\\JidamVision-BaseVision\\JidamVision\\Grab"
+    "\\JidamVision-BaseVision\\JidamVision\\Grab",
+    "\\JidamVision-BaseVision\\packages"
   ],
+  "SelectedNode": "\\JidamVision-BaseVision\\JidamVision\\Grab\\WebCam.cs",
   "PreviewInSolutionExplorer": false
 }

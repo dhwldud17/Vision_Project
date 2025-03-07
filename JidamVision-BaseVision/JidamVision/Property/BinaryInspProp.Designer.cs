@@ -29,12 +29,12 @@
         private void InitializeComponent()
         {
             this.grpBinary = new System.Windows.Forms.GroupBox();
-            this.trackBarLower = new System.Windows.Forms.TrackBar();
-            this.trackBarUpper = new System.Windows.Forms.TrackBar();
             this.chkHighlight = new System.Windows.Forms.CheckBox();
+            this.trackBarUpper = new System.Windows.Forms.TrackBar();
+            this.trackBarLower = new System.Windows.Forms.TrackBar();
             this.grpBinary.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBarLower)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarUpper)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBarLower)).BeginInit();
             this.SuspendLayout();
             // 
             // grpBinary
@@ -49,20 +49,6 @@
             this.grpBinary.TabStop = false;
             this.grpBinary.Text = "이진화";
             // 
-            // trackBarLower
-            // 
-            this.trackBarLower.Location = new System.Drawing.Point(50, 66);
-            this.trackBarLower.Name = "trackBarLower";
-            this.trackBarLower.Size = new System.Drawing.Size(377, 69);
-            this.trackBarLower.TabIndex = 0;
-            // 
-            // trackBarUpper
-            // 
-            this.trackBarUpper.Location = new System.Drawing.Point(50, 130);
-            this.trackBarUpper.Name = "trackBarUpper";
-            this.trackBarUpper.Size = new System.Drawing.Size(377, 69);
-            this.trackBarUpper.TabIndex = 1;
-            // 
             // chkHighlight
             // 
             this.chkHighlight.AutoSize = true;
@@ -73,17 +59,36 @@
             this.chkHighlight.Text = "Highlight";
             this.chkHighlight.UseVisualStyleBackColor = true;
             // 
+            // trackBarUpper
+            // 
+            this.trackBarUpper.Location = new System.Drawing.Point(50, 131);
+            this.trackBarUpper.Maximum = 255;
+            this.trackBarUpper.Name = "trackBarUpper";
+            this.trackBarUpper.Size = new System.Drawing.Size(377, 69);
+            this.trackBarUpper.TabIndex = 1;
+            this.trackBarUpper.Value = 255;
+            // 
+            // trackBarLower
+            // 
+            this.trackBarLower.Location = new System.Drawing.Point(50, 66);
+            this.trackBarLower.Maximum = 255;
+            this.trackBarLower.Name = "trackBarLower";
+            this.trackBarLower.Size = new System.Drawing.Size(377, 69);
+            this.trackBarLower.TabIndex = 0;
+            this.trackBarLower.Scroll += new System.EventHandler(this.trackBarLower_Scroll);
+            // 
             // BinaryInspProp
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.grpBinary);
             this.Name = "BinaryInspProp";
-            this.Size = new System.Drawing.Size(538, 389);
+            this.Size = new System.Drawing.Size(589, 421);
+            this.Load += new System.EventHandler(this.BinaryInspProp_Load);
             this.grpBinary.ResumeLayout(false);
             this.grpBinary.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBarLower)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarUpper)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBarLower)).EndInit();
             this.ResumeLayout(false);
 
         }
