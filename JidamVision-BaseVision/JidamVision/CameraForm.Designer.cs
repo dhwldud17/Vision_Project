@@ -35,8 +35,9 @@
             this.rbtGreen = new System.Windows.Forms.RadioButton();
             this.rbtBlue = new System.Windows.Forms.RadioButton();
             this.rbtRed = new System.Windows.Forms.RadioButton();
-            this.imageViewer = new JidamVision.ImageViewCCtrl();
             this.btnSetRoi = new System.Windows.Forms.Button();
+            this.btnSave = new System.Windows.Forms.Button();
+            this.imageViewer = new JidamVision.ImageViewCCtrl();
             this.grbChannel.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -68,7 +69,7 @@
             this.grbChannel.Controls.Add(this.rbtGreen);
             this.grbChannel.Controls.Add(this.rbtBlue);
             this.grbChannel.Controls.Add(this.rbtRed);
-            this.grbChannel.Location = new System.Drawing.Point(499, 152);
+            this.grbChannel.Location = new System.Drawing.Point(500, 231);
             this.grbChannel.Name = "grbChannel";
             this.grbChannel.Size = new System.Drawing.Size(158, 183);
             this.grbChannel.TabIndex = 4;
@@ -119,6 +120,26 @@
             this.rbtRed.Text = "Red";
             this.rbtRed.UseVisualStyleBackColor = true;
             // 
+            // btnSetRoi
+            // 
+            this.btnSetRoi.Location = new System.Drawing.Point(499, 142);
+            this.btnSetRoi.Name = "btnSetRoi";
+            this.btnSetRoi.Size = new System.Drawing.Size(107, 32);
+            this.btnSetRoi.TabIndex = 5;
+            this.btnSetRoi.Text = "SetRoi";
+            this.btnSetRoi.UseVisualStyleBackColor = true;
+            this.btnSetRoi.Click += new System.EventHandler(this.btnSetRoi_Click);
+            // 
+            // btnSave
+            // 
+            this.btnSave.Location = new System.Drawing.Point(507, 180);
+            this.btnSave.Name = "btnSave";
+            this.btnSave.Size = new System.Drawing.Size(89, 35);
+            this.btnSave.TabIndex = 6;
+            this.btnSave.Text = "Save";
+            this.btnSave.UseVisualStyleBackColor = true;
+            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
+            // 
             // imageViewer
             // 
             this.imageViewer.AutoSize = true;
@@ -127,24 +148,16 @@
             this.imageViewer.Location = new System.Drawing.Point(17, 18);
             this.imageViewer.Margin = new System.Windows.Forms.Padding(6);
             this.imageViewer.Name = "imageViewer";
+            this.imageViewer.RoiMode = false;
             this.imageViewer.Size = new System.Drawing.Size(473, 406);
             this.imageViewer.TabIndex = 2;
-            // 
-            // btnSetRoi
-            // 
-            this.btnSetRoi.Location = new System.Drawing.Point(505, 358);
-            this.btnSetRoi.Name = "btnSetRoi";
-            this.btnSetRoi.Size = new System.Drawing.Size(102, 38);
-            this.btnSetRoi.TabIndex = 5;
-            this.btnSetRoi.Text = "SetRoi";
-            this.btnSetRoi.UseVisualStyleBackColor = true;
-            this.btnSetRoi.Click += new System.EventHandler(this.btnSetRoi_Click);
             // 
             // CameraForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(670, 444);
+            this.Controls.Add(this.btnSave);
             this.Controls.Add(this.btnSetRoi);
             this.Controls.Add(this.grbChannel);
             this.Controls.Add(this.btnLive);
@@ -172,5 +185,6 @@
         private System.Windows.Forms.RadioButton rbtBlue;
         private System.Windows.Forms.RadioButton rbtRed;
         private System.Windows.Forms.Button btnSetRoi;
+        private System.Windows.Forms.Button btnSave;
     }
 }

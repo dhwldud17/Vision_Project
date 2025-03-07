@@ -30,18 +30,26 @@
         {
             this.components = new System.ComponentModel.Container();
             this.grpMatch = new System.Windows.Forms.GroupBox();
-            this.lbExtent = new System.Windows.Forms.Label();
-            this.lblScore = new System.Windows.Forms.Label();
-            this.txtExtendX = new System.Windows.Forms.TextBox();
-            this.txtScore = new System.Windows.Forms.TextBox();
-            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.txtExtendY = new System.Windows.Forms.TextBox();
             this.lbX = new System.Windows.Forms.Label();
+            this.txtExtendY = new System.Windows.Forms.TextBox();
+            this.txtScore = new System.Windows.Forms.TextBox();
+            this.txtExtendX = new System.Windows.Forms.TextBox();
+            this.lblScore = new System.Windows.Forms.Label();
+            this.lbExtent = new System.Windows.Forms.Label();
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.lbMatchCount = new System.Windows.Forms.Label();
+            this.txtMatchCount = new System.Windows.Forms.TextBox();
+            this.btnTeach = new System.Windows.Forms.Button();
+            this.btnSearch = new System.Windows.Forms.Button();
             this.grpMatch.SuspendLayout();
             this.SuspendLayout();
             // 
             // grpMatch
             // 
+            this.grpMatch.Controls.Add(this.btnSearch);
+            this.grpMatch.Controls.Add(this.btnTeach);
+            this.grpMatch.Controls.Add(this.txtMatchCount);
+            this.grpMatch.Controls.Add(this.lbMatchCount);
             this.grpMatch.Controls.Add(this.lbX);
             this.grpMatch.Controls.Add(this.txtExtendY);
             this.grpMatch.Controls.Add(this.txtScore);
@@ -55,6 +63,46 @@
             this.grpMatch.TabStop = false;
             this.grpMatch.Text = "패턴매칭";
             // 
+            // lbX
+            // 
+            this.lbX.AutoSize = true;
+            this.lbX.Location = new System.Drawing.Point(252, 58);
+            this.lbX.Name = "lbX";
+            this.lbX.Size = new System.Drawing.Size(19, 18);
+            this.lbX.TabIndex = 5;
+            this.lbX.Text = "X";
+            // 
+            // txtExtendY
+            // 
+            this.txtExtendY.Location = new System.Drawing.Point(298, 49);
+            this.txtExtendY.Name = "txtExtendY";
+            this.txtExtendY.Size = new System.Drawing.Size(100, 28);
+            this.txtExtendY.TabIndex = 4;
+            // 
+            // txtScore
+            // 
+            this.txtScore.Location = new System.Drawing.Point(132, 108);
+            this.txtScore.Name = "txtScore";
+            this.txtScore.Size = new System.Drawing.Size(100, 28);
+            this.txtScore.TabIndex = 3;
+            this.txtScore.TextChanged += new System.EventHandler(this.textBox2_TextChanged);
+            // 
+            // txtExtendX
+            // 
+            this.txtExtendX.Location = new System.Drawing.Point(132, 49);
+            this.txtExtendX.Name = "txtExtendX";
+            this.txtExtendX.Size = new System.Drawing.Size(100, 28);
+            this.txtExtendX.TabIndex = 2;
+            // 
+            // lblScore
+            // 
+            this.lblScore.AutoSize = true;
+            this.lblScore.Location = new System.Drawing.Point(12, 108);
+            this.lblScore.Name = "lblScore";
+            this.lblScore.Size = new System.Drawing.Size(98, 18);
+            this.lblScore.TabIndex = 1;
+            this.lblScore.Text = "매칭스코어";
+            // 
             // lbExtent
             // 
             this.lbExtent.AutoSize = true;
@@ -64,51 +112,49 @@
             this.lbExtent.TabIndex = 0;
             this.lbExtent.Text = "확장영역";
             // 
-            // lblScore
-            // 
-            this.lblScore.AutoSize = true;
-            this.lblScore.Location = new System.Drawing.Point(24, 108);
-            this.lblScore.Name = "lblScore";
-            this.lblScore.Size = new System.Drawing.Size(98, 18);
-            this.lblScore.TabIndex = 1;
-            this.lblScore.Text = "매칭스코어";
-            // 
-            // txtExtendX
-            // 
-            this.txtExtendX.Location = new System.Drawing.Point(132, 49);
-            this.txtExtendX.Name = "txtExtendX";
-            this.txtExtendX.Size = new System.Drawing.Size(100, 28);
-            this.txtExtendX.TabIndex = 2;
-            // 
-            // txtScore
-            // 
-            this.txtScore.Location = new System.Drawing.Point(132, 98);
-            this.txtScore.Name = "txtScore";
-            this.txtScore.Size = new System.Drawing.Size(100, 28);
-            this.txtScore.TabIndex = 3;
-            this.txtScore.TextChanged += new System.EventHandler(this.textBox2_TextChanged);
-            // 
             // contextMenuStrip1
             // 
             this.contextMenuStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.contextMenuStrip1.Name = "contextMenuStrip1";
             this.contextMenuStrip1.Size = new System.Drawing.Size(61, 4);
             // 
-            // txtExtendY
+            // lbMatchCount
             // 
-            this.txtExtendY.Location = new System.Drawing.Point(298, 49);
-            this.txtExtendY.Name = "txtExtendY";
-            this.txtExtendY.Size = new System.Drawing.Size(100, 28);
-            this.txtExtendY.TabIndex = 4;
+            this.lbMatchCount.AutoSize = true;
+            this.lbMatchCount.Location = new System.Drawing.Point(21, 168);
+            this.lbMatchCount.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lbMatchCount.Name = "lbMatchCount";
+            this.lbMatchCount.Size = new System.Drawing.Size(86, 18);
+            this.lbMatchCount.TabIndex = 6;
+            this.lbMatchCount.Text = "매칭 갯수";
             // 
-            // lbX
+            // txtMatchCount
             // 
-            this.lbX.AutoSize = true;
-            this.lbX.Location = new System.Drawing.Point(252, 58);
-            this.lbX.Name = "lbX";
-            this.lbX.Size = new System.Drawing.Size(19, 18);
-            this.lbX.TabIndex = 5;
-            this.lbX.Text = "X";
+            this.txtMatchCount.Location = new System.Drawing.Point(132, 168);
+            this.txtMatchCount.Margin = new System.Windows.Forms.Padding(4);
+            this.txtMatchCount.Name = "txtMatchCount";
+            this.txtMatchCount.Size = new System.Drawing.Size(100, 28);
+            this.txtMatchCount.TabIndex = 7;
+            // 
+            // btnTeach
+            // 
+            this.btnTeach.Location = new System.Drawing.Point(37, 225);
+            this.btnTeach.Margin = new System.Windows.Forms.Padding(4);
+            this.btnTeach.Name = "btnTeach";
+            this.btnTeach.Size = new System.Drawing.Size(94, 38);
+            this.btnTeach.TabIndex = 8;
+            this.btnTeach.Text = "티칭";
+            this.btnTeach.UseVisualStyleBackColor = true;
+            // 
+            // btnSearch
+            // 
+            this.btnSearch.Location = new System.Drawing.Point(184, 222);
+            this.btnSearch.Margin = new System.Windows.Forms.Padding(4);
+            this.btnSearch.Name = "btnSearch";
+            this.btnSearch.Size = new System.Drawing.Size(177, 44);
+            this.btnSearch.TabIndex = 9;
+            this.btnSearch.Text = "찾기";
+            this.btnSearch.UseVisualStyleBackColor = true;
             // 
             // MatchInspProp
             // 
@@ -133,5 +179,9 @@
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.Label lbX;
         private System.Windows.Forms.TextBox txtExtendY;
+        private System.Windows.Forms.Button btnSearch;
+        private System.Windows.Forms.Button btnTeach;
+        private System.Windows.Forms.TextBox txtMatchCount;
+        private System.Windows.Forms.Label lbMatchCount;
     }
 }

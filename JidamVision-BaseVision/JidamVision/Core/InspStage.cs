@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -31,7 +32,8 @@ namespace JidamVision.Core
             get => _previewImage;
         }
         public bool LiveMode { get; set; } = false;
-
+        public int SelBufferIndex { get; set; } = 0;
+        public eImageChannel SelImageChannel { get; set; } = eImageChannel.Gray;
         public InspStage() { }
 
         public bool Initialize()
@@ -130,7 +132,58 @@ namespace JidamVision.Core
            
 
         }
+        public void SetImageBuffer(string filePath)
+        {
+            if (_grabManager == null)
+                return;
 
+            Mat matImage = Cv2.ImRead(filePath);
+
+            int pixelBpp = 8;
+            int imageWidth;
+            int imageHeight;
+            int imageStride;
+
+            if (matImage.Type() == MatType.CV_8UC3)
+                pixelBpp = 24;
+
+            imageWidth = (matImage.Width + 3) / 4 * 4;
+            imageHeight = matImage.Height;
+            //imageStride = (int)matImage.Step();
+            imageStride = imageWidth * matImage.ElemSize();
+
+            if (_imageSpace != null)
+            {
+                _imageSpace.SetImageInfo(pixelBpp, imageWidth, imageHeight, imageStride);
+            }
+
+            SetBuffer(1);
+
+            int bufferIndex = 0;
+
+            // Mat의 데이터를 byte 배열로 복사
+            int bufSize = (int)(matImage.Total() * matImage.ElemSize());
+            Marshal.Copy(matImage.Data, ImageSpace.GetInspectionBuffer(bufferIndex), 0, bufSize);
+
+            _imageSpace.Split(bufferIndex);
+
+            DisplayGrabImage(bufferIndex);
+
+            if (_previewImage != null)
+            {
+                Bitmap bitmap = ImageSpace.GetBitmap(0);
+                _previewImage.SetImage(BitmapConverter.ToMat(bitmap));
+            }
+        }
+        public Bitmap GetBitmap(int bufferIndex = -1, eImageChannel imageChannel = eImageChannel.Gray)
+        {
+            if (bufferIndex >= 0)
+                SelBufferIndex = bufferIndex;
+
+            SelImageChannel = imageChannel;
+
+            return Global.Inst.InspStage.ImageSpace.GetBitmap(SelBufferIndex, SelImageChannel);
+        }
         public void SetBuffer(int bufferCount)
         {
             if (_grabManager == null)
@@ -160,7 +213,23 @@ namespace JidamVision.Core
             _grabManager.Grab(bufferIndex, true);
 
         }
+        public void SaveCurrentImage(string filePath)
+        {
+            var cameraForm = MainForm.GetDockForm<CameraForm>();
+            if (cameraForm != null)
+            {
+                Mat displayImage = cameraForm.GetDisplayImage();
+                Cv2.ImWrite(filePath, displayImage);
+            }
+        }
+        public Mat GetMat(int bufferIndex = -1, eImageChannel imageChannel = eImageChannel.Gray)
+        {
+            if (bufferIndex >= 0)
+                SelBufferIndex = bufferIndex;
 
+            SelImageChannel = imageChannel;
+            return Global.Inst.InspStage.ImageSpace.GetMat(SelBufferIndex, SelImageChannel);
+        }
 
         private void DisplayGrabImage(int bufferIndex)
         {
