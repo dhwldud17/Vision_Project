@@ -17,7 +17,8 @@ namespace JidamVision
     {
         InspNone = 0,
         InspBinary,
-        InspMatch
+        InspMatch,
+        InspFilter
     }
     public partial class PropertiesForm : DockContent
     {
@@ -25,7 +26,7 @@ namespace JidamVision
         {
             InitializeComponent();
             //속성창 설정
-            SetInspType(InspPropType.InspBinary);
+            SetInspType(InspPropType.InspFilter);
         }
         public void SetInspType(InspPropType inspPropType)
         {
@@ -44,10 +45,14 @@ namespace JidamVision
             {
                 case InspPropType.InspBinary:
                     _inspProp = new BinaryInspProp();
-                    ((BinaryInspProp)_inspProp).RangeChanged += RangeSlider_RangeChanged;
+                    ((BinaryInspProp)_inspProp).RangeChanged += RangeSlider_RangeChanged; 
                     break;
                 case InspPropType.InspMatch:
                     _inspProp = new MatchInspProp();
+                    break;
+                case InspPropType.InspFilter:
+                    _inspProp = new FilterInsProp();
+                    ((FilterInsProp)_inspProp).FilterSelected += FilterSelect_FilterChanged;
                     break;
                 default:
                     MessageBox.Show("유효하지 않은 옵션입니다.");
@@ -60,6 +65,14 @@ namespace JidamVision
                 _inspProp.Dock = DockStyle.Fill; // 패널을 꽉 채움
                 panelContainer.Controls.Add(_inspProp);
             }
+        }
+        private void FilterSelect_FilterChanged(object sender, FilterSelectedEventArgs e)
+        {
+            //선택된 필터값 inspStage의 ApplyFilter로 보냄
+            string filter1 = e.FilterSelected1;
+            int filter2 = e.FilterSelected2;
+            Global.Inst.InspStage.PreView?.ApplyFilter(filter1, filter2);
+
         }
         private void RangeSlider_RangeChanged(object sender, RangeChangedEventArgs e)
         {

@@ -48,6 +48,7 @@
             this.grpBinary.TabIndex = 0;
             this.grpBinary.TabStop = false;
             this.grpBinary.Text = "이진화";
+            this.grpBinary.Enter += new System.EventHandler(this.grpBinary_Enter);
             // 
             // chkHighlight
             // 

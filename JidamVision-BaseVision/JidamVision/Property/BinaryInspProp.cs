@@ -45,6 +45,11 @@ namespace JidamVision.Property
         {
 
         }
+
+        private void grpBinary_Enter(object sender, EventArgs e)
+        {
+
+        }
     }
 
     public class RangeChangedEventArgs : EventArgs //RangeChanged 이벤트를 위한 클래스
