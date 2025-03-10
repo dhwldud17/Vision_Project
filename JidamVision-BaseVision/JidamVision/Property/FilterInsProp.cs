@@ -12,47 +12,7 @@ using System.Windows.Forms;
 
 namespace JidamVision.Property
 {
-    enum ImageOperation
-    {
-        OpAdd = 0,         // 덧셈
-        OpSubtract,        // 뺄셈
-        OpMultiply,        // 곱셈
-        OpDivide,          // 나눗셈
-        OpMax,             // 최대값
-        OpMin,             // 최소값
-        OpAbs,             // 절댓값
-        OpAbsDiff          // 절댓값 차이
-    }
-
-    // 비트 연산 (AND, OR, XOR 등)을 위한 열거형
-    enum Bitwise
-    {
-        OnAnd = 0,         // AND
-        OnOr,              // OR
-        OnXor,             // XOR
-        OnNot,             // NOT
-        OnCompare          // 비교
-    }
-
-    // 이미지 필터링 (블러, 박스 필터 등)을 위한 열거형
-    enum ImageFilter
-    {
-        FilterBlur = 0,           // 블러
-        FilterBoxFilter,          // 박스 필터
-        FilterMedianBlur,         // 미디안 블러
-        FilterGaussianBlur,       // 가우시안 블러
-        FilterBilateral           // 양방향 필터
-    }
-
-    // 가장자리 검출 (Sobel, Scharr, Laplacian, Canny 등)을 위한 열거형
-    enum ImageEdge
-    {
-        FilterSobel = 0,          // Sobel 필터
-        FilterScharr,             // Scharr 필터
-        FilterLaplacian,          // Laplacian 필터
-        FilterCanny               // Canny 엣지 검출
-    }
-
+ 
     public partial class FilterInsProp : UserControl
     {
         public event EventHandler<FilterSelectedEventArgs> FilterSelected;
