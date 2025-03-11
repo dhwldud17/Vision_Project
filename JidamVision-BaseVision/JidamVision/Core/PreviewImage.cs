@@ -227,13 +227,13 @@ namespace JidamVision.Core
                     Cv2.Blur(src, dst, new OpenCvSharp.Size(5, 5));  // 블러 필터 적용
                     break;
                 case ImageFilter.FilterBoxFilter:
-                    Cv2.BoxFilter(src, dst, src.Depth(), new OpenCvSharp.Size(5, 5));  // 박스 필터 적용
+                    Cv2.BoxFilter(src, dst, src.Depth(), new OpenCvSharp.Size(30, 30));  // 박스 필터 적용
                     break;
                 case ImageFilter.FilterMedianBlur:
-                    Cv2.MedianBlur(src, dst, 5);  // 미디안 블러 적용
+                    Cv2.MedianBlur(src, dst, 31);  // 미디안 블러 적용
                     break;
                 case ImageFilter.FilterGaussianBlur:
-                    Cv2.GaussianBlur(src, dst, new OpenCvSharp.Size(5, 5), 0);  // 가우시안 블러 적용
+                    Cv2.GaussianBlur(src, dst, new OpenCvSharp.Size(31, 31), 0);  // 가우시안 블러 적용
                     break;
                 case ImageFilter.FilterBilateral:
                     Cv2.BilateralFilter(src, dst, 9, 75, 75);  // 양방향 필터 적용
@@ -275,7 +275,7 @@ namespace JidamVision.Core
                 case "연산":
                     // 연산 관련 enum 값 매핑
                     ImageOperation operation = (ImageOperation)selected_filter2;
-                    string op_values = "3 3 3";  //연산값 지정
+                    string op_values = "30 30 30";  //연산값 지정
                     ApplyImageOperation(operation, _orinalImage, op_values, out filteredImage);
                     break;
                 case "비트연산(Bitwise)":

@@ -85,6 +85,11 @@ namespace JidamVision.Property
 
         private void apply_Click(object sender, EventArgs e)
         {
+            if (_selected_effect == null || _selected_effect2 == -1) // 두 번째 효과가 선택되지 않은 경우
+            {
+                MessageBox.Show("효과를 선택해주세요.", "알림", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
             FilterSelected?.Invoke(this,new FilterSelectedEventArgs(_selected_effect,_selected_effect2));
         }
 
