@@ -111,5 +111,10 @@ namespace JidamVision
                 }
             }
         }
+
+        private void imageFilterToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
