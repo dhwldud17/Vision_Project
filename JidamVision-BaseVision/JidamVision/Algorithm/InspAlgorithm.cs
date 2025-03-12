@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace JidamVision.Algorithm
 {
-    internal class InspAlgorithm
+    public class InspAlgorithm
     {
     }
 }

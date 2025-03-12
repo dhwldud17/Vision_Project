@@ -1,5 +1,6 @@
 ﻿
 using JidamVision.Grab;
+using JidamVision.Teach;
 using OpenCvSharp;
 using OpenCvSharp.Extensions;
 using System;
@@ -7,9 +8,11 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Linq;
+using System.Net;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace JidamVision.Core
 {
@@ -20,31 +23,42 @@ namespace JidamVision.Core
 
         private ImageSpace _imageSpace = null;
         private GrabModel _grabManager = null;
-        private CameraType _camType = CameraType.WebCam;  //카메라 정해줌  
+        private CameraType _camType = CameraType.HikRobotCam;  //카메라 정해줌  
         private PreviewImage _previewImage = null;
+        private InspWindow _inspWindow = null;
 
         public ImageSpace ImageSpace
         {
             get => _imageSpace;
         }
+
         public PreviewImage PreView
         {
             get => _previewImage;
         }
+
+        public InspWindow InspWindow
+        {
+            get => _inspWindow;
+        }
+
         public bool LiveMode { get; set; } = false;
+
         public int SelBufferIndex { get; set; } = 0;
         public eImageChannel SelImageChannel { get; set; } = eImageChannel.Gray;
+
         public InspStage() { }
 
         public bool Initialize()
         {
             _imageSpace = new ImageSpace();
             _previewImage = new PreviewImage();
+
             switch (_camType)
             {
                 case CameraType.WebCam:
                     {
-                        _grabManager = new WebCam();//카메라가 webcam이면 webcam객체 _grabManager에 할당
+                        _grabManager = new WebCam();
                         break;
                     }
                 case CameraType.HikRobotCam:
@@ -59,78 +73,38 @@ namespace JidamVision.Core
                     }
             }
 
-            if (_grabManager.InitGrab() == true) //
+            if (_grabManager.InitGrab() == true)
             {
                 _grabManager.TransferCompleted += _multiGrab_TransferCompleted;
 
                 InitModelGrab(MAX_GRAB_BUF);
             }
 
-            _grabManager.SetExposureTime(-2);
-
-            _grabManager.SetGain(1);
-
+            InitInspWindow();
 
             return true;
         }
 
 
-
-        private async void _multiGrab_TransferCompleted(object sender, object e)
-        {
-
-            int bufferIndex = (int)e;
-            Console.WriteLine($"_multiGrab_TransferCompleted {bufferIndex}");
-
-            _imageSpace.Split(bufferIndex);
-
-            DisplayGrabImage(bufferIndex);
-
-            if (_previewImage != null)
-            {
-                Bitmap bitmap = ImageSpace.GetBitmap(0);
-                _previewImage.SetImage(BitmapConverter.ToMat(bitmap));
-            }
-
-            //if (LiveMode == true)
-            //{
-            //    Task.Factory.StartNew(() => //비동기로 작업시작
-            //    {
-            //        System.Threading.Thread.Sleep(100); 
-            //        _grabManager.Grab(bufferIndex, true); //계속 grab 반복
-            //    });
-            //}
-
-            if(LiveMode == true)   
-            {
-                await Task.Delay(30);//비동기 대기 (async 통해 앞 작업 긑나지 않아도 다음작업시작될수있도록 함)
-                _grabManager.Grab(bufferIndex, true);
-            }
-
-        }
-
-        public void InitModelGrab(int bufferCount)//
+        public void InitModelGrab(int bufferCount)
         {
             if (_grabManager == null)
                 return;
 
             int pixelBpp = 8;
-            _grabManager.GetPixelBpp(out pixelBpp); //한픽셀당 비트수
+            _grabManager.GetPixelBpp(out pixelBpp);
 
-            int inspectionWidth;
-            int inspectionHeight;
-            int inspectionStride;
-            _grabManager.GetResolution(out inspectionWidth, out inspectionHeight, out inspectionStride);
+            int imageWidth;
+            int imageHeight;
+            int imageStride;
+            _grabManager.GetResolution(out imageWidth, out imageHeight, out imageStride);
 
             if (_imageSpace != null)
             {
-                _imageSpace.SetImageInfo(pixelBpp, inspectionWidth, inspectionHeight, inspectionStride);
+                _imageSpace.SetImageInfo(pixelBpp, imageWidth, imageHeight, imageStride);
             }
 
             SetBuffer(bufferCount);
-
-           
-
         }
         public void SetImageBuffer(string filePath)
         {
@@ -175,21 +149,10 @@ namespace JidamVision.Core
                 _previewImage.SetImage(BitmapConverter.ToMat(bitmap));
             }
         }
-        public Bitmap GetBitmap(int bufferIndex = -1, eImageChannel imageChannel = eImageChannel.Gray)
-        {
-            if (bufferIndex >= 0)
-                SelBufferIndex = bufferIndex;
 
-            SelImageChannel = imageChannel;
-
-            return Global.Inst.InspStage.ImageSpace.GetBitmap(SelBufferIndex, SelImageChannel);
-        }
         public void SetBuffer(int bufferCount)
         {
             if (_grabManager == null)
-                return;
-
-            if (_imageSpace.BufferCount == bufferCount)
                 return;
 
             _imageSpace.InitImageSpace(bufferCount);
@@ -211,24 +174,33 @@ namespace JidamVision.Core
                 return;
 
             _grabManager.Grab(bufferIndex, true);
-
         }
-        public void SaveCurrentImage(string filePath)
+
+        // NOTE
+        // async / await란?
+        // async / await는 비동기 프로그래밍(Asynchronous Programming)을 쉽게 구현할 수 있도록 도와주는 키워드입니다.
+        //기본 개념은 작업(Task)이 끝날 때까지 기다리지 않고 다른 작업을 진행할 수 있도록 하는 것입니다.
+        //이를 통해 UI가 멈추지 않으며(프리징 방지), 응답성이 높은 프로그램을 만들 수 있습니다.
+        private async void _multiGrab_TransferCompleted(object sender, object e)
         {
-            var cameraForm = MainForm.GetDockForm<CameraForm>();
-            if (cameraForm != null)
+            int bufferIndex = (int)e;
+            Console.WriteLine($"_multiGrab_TransferCompleted {bufferIndex}");
+
+            _imageSpace.Split(bufferIndex);
+
+            DisplayGrabImage(bufferIndex);
+
+            if (_previewImage != null)
             {
-                Mat displayImage = cameraForm.GetDisplayImage();
-                Cv2.ImWrite(filePath, displayImage);
+                Bitmap bitmap = ImageSpace.GetBitmap(0);
+                _previewImage.SetImage(BitmapConverter.ToMat(bitmap));
             }
-        }
-        public Mat GetMat(int bufferIndex = -1, eImageChannel imageChannel = eImageChannel.Gray)
-        {
-            if (bufferIndex >= 0)
-                SelBufferIndex = bufferIndex;
 
-            SelImageChannel = imageChannel;
-            return Global.Inst.InspStage.ImageSpace.GetMat(SelBufferIndex, SelImageChannel);
+            if (LiveMode)
+            {
+                await Task.Delay(100);  // 비동기 대기
+                _grabManager.Grab(bufferIndex, true);  // 다음 촬영 시작
+            }
         }
 
         private void DisplayGrabImage(int bufferIndex)
@@ -240,7 +212,43 @@ namespace JidamVision.Core
             }
         }
 
+        public void SaveCurrentImage(string filePath)
+        {
+            var cameraForm = MainForm.GetDockForm<CameraForm>();
+            if (cameraForm != null)
+            {
+                Mat displayImage = cameraForm.GetDisplayImage();
+                Cv2.ImWrite(filePath, displayImage);
+            }
+        }
 
+        public Bitmap GetBitmap(int bufferIndex = -1, eImageChannel imageChannel = eImageChannel.Gray)
+        {
+            if (bufferIndex >= 0)
+                SelBufferIndex = bufferIndex;
+            
+            SelImageChannel = imageChannel;
 
+            return Global.Inst.InspStage.ImageSpace.GetBitmap(SelBufferIndex, SelImageChannel);
+        }
+        public Mat GetMat(int bufferIndex = -1, eImageChannel imageChannel = eImageChannel.Gray)
+        {
+            if (bufferIndex >= 0)
+                SelBufferIndex = bufferIndex;
+
+            SelImageChannel = imageChannel;
+            return Global.Inst.InspStage.ImageSpace.GetMat(SelBufferIndex, SelImageChannel);
+        }
+
+        private void InitInspWindow()
+        {
+            _inspWindow = new InspWindow();
+
+            var propForm = MainForm.GetDockForm<PropertiesForm>();
+            if (propForm != null)
+            {
+                propForm.SetInspType(InspPropType.InspMatch);
+            }
+        }
     }
 }

@@ -25,8 +25,8 @@ namespace JidamVision
         public PropertiesForm()
         {
             InitializeComponent();
-            //속성창 설정
-            SetInspType(InspPropType.InspFilter);
+            //속성창 설정 - 여기말고 InspStage.cs에서 변경해야됨
+           // SetInspType(InspPropType.InspFilter);
         }
         public void SetInspType(InspPropType inspPropType)
         {

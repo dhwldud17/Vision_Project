@@ -133,6 +133,12 @@ namespace JidamVision
                 Cv2.ImWrite(savePath, roiImage);
             }
 
+
+        }//#MATCH PROP#14 템플릿 매칭 위치 입력 받는 함수
+        public void AddRect(List<Rectangle> rectangles)
+        {
+            imageViewer.AddRect(rectangles);
+
         }
     }
 }
