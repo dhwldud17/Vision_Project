@@ -84,11 +84,12 @@ namespace JidamVision
                     //matchProp.LoadInspParam();
                     _inspProp = matchProp;
                     break;
-                //case InspectType.InspFilter:
-                //    FilterInsProp filterProp = new FilterInsProp();
-                //    //filterProp.LoadInspParam();
-                //    _inspProp = filterProp;
-                //    break;
+                case InspectType.InspFilter:
+                    FilterInsProp filterProp = new FilterInsProp();
+                    //filterProp.LoadInspParam();
+                    filterProp.FilterSelected += FilterSelect_FilterChanged;
+                    _inspProp = filterProp;
+                    break;
                 default:
                     MessageBox.Show("유효하지 않은 옵션입니다.");
                     break;

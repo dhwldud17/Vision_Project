@@ -58,7 +58,7 @@ namespace JidamVision.Property
             trackBarUpper.ValueChanged += OnValueChanged; //trackBarUpper의 ValueChanged 이벤트가 발생하면 OnValueChanged 함수 실행
 
             trackBarLower.Value = 0; //trackBarLower의 Value값을 0으로 초기화
-            trackBarUpper.Value = 128; //trackBarUpper의 Value값을 128
+            trackBarUpper.Value = 255; //trackBarUpper의 Value값을 128
 
             //#BINARY FILTER#8 이진화 검사 속성값을 GUI에 설정
             InspWindow inspWindow = Global.Inst.InspStage.InspWindow;

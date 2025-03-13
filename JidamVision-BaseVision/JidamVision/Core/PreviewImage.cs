@@ -286,7 +286,12 @@ namespace JidamVision.Core
         {
             if (_orinalImage == null)
                 return;
+            var cameraForm = MainForm.GetDockForm<CameraForm>();
+            if (cameraForm == null)
+                return;
             Mat filteredImage = new Mat();
+            Bitmap bmpImage;
+
             switch (selected_filter1)
             {
                 case "연산":
@@ -314,14 +319,15 @@ namespace JidamVision.Core
             }
 
             _previewImage = filteredImage;
+            bmpImage = BitmapConverter.ToBitmap(_previewImage);
+            cameraForm.UpdateDisplay(bmpImage);
+            //var cameraForm = MainForm.GetDockForm<CameraForm>();
+            //if (cameraForm != null)
+            //{
+            //    Bitmap bmpImage  = BitmapConverter.ToBitmap(_previewImage);
+            //    cameraForm.UpdateDisplay(bmpImage);
+            //}
 
-            var cameraForm = MainForm.GetDockForm<CameraForm>();
-            if (cameraForm != null)
-            {
-                Bitmap bmpImage  = BitmapConverter.ToBitmap(_previewImage);
-                cameraForm.UpdateDisplay(bmpImage);
-            }
-        
         }
     }
 }
