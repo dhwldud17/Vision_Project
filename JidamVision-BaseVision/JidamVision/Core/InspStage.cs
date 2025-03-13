@@ -1,5 +1,4 @@
-﻿
-using JidamVision.Grab;
+﻿using JidamVision.Grab;
 using JidamVision.Teach;
 using OpenCvSharp;
 using OpenCvSharp.Extensions;
@@ -23,8 +22,9 @@ namespace JidamVision.Core
 
         private ImageSpace _imageSpace = null;
         private GrabModel _grabManager = null;
-        private CameraType _camType = CameraType.HikRobotCam;  //카메라 정해줌  
+        private CameraType _camType = CameraType.HikRobotCam;
         private PreviewImage _previewImage = null;
+
         private InspWindow _inspWindow = null;
 
         public ImageSpace ImageSpace
@@ -226,8 +226,9 @@ namespace JidamVision.Core
         {
             if (bufferIndex >= 0)
                 SelBufferIndex = bufferIndex;
-            
-            SelImageChannel = imageChannel;
+            //#BINARY FILTER#13 채널 정보가 유지되도록, eImageChannel.None 타입을 추가
+            if (imageChannel != eImageChannel.None)
+                SelImageChannel = imageChannel;
 
             return Global.Inst.InspStage.ImageSpace.GetBitmap(SelBufferIndex, SelImageChannel);
         }
@@ -236,7 +237,9 @@ namespace JidamVision.Core
             if (bufferIndex >= 0)
                 SelBufferIndex = bufferIndex;
 
-            SelImageChannel = imageChannel;
+            //#BINARY FILTER#14 채널 정보가 유지되도록, eImageChannel.None 타입을 추가
+            if (imageChannel != eImageChannel.None)
+                SelImageChannel = imageChannel;
             return Global.Inst.InspStage.ImageSpace.GetMat(SelBufferIndex, SelImageChannel);
         }
 
@@ -246,8 +249,10 @@ namespace JidamVision.Core
 
             var propForm = MainForm.GetDockForm<PropertiesForm>();
             if (propForm != null)
-            {
-                propForm.SetInspType(InspPropType.InspMatch);
+            {//#PANEL TO TAB#4 초기화 과정에서 모든 속성 추가
+                propForm.SetInspType(InspectType.InspMatch);
+                propForm.SetInspType(InspectType.InspBinary);
+                propForm.SetInspType(InspectType.InspFilter);
             }
         }
     }

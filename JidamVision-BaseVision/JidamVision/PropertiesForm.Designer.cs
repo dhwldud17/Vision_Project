@@ -30,22 +30,24 @@ namespace JidamVision
         /// </summary>
         private void InitializeComponent()
         {
-            this.panelContainer = new System.Windows.Forms.Panel();
+            this.tabPropControl = new System.Windows.Forms.TabControl();
             this.SuspendLayout();
             // 
-            // panelContainer
+            // tabPropControl
             // 
-            this.panelContainer.Location = new System.Drawing.Point(13, 22);
-            this.panelContainer.Name = "panelContainer";
-            this.panelContainer.Size = new System.Drawing.Size(310, 313);
-            this.panelContainer.TabIndex = 0;
+            this.tabPropControl.Location = new System.Drawing.Point(-6, 42);
+            this.tabPropControl.Name = "tabPropControl";
+            this.tabPropControl.SelectedIndex = 0;
+            this.tabPropControl.Size = new System.Drawing.Size(499, 549);
+            this.tabPropControl.TabIndex = 0;
             // 
             // PropertiesForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(342, 390);
-            this.Controls.Add(this.panelContainer);
+            this.ClientSize = new System.Drawing.Size(489, 585);
+            this.Controls.Add(this.tabPropControl);
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "PropertiesForm";
             this.Text = "PropertiesForm";
             this.ResumeLayout(false);
@@ -54,6 +56,6 @@ namespace JidamVision
 
         #endregion
 
-        private System.Windows.Forms.Panel panelContainer;
+        private System.Windows.Forms.TabControl tabPropControl;
     }
 }

@@ -58,6 +58,11 @@ namespace JidamVision
 
             imageViewer.LoadBitmap(bitmap);
 
+            //#BINARY FILTER#12 이진화 프리뷰에서 각 채널별로 설정이 적용되도록, 현재 이미지를 프리뷰 클래스 설정
+            //현재 선택된 이미지로 Previwe이미지 갱신
+            Mat curImage = Global.Inst.InspStage.GetMat();
+            Global.Inst.InspStage.PreView.SetImage(curImage);
+
         }
 
         private void CameraForm_Resize(object sender, EventArgs e)
@@ -135,8 +140,11 @@ namespace JidamVision
 
 
         }//#MATCH PROP#14 템플릿 매칭 위치 입력 받는 함수
-        public void AddRect(List<Rectangle> rectangles)
+        public void AddRect(List<Rect> rects)
         {
+            //#BINARY FILTER#18 imageViewer는 Rectangle 타입으로 그래픽을 그리므로, 
+            //아래 코드를 이용해, Rect -> Rectangle로 변환하는 람다식
+            var rectangles = rects.Select(r => new Rectangle(r.X, r.Y, r.Width, r.Height)).ToList();
             imageViewer.AddRect(rectangles);
 
         }
