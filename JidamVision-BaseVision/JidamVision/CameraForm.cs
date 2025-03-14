@@ -21,29 +21,56 @@ namespace JidamVision
         public CameraForm()
         {
             InitializeComponent();
+            rbtnColor.Checked = true;
         }
         // GUI상에서 선택된 채널 라디오 버튼에 따른 채널 정보를 반환
         private eImageChannel GetCurrentChannel()
         {
-            if (rbtRed.Checked)
+            if (rbtnRedChannel.Checked)
             {
                 return eImageChannel.Red;
             }
-            else if (rbtBlue.Checked)
+            else if (rbtnBlueChannel.Checked)
             {
                 return eImageChannel.Blue;
             }
-            else if (rbtGreen.Checked)
+            else if (rbtnGreenChannel.Checked)
             {
                 return eImageChannel.Green;
             }
-            else if (rbtGray.Checked)
+            else if (rbtnGrayChannel.Checked)
             {
                 return eImageChannel.Gray;
             }
 
             return eImageChannel.Color;
         }
+
+        private void rbtnColor_CheckedChanged(object sender, EventArgs e)
+        {
+            UpdateDisplay();
+        }
+
+        private void rbtnRedChannel_CheckedChanged(object sender, EventArgs e)
+        {
+            UpdateDisplay();
+        }
+
+        private void rbtnBlueChannel_CheckedChanged(object sender, EventArgs e)
+        {
+            UpdateDisplay();
+        }
+
+        private void rbtnGreenChannel_CheckedChanged(object sender, EventArgs e)
+        {
+            UpdateDisplay();
+        }
+
+        private void rbtnGrayChannel_CheckedChanged(object sender, EventArgs e)
+        {
+            UpdateDisplay();
+        }
+
         public void UpdateDisplay(Bitmap bitmap = null)
         {
             if (bitmap == null)
@@ -51,7 +78,7 @@ namespace JidamVision
                 //# SAVE ROI#3 채널 정보 변수에 저장
                 //참고 프로젝트에서 _currentImageChannel를 모두 찾아서, 수정할것
                 _currentImageChannel = GetCurrentChannel();
-                bitmap = Global.Inst.InspStage.GetBitmap(0, _currentImageChannel);
+                bitmap = Global.Inst.InspStage.GetBitmap(0, _currentImageChannel);//현재 이미지 채널에 맞는 비트맵을 가져옴
                 if (bitmap == null)
                     return;
             }
@@ -68,18 +95,20 @@ namespace JidamVision
         private void CameraForm_Resize(object sender, EventArgs e)
         {
             int margin = 10;
+
             int xPos = Location.X + this.Width - btnGrab.Width - margin;
 
             btnGrab.Location = new System.Drawing.Point(xPos, btnGrab.Location.Y);
             btnLive.Location = new System.Drawing.Point(xPos, btnLive.Location.Y);
-            grbChannel.Location = new System.Drawing.Point(xPos, btnSave.Location.Y + btnSetRoi.Height*2);
             btnSetRoi.Location = new System.Drawing.Point(xPos, btnSetRoi.Location.Y);
-            btnSave.Location = new System.Drawing.Point(xPos, btnSave.Location.Y );
+            btnSave.Location = new System.Drawing.Point(xPos, btnSave.Location.Y);
+            btnInspect.Location = new System.Drawing.Point(xPos, btnInspect.Location.Y);
+            groupBox1.Location = new System.Drawing.Point(xPos, groupBox1.Location.Y);
+            
             imageViewer.Width = this.Width - btnGrab.Width - margin * 2;
             imageViewer.Height = this.Height - margin * 2;
 
             imageViewer.Location = new System.Drawing.Point(margin, margin);
-
         }
 
         private void btnGrab_Click(object sender, EventArgs e)
@@ -146,6 +175,16 @@ namespace JidamVision
             //아래 코드를 이용해, Rect -> Rectangle로 변환하는 람다식
             var rectangles = rects.Select(r => new Rectangle(r.X, r.Y, r.Width, r.Height)).ToList();
             imageViewer.AddRect(rectangles);
+
+        }
+
+        private void btnInspect_Click(object sender, EventArgs e)
+        {
+            Global.Inst.InspStage.InspWorker.RunInspect(); //전체 검사 함수 실행
+        }
+
+        private void groupBox1_Enter(object sender, EventArgs e)
+        {
 
         }
     }

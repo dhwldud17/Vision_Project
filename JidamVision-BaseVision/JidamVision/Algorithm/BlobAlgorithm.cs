@@ -29,32 +29,38 @@ namespace JidamVision.Algorithm
         public int AreaFilter { get; set; } = 100; //픽셀 영역으로 이진화 필터
 
         public BlobAlgorithm()
-        {
+        { //#ABSTRACT ALGORITHM#5 각 함수마다 자신의 알고리즘 타입 설정
+            InspectType = InspectType.InspBinary;
         }
         //#BINARY FILTER#2 이진화 후, 필터를 이용해 원하는 영역을 얻음 
-        public bool DoInspect(Mat srcImage)
+        public override bool DoInspect()
         {
-            if (srcImage == null)
+            IsInspected = false;
+
+            if (_srcImage == null)
                 return false;
 
             Mat grayImage = new Mat();
-            if (srcImage.Type() == MatType.CV_8UC3)
-                Cv2.CvtColor(srcImage, grayImage, ColorConversionCodes.BGR2GRAY);
+            if (_srcImage.Type() == MatType.CV_8UC3)
+                Cv2.CvtColor(_srcImage, grayImage, ColorConversionCodes.BGR2GRAY);
             else
-                grayImage = srcImage;
+                grayImage = _srcImage;
 
             Mat binaryImage = new Mat();
-            //Cv2.Threshold(grayImage, binaryMask, lowerValue,upperValue, ThresholdTypes.Binary);
+            //Cv2.Threshold(grayImage, binaryMask, lowerValue, upperValue, ThresholdTypes.Binary);
             Cv2.InRange(grayImage, BinThreshold.lower, BinThreshold.upper, binaryImage);
 
             if (BinThreshold.invert)
-                Cv2.BitwiseNot(binaryImage, binaryImage); //이진화 반전
+                binaryImage = ~binaryImage;
 
             if (AreaFilter > 0)
             {
                 if (!BlobFilter(binaryImage, AreaFilter))
                     return false;
             }
+
+            IsInspected = true;
+
             return true;
         }
         //#BINARY FILTER#3 이진화 필터처리 함수

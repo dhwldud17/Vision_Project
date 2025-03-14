@@ -101,6 +101,7 @@ namespace JidamVision
             //선택된 필터값 PrieviewImage의 ApplyFilter로 보냄
             string filter1 = e.FilterSelected1;
             int filter2 = e.FilterSelected2;
+
             Global.Inst.InspStage.PreView?.ApplyFilter(filter1, filter2);
 
         }

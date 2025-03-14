@@ -1,4 +1,5 @@
 ﻿using JidamVision.Grab;
+using JidamVision.Inspect;
 using JidamVision.Teach;
 using OpenCvSharp;
 using OpenCvSharp.Extensions;
@@ -25,6 +26,11 @@ namespace JidamVision.Core
         private CameraType _camType = CameraType.WebCam;
         private PreviewImage _previewImage = null;
 
+      
+
+        //#INSP WORKER#6 InspWorker 변수 추가 
+        private InspWorker _inspWorker = null;
+
         private InspWindow _inspWindow = null;
 
         public ImageSpace ImageSpace
@@ -41,6 +47,13 @@ namespace JidamVision.Core
         {
             get => _inspWindow;
         }
+        public InspWorker InspWorker
+        {
+            get => _inspWorker;
+        }
+
+        //#INSP WORKER#1 1개만 있던 InspWindow를 리스트로 변경하여, 여러개의 ROI를 관리하도록 개선
+        public List<InspWindow> InspWindowList { get; set; } = new List<InspWindow>();
 
         public bool LiveMode { get; set; } = false;
 

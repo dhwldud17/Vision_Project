@@ -30,6 +30,10 @@ namespace JidamVision.Teach
 
         public MatchAlgorithm MatchAlgorithm => _matchAlgorithm;
 
+
+        public List<InspAlgorithm> AlgorithmList { get; set; } = new List<InspAlgorithm>();
+
+
         //#BINARY FILTER#5 이진화 알고리즘 추가
         //이진화 검사 클래스
         private BlobAlgorithm _blobAlgorithm;
@@ -90,6 +94,28 @@ namespace JidamVision.Teach
                 int matchCount = _matchAlgorithm.MatchTemplateMultiple(srcImage, out _outPoints);
                 if (matchCount <= 0)
                     return false;
+            }
+
+            return true;
+        }
+
+
+        //#ABSTRACT ALGORITHM#11 알고리즘을 리스트로 관리하므로, 필요한 타입의 알고리즘을 찾는 함수
+        public InspAlgorithm FindInspAlgorithm(InspectType inspType)
+        {
+            foreach (var algorithm in AlgorithmList)
+            {
+                if (algorithm.InspectType == inspType)
+                    return algorithm;
+            }
+            return null;
+        }
+        public bool DoInpsect(InspectType inspType)
+        {
+            foreach (var inspAlgo in AlgorithmList)
+            {
+                if (inspAlgo.InspectType == inspType || inspAlgo.InspectType == InspectType.InspNone)
+                    inspAlgo.DoInspect();
             }
 
             return true;

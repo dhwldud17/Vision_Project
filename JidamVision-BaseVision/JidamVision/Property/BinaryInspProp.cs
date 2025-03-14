@@ -63,7 +63,7 @@ namespace JidamVision.Property
             //#BINARY FILTER#8 이진화 검사 속성값을 GUI에 설정
             InspWindow inspWindow = Global.Inst.InspStage.InspWindow;
             if (inspWindow != null)
-            {
+            {//#INSP WORKER#13 inspWindow에서 이진화 알고리즘 찾는 코드
                 BlobAlgorithm blobAlgo = inspWindow.BlobAlgorithm;
                 if (blobAlgo != null)
                 {
@@ -132,7 +132,8 @@ namespace JidamVision.Property
             if (inspWindow is null)
                 return;
 
-            BlobAlgorithm blobAlgo = inspWindow.BlobAlgorithm;
+            //#INSP WORKER#9 inspWindow에서 이진화 알고리즘 찾는 코드 추가
+            BlobAlgorithm blobAlgo = (BlobAlgorithm)inspWindow.FindInspAlgorithm(InspectType.InspBinary);
             if (blobAlgo is null)
                 return;
 
@@ -146,22 +147,8 @@ namespace JidamVision.Property
             int filterArea = int.Parse(txtArea.Text);
             blobAlgo.AreaFilter = filterArea;
 
-            Mat srcImage = Global.Inst.InspStage.GetMat();
-
-            if (blobAlgo.DoInspect(srcImage))
-            {
-                List<Rect> rects;
-                int findCount = blobAlgo.GetResultRect(out rects);
-                if (findCount > 0)
-                {
-                    //찾은 위치를 이미지상에서 표시
-                    var cameraForm = MainForm.GetDockForm<CameraForm>();
-                    if (cameraForm != null)
-                    {
-                        cameraForm.AddRect(rects);
-                    }
-                }
-            }
+            //#INSP WORKER#10 이진화 검사시, 해당 InspWindow와 이진화 알고리즘만 실행
+            Global.Inst.InspStage.InspWorker.TryInspect(inspWindow, InspectType.InspBinary);
         }
 
         private void txtArea_TextChanged(object sender, EventArgs e)

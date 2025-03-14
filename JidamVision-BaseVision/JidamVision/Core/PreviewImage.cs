@@ -11,13 +11,13 @@ using OpenCvSharp.Extensions;
 
 namespace JidamVision.Core
 {
-    
+
     public class PreviewImage
     {
         private Mat _orinalImage = null;
         private Mat _previewImage = null;
         private Mat _tempImage = null;
-
+        eImageChannel _currentImageChannel = eImageChannel.Color;
         public void SetImage(Mat image)
         {
             _orinalImage = image;
@@ -86,14 +86,35 @@ namespace JidamVision.Core
             bmpImage = BitmapConverter.ToBitmap(_previewImage);
             cameraForm.UpdateDisplay(bmpImage);
         }
-       
-        public void ApplyFilter(String selected_filter1,int selected_filter2)
+
+        public void ApplyFilter(String selected_filter1, int selected_filter2,//ROI이미지데이터)
         {
             if (_orinalImage == null)
                 return;
             var cameraForm = MainForm.GetDockForm<CameraForm>();
             if (cameraForm == null)
                 return;
+
+          //  ROI 영역이 지정되면 해당 부분만 효과 들어가도록.
+            if (imageViewCCtrl.GetRoiRect() != null)
+            {
+
+                // 현재 설정된 ROI 영역 가져오기
+
+                Rectangle roiRect = imageViewCCtrl.GetRoiRect();
+
+                if (roiRect.IsEmpty)
+                    return;
+                //// ROI 영역만 추출
+                ////전체 이미지에서 ROI 영역만을 roiImage에 저장
+
+                //  Mat roiImage = new Mat(currentImage, new Rect(roiRect.X, roiRect.Y, roiRect.Width, roiRect.Height));
+                // OpenCvSharp.Rect roiOpenCvRect = new OpenCvSharp.Rect(roiRect.X, roiRect.Y, roiRect.Width, roiRect.Height);
+                Rect roi = new Rect(roiRect.X, roiRect.Y, roiRect.Width, roiRect.Height);
+                Mat roiImage = new Mat(currentImage, roi);
+                _orinalImage = roiImage;
+            }
+
             Mat filteredImage = new Mat();
             Bitmap bmpImage;
 
@@ -112,26 +133,22 @@ namespace JidamVision.Core
                     break;
                 case "블러링":
                     ImageFilter filter = (ImageFilter)selected_filter2;
-                    FilterFunction.ApplyImageFiltering(filter,_orinalImage,out filteredImage);
+                    FilterFunction.ApplyImageFiltering(filter, _orinalImage, out filteredImage);
                     break;
                 case "Edge":
                     ImageEdge edge = (ImageEdge)selected_filter2;
                     FilterFunction.ApplyEdgeDetection(edge, _orinalImage, out filteredImage);
                     break;
-                
+
                 default:
                     return;
             }
 
+            //원본이랑 합성
             _previewImage = filteredImage;
             bmpImage = BitmapConverter.ToBitmap(_previewImage);
             cameraForm.UpdateDisplay(bmpImage);
-            //var cameraForm = MainForm.GetDockForm<CameraForm>();
-            //if (cameraForm != null)
-            //{
-            //    Bitmap bmpImage  = BitmapConverter.ToBitmap(_previewImage);
-            //    cameraForm.UpdateDisplay(bmpImage);
-            //}
+
 
         }
     }
