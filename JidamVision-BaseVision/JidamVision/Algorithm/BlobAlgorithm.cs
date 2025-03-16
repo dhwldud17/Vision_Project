@@ -26,7 +26,15 @@ namespace JidamVision.Algorithm
 
 
         //픽셀 영역으로 이진화 필터
-        public int AreaFilter { get; set; } = 100; //픽셀 영역으로 이진화 필터
+        public int FilterAreaMin { get; set; } = 0;   // 최소 면적
+        public int FilterAreaMax { get; set; } = 300; // 최대 면적
+
+        public int FilterWidthMin { get; set; } = 0;   // 최소 너비
+        public int FilterWidthMax { get; set; } = 300; // 최대 너비
+
+        public int FilterHeightMin { get; set; } = 0;  // 최소 높이
+        public int FilterHeightMax { get; set; } = 300; // 최대 높이
+
 
         public BlobAlgorithm()
         { //#ABSTRACT ALGORITHM#5 각 함수마다 자신의 알고리즘 타입 설정
@@ -53,9 +61,9 @@ namespace JidamVision.Algorithm
             if (BinThreshold.invert)
                 binaryImage = ~binaryImage;
 
-            if (AreaFilter > 0)
+            if (FilterAreaMin > 0)
             {
-                if (!BlobFilter(binaryImage, AreaFilter))
+                if (!BlobFilter(binaryImage, FilterAreaMin))
                     return false;
             }
 
@@ -81,9 +89,8 @@ namespace JidamVision.Algorithm
             foreach (var contour in contours)
             {
                 double area = Cv2.ContourArea(contour);
-                if (area > areaFilter)
-                    continue;
-
+                // 면적 필터 적용
+                
                 // 필터링된 객체를 이미지에 그림
                 //Cv2.DrawContours(filteredImage, new Point[][] { contour }, -1, Scalar.White, -1);
 
@@ -93,6 +100,14 @@ namespace JidamVision.Algorithm
                 // RotatedRect 정보 계산 
                 //RotatedRect rotatedRect = Cv2.MinAreaRect(contour);//최소 회전된 사각형
                 Rect boundingRect = Cv2.BoundingRect(contour);
+                if (area < FilterAreaMin || area > FilterAreaMax)
+                    continue;
+
+                // 너비, 높이 필터 적용
+                if (boundingRect.Width < FilterWidthMin || boundingRect.Width > FilterWidthMax)
+                    continue;
+                if (boundingRect.Height < FilterHeightMin || boundingRect.Height > FilterHeightMax)
+                    continue;
 
                 _findArea.Add(boundingRect);
 
@@ -110,11 +125,16 @@ namespace JidamVision.Algorithm
         public int GetResultRect(out List<Rect> resultArea)
         {
             resultArea = null;
-            if (_findArea is null || _findArea.Count <=0)
+
+            //#ABSTRACT ALGORITHM#7 검사가 완료되지 않았다면, 리턴
+            if (!IsInspected)
+                return -1;
+
+            if (_findArea is null || _findArea.Count <= 0)
                 return -1;
 
             resultArea = _findArea;
-                return resultArea.Count;
+            return resultArea.Count; 
         }
     }
 

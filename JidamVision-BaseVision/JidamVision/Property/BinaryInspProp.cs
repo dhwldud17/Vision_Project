@@ -64,11 +64,24 @@ namespace JidamVision.Property
             InspWindow inspWindow = Global.Inst.InspStage.InspWindow;
             if (inspWindow != null)
             {//#INSP WORKER#13 inspWindow에서 이진화 알고리즘 찾는 코드
-                BlobAlgorithm blobAlgo = inspWindow.BlobAlgorithm;
+                BlobAlgorithm blobAlgo = (BlobAlgorithm)inspWindow.FindInspAlgorithm(InspectType.InspBinary);
                 if (blobAlgo != null)
                 {
-                    int filterArea = blobAlgo.AreaFilter;
-                    txtArea.Text = filterArea.ToString();
+                    // FilterAreaMin, FilterAreaMax, FilterWidthMin, FilterWidthMax, FilterHeightMin, FilterHeightMax
+                    int filterAreaMin = blobAlgo.FilterAreaMin;
+                    int filterAreaMax = blobAlgo.FilterAreaMax;
+                    int filterWidthMin = blobAlgo.FilterWidthMin;
+                    int filterWidthMax = blobAlgo.FilterWidthMax;
+                    int filterHeightMin = blobAlgo.FilterHeightMin;
+                    int filterHeightMax = blobAlgo.FilterHeightMax;
+
+                    // 텍스트 박스에 필터링 값 설정
+                    txtArea_min.Text = filterAreaMin.ToString();
+                    txtArea_max.Text = filterAreaMax.ToString();
+                    txtWidth_min.Text = filterWidthMin.ToString();
+                    txtWidth_max.Text = filterWidthMax.ToString();
+                    txtHeight_min.Text = filterHeightMin.ToString();
+                    txtHeight_max.Text = filterHeightMax.ToString();
                 }
             }
         }
@@ -144,8 +157,13 @@ namespace JidamVision.Property
 
             blobAlgo.BinThreshold = threshold;
 
-            int filterArea = int.Parse(txtArea.Text);
-            blobAlgo.AreaFilter = filterArea;
+            int filterArea_min = int.Parse(txtArea_min.Text);
+            int filterArea_max = int.Parse(txtArea_max.Text);
+            int filterHeight_min = int.Parse(txtHeight_min.Text);
+            int filterHeight_max = int.Parse(txtHeight_max.Text);
+            int filterWidth_min = int.Parse(txtWidth_min.Text);
+            int filterWidth_max = int.Parse(txtWidth_max.Text);
+           
 
             //#INSP WORKER#10 이진화 검사시, 해당 InspWindow와 이진화 알고리즘만 실행
             Global.Inst.InspStage.InspWorker.TryInspect(inspWindow, InspectType.InspBinary);
@@ -157,6 +175,11 @@ namespace JidamVision.Property
         }
 
         private void lbArea_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
         {
 
         }
