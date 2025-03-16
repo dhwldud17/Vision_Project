@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using JidamVision.Core;
 
 namespace JidamVision.Property
 {
@@ -102,6 +103,8 @@ namespace JidamVision.Property
         {
 
         }
+
+        
     }
 
     public class FilterSelectedEventArgs : EventArgs

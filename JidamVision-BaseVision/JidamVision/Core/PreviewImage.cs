@@ -87,69 +87,73 @@ namespace JidamVision.Core
             cameraForm.UpdateDisplay(bmpImage);
         }
 
-        public void ApplyFilter(String selected_filter1, int selected_filter2,//ROI이미지데이터)
+        public void ApplyFilter(string selected_filter1, int selected_filter2)
         {
             if (_orinalImage == null)
                 return;
+
             var cameraForm = MainForm.GetDockForm<CameraForm>();
             if (cameraForm == null)
                 return;
 
-          //  ROI 영역이 지정되면 해당 부분만 효과 들어가도록.
-            if (imageViewCCtrl.GetRoiRect() != null)
+            // 원본 이미지를 다시 가져와서 작업하도록 수정
+            Mat originalImage = _orinalImage;
+            Mat filteredImage = new Mat();
+
+            // ROI가 설정된 경우 또는 설정되지 않은 경우
+            Rect roiRect = new Rect();  // roiRect를 여기에 한 번만 선언
+            Mat imageToProcess = originalImage; // 기본적으로 원본 이미지로 설정
+
+           //ROI영역이 존재하면 
+            if (cameraForm.TryGetROI(out Mat roiImage, out roiRect))
             {
-
-                // 현재 설정된 ROI 영역 가져오기
-
-                Rectangle roiRect = imageViewCCtrl.GetRoiRect();
-
-                if (roiRect.IsEmpty)
-                    return;
-                //// ROI 영역만 추출
-                ////전체 이미지에서 ROI 영역만을 roiImage에 저장
-
-                //  Mat roiImage = new Mat(currentImage, new Rect(roiRect.X, roiRect.Y, roiRect.Width, roiRect.Height));
-                // OpenCvSharp.Rect roiOpenCvRect = new OpenCvSharp.Rect(roiRect.X, roiRect.Y, roiRect.Width, roiRect.Height);
-                Rect roi = new Rect(roiRect.X, roiRect.Y, roiRect.Width, roiRect.Height);
-                Mat roiImage = new Mat(currentImage, roi);
-                _orinalImage = roiImage;
+                // ROI가 있을 때는 ROI만 필터 적용
+                imageToProcess = roiImage;
             }
 
-            Mat filteredImage = new Mat();
-            Bitmap bmpImage;
-
+            // 선택된 필터에 따라 필터 적용
             switch (selected_filter1)
             {
                 case "연산":
-                    // 연산 관련 enum 값 매핑
                     ImageOperation operation = (ImageOperation)selected_filter2;
-                    string op_values = "30 30 30";  //연산값 지정
-                    FilterFunction.ApplyImageOperation(operation, _orinalImage, op_values, out filteredImage);
+                    string op_values = "30 30 30";
+                    FilterFunction.ApplyImageOperation(operation, imageToProcess, op_values, out filteredImage);
                     break;
                 case "비트연산(Bitwise)":
-                    // 비트 연산 관련 enum 값 매핑
                     Bitwise bitwise = (Bitwise)selected_filter2;
-                    FilterFunction.ApplyBitwiseOperation(bitwise, _orinalImage, out filteredImage);
+                    FilterFunction.ApplyBitwiseOperation(bitwise, imageToProcess, out filteredImage);
                     break;
                 case "블러링":
                     ImageFilter filter = (ImageFilter)selected_filter2;
-                    FilterFunction.ApplyImageFiltering(filter, _orinalImage, out filteredImage);
+                    FilterFunction.ApplyImageFiltering(filter, imageToProcess, out filteredImage);
                     break;
                 case "Edge":
                     ImageEdge edge = (ImageEdge)selected_filter2;
-                    FilterFunction.ApplyEdgeDetection(edge, _orinalImage, out filteredImage);
+                    FilterFunction.ApplyEdgeDetection(edge, imageToProcess, out filteredImage);
                     break;
-
                 default:
                     return;
             }
 
-            //원본이랑 합성
-            _previewImage = filteredImage;
-            bmpImage = BitmapConverter.ToBitmap(_previewImage);
+            //// ROI가 설정된 경우, 필터링된 이미지를 해당 영역에만 반영
+            if (cameraForm.TryGetROI(out _, out roiRect))
+            {
+                filteredImage.CopyTo(originalImage[roiRect]);
+            }
+            else
+            {
+                // ROI가 없으면 필터링된 이미지를 원본 이미지 전체에 반영
+                originalImage = filteredImage.Clone(); // Clone()을 사용하여 새로운 이미지로 대체
+            }
+
+            // 필터링된 이미지를 화면에 표시
+            _previewImage = originalImage;
+            Bitmap bmpImage = BitmapConverter.ToBitmap(_previewImage);
             cameraForm.UpdateDisplay(bmpImage);
-
-
         }
+
+
+
+
     }
 }

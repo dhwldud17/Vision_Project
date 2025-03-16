@@ -143,12 +143,31 @@ namespace JidamVision
         {
             return Global.Inst.InspStage.ImageSpace.GetMat(0, _currentImageChannel);
         }
+
+        // ROI를 가져오는 공통 함수 (중복 코드 제거)
+        public bool TryGetROI(out Mat roiImage, out Rect roiRect)
+        {
+            roiImage = null;
+            roiRect = new Rect(); // 기본값
+
+            OpenCvSharp.Mat currentImage = Global.Inst.InspStage.GetMat(0, _currentImageChannel);
+            if (currentImage == null)
+                return false;
+
+            Rectangle roi = imageViewer.GetRoiRect();
+            if (roi.Width == 0 || roi.Height == 0)
+                return false;
+
+            roiRect = new Rect(roi.X, roi.Y, roi.Width, roi.Height);
+            roiImage = new Mat(currentImage, roiRect);
+            return true;
+        }
         private void btnSave_Click(object sender, EventArgs e)
         {
             // 현재 채널 이미지에서, 설정된 ROI 영역을 파일로 저장
             //->ROI사각형으로 자른 부분 저장
             OpenCvSharp.Mat currentImage = Global.Inst.InspStage.GetMat(0, _currentImageChannel);
-            if(currentImage != null)
+            if (currentImage != null)
             {
                 //현재 설정된 ROI 영역을 가져옴
                 Rectangle roiRect = imageViewer.GetRoiRect();
@@ -166,10 +185,8 @@ namespace JidamVision
                 //이미지 저장
                 Cv2.ImWrite(savePath, roiImage);
             }
-
-
-        }//#MATCH PROP#14 템플릿 매칭 위치 입력 받는 함수
-        public void AddRect(List<Rect> rects)
+        }
+            public void AddRect(List<Rect> rects)
         {
             //#BINARY FILTER#18 imageViewer는 Rectangle 타입으로 그래픽을 그리므로, 
             //아래 코드를 이용해, Rect -> Rectangle로 변환하는 람다식
