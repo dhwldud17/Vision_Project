@@ -26,6 +26,7 @@ namespace JidamVision.Algorithm
         public Point OutPoint { get; set; } = new Point(0, 0);
 
         public List<Point> OutPoints { get; set; } = new List<Point>();
+
         //템플릿 매칭으로 찾고 싶은 갯수
         public int MatchCount { get; set; } = 1;
 
@@ -33,6 +34,8 @@ namespace JidamVision.Algorithm
 
         public MatchAlgorithm()
         {
+            //#ABSTRACT ALGORITHM#2 각 함수마다 자신의 알고리즘 타입 설정
+            InspectType = InspectType.InspMatch;
         }
 
         public void SetTemplateImage(Mat templateImage)
@@ -62,34 +65,6 @@ namespace JidamVision.Algorithm
 
             OutPoint = new Point(maxLoc.X + _templateImage.Width, maxLoc.Y + _templateImage.Height);
 
-            return true;
-        }
-
-        public override bool DoInspect()
-        {
-            IsInspected = false;
-
-            Mat srcImage = Global.Inst.InspStage.GetMat();
-
-            if (MatchCount == 1)
-            {
-                if (MatchTemplateSingle(srcImage) == false)
-                    return false;
-
-                OutPoints.Clear();
-                OutPoints.Add(OutPoint);
-            }
-            else
-            {
-                List<Point> outPoints = new List<Point>();
-                int matchCount = MatchTemplateMultiple(srcImage, out outPoints);
-                if (matchCount <= 0)
-                    return false;
-
-                OutPoints = outPoints;
-            }
-
-            IsInspected = true;
             return true;
         }
 
@@ -198,6 +173,57 @@ namespace JidamVision.Algorithm
             }
 
             return matchedPositions.Count;
+        }
+
+        //#ABSTRACT ALGORITHM#3 매칭 알고리즘 검사 구현
+        public override bool DoInspect()
+        {
+            IsInspected = false;
+
+            Mat srcImage = Global.Inst.InspStage.GetMat();
+
+            if (MatchCount == 1)
+            {
+                if (MatchTemplateSingle(srcImage) == false)
+                    return false;
+
+                OutPoints.Clear();
+                OutPoints.Add(OutPoint);
+            }
+            else
+            {
+                List<Point> outPoints = new List<Point>();
+                int matchCount = MatchTemplateMultiple(srcImage, out outPoints);
+                if (matchCount <= 0)
+                    return false;
+
+                OutPoints = outPoints;
+            }
+
+            IsInspected = true;
+            return true;
+        }
+
+        //#ABSTRACT ALGORITHM#4 매칭 검사로 찾을 Rect 리스트 반환
+        public override int GetResultRect(out List<Rect> resultArea)
+        {
+            resultArea = null;
+
+            if (!IsInspected)
+                return -1;
+
+            resultArea = new List<Rect>();
+
+            int halfWidth = _templateImage.Width;
+            int halfHeight = _templateImage.Height;
+
+            foreach (var point in OutPoints)
+            {
+                Console.WriteLine($"매칭된 위치: {OutPoints}");
+                resultArea.Add(new Rect(point.X - halfWidth, point.Y - halfHeight, _templateImage.Width, _templateImage.Height));
+            }
+
+            return resultArea.Count;
         }
     }
 

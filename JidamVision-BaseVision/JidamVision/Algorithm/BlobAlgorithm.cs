@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using JidamVision.Core;
 using OpenCvSharp;
+using OpenCvSharp.Extensions;
+using System;
+using System.Collections.Generic;
 
 namespace JidamVision.Algorithm
-{ //#BINARY FILTER#1 이진화 필터를 위한 클래스
-
+{
+    //#BINARY FILTER#1 이진화 필터를 위한 클래스
+    
 
     //이진화 임계값 설정을 구조체로 만들기
     public struct BinaryThreshold
@@ -22,8 +22,7 @@ namespace JidamVision.Algorithm
         //이진화 필터로 찾은 영역
         private List<Rect> _findArea;
 
-        public BinaryThreshold BinThreshold { get; set; } = new BinaryThreshold(); //이진화 임계값 설정
-
+        public BinaryThreshold BinThreshold { get; set; } = new BinaryThreshold();
 
         //픽셀 영역으로 이진화 필터
         public int FilterAreaMin { get; set; } = 0;   // 최소 면적
@@ -37,10 +36,16 @@ namespace JidamVision.Algorithm
 
 
         public BlobAlgorithm()
-        { //#ABSTRACT ALGORITHM#5 각 함수마다 자신의 알고리즘 타입 설정
+        {
+            //#ABSTRACT ALGORITHM#5 각 함수마다 자신의 알고리즘 타입 설정
             InspectType = InspectType.InspBinary;
         }
+
         //#BINARY FILTER#2 이진화 후, 필터를 이용해 원하는 영역을 얻음 
+
+        //#ABSTRACT ALGORITHM#6 
+        //InspAlgorithm을 상속받아, 구현하고, 인자로 입력받던 것을 부모의 _srcImage 이미지 사용
+        //검사 시작전 IsInspected = false로 초기화하고, 검사가 정상적으로 완료되면,IsInspected = true로 설정
         public override bool DoInspect()
         {
             IsInspected = false;
@@ -122,7 +127,7 @@ namespace JidamVision.Algorithm
         }
 
         //#BINARY FILTER#4 이진화 영역 반환
-        public int GetResultRect(out List<Rect> resultArea)
+        public override int GetResultRect(out List<Rect> resultArea)
         {
             resultArea = null;
 
@@ -134,8 +139,7 @@ namespace JidamVision.Algorithm
                 return -1;
 
             resultArea = _findArea;
-            return resultArea.Count; 
+            return resultArea.Count;
         }
     }
-
 }

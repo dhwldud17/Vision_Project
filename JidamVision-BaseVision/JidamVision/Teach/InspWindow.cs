@@ -22,31 +22,25 @@ namespace JidamVision.Teach
         //템플릿 매칭 이미지
         private Mat _teachingImage;
 
-        //템플릿 매칭 클래스
-        private MatchAlgorithm _matchAlgorithm;
+        public InspWindowType InspWindowType {  get; private set; }
 
-        //템플릿 매칭으로 찾은 위치 리스트
-        private List<OpenCvSharp.Point> _outPoints;
-
-        public MatchAlgorithm MatchAlgorithm => _matchAlgorithm;
-
-        public InspWindowType InspWindowType { get; private set; }
-        public Rect WindowArea { get; set; }
-        public string Name { get; private set; }
+        public string Name {  get; private set; }
         public string UID { get; set; }
+
+        public Rect WindowArea { get; set; }
+
+        //#ABSTRACT ALGORITHM#9 개별 변수로 있던, MatchAlgorithm과 BlobAlgorithm을
+        //InspAlgorithm으로 추상화하여 리스트로 관리하도록 변경
+
         public List<InspAlgorithm> AlgorithmList { get; set; } = new List<InspAlgorithm>();
 
-
-        //#BINARY FILTER#5 이진화 알고리즘 추가
-        //이진화 검사 클래스
-        private BlobAlgorithm _blobAlgorithm;
-        public BlobAlgorithm BlobAlgorithm => _blobAlgorithm; //BlobAlgorithm 클래스를 가져옴
         public InspWindow()
         {
-            _matchAlgorithm = new MatchAlgorithm();
-            //#BINARY FILTER#6 이진화 알고리즘 인스턴스 생성
-            _blobAlgorithm = new BlobAlgorithm();
+            //#ABSTRACT ALGORITHM#13 매칭 알고리즘과 이진화 알고리즘 추가
+            AddInspAlgorithm(InspectType.InspMatch);
+            AddInspAlgorithm(InspectType.InspBinary);
         }
+
         public InspWindow(InspWindowType windowType, string name)
         {
             InspWindowType = windowType;
@@ -54,6 +48,7 @@ namespace JidamVision.Teach
             AddInspAlgorithm(InspectType.InspMatch);
             AddInspAlgorithm(InspectType.InspBinary);
         }
+
         public bool SetTeachingImage(Mat image, System.Drawing.Rectangle rect)
         {
             _rect = rect;
@@ -64,77 +59,32 @@ namespace JidamVision.Teach
         //#MATCH PROP#4 템플릿 매칭 이미지 로딩
         public bool PatternLearn()
         {
-            if (_matchAlgorithm == null)
-                return false;
-
-            string templatePath = Path.Combine(Directory.GetCurrentDirectory(), Define.ROI_IMAGE_NAME);
-            if (File.Exists(templatePath))
-            {
-                _teachingImage = Cv2.ImRead(templatePath);
-
-                if (_teachingImage != null)
-                    _matchAlgorithm.SetTemplateImage(_teachingImage);
-            }
-
-            return true;
-        }
-
-        //#MATCH PROP#5 템플릿 매칭 검사
-        public bool DoInpsect()
-        {
-            if (_teachingImage is null)
-                return false;
-
-            if (_matchAlgorithm is null)
-                _matchAlgorithm = new MatchAlgorithm();
-
-            Mat srcImage = Global.Inst.InspStage.GetMat();
-
-            if (_matchAlgorithm.MatchCount == 1)
-            {
-                if (_matchAlgorithm.MatchTemplateSingle(srcImage) == false)
-                    return false;
-
-                _outPoints = new List<OpenCvSharp.Point>();
-                _outPoints.Add(_matchAlgorithm.OutPoint);
-            }
-            else
-            {
-                int matchCount = _matchAlgorithm.MatchTemplateMultiple(srcImage, out _outPoints);
-                if (matchCount <= 0)
-                    return false;
-            }
-
-            return true;
-        }
-
-
-        //#ABSTRACT ALGORITHM#11 알고리즘을 리스트로 관리하므로, 필요한 타입의 알고리즘을 찾는 함수
-        public InspAlgorithm FindInspAlgorithm(InspectType inspType)
-        {
             foreach (var algorithm in AlgorithmList)
             {
-                if (algorithm.InspectType == inspType)
-                    return algorithm;
-            }
-            return null;
-        }
-        public bool DoInpsect(InspectType inspType)
-        {
-            foreach (var inspAlgo in AlgorithmList)
-            {
-                if (inspAlgo.InspectType == inspType || inspAlgo.InspectType == InspectType.InspNone)
-                    inspAlgo.DoInspect();
+                if (algorithm.InspectType != InspectType.InspMatch)
+                    continue;
+
+                MatchAlgorithm matchAlgo = (MatchAlgorithm)algorithm;
+
+                string templatePath = Path.Combine(Directory.GetCurrentDirectory(), Define.ROI_IMAGE_NAME);
+                if (File.Exists(templatePath))
+                {
+                    _teachingImage = Cv2.ImRead(templatePath);
+
+                    if (_teachingImage != null)
+                        matchAlgo.SetTemplateImage(_teachingImage);
+                }
             }
 
             return true;
         }
+        
         //#ABSTRACT ALGORITHM#10 타입에 따라 알고리즘을 추가하는 함수
         public bool AddInspAlgorithm(InspectType inspType)
         {
             InspAlgorithm inspAlgo = null;
 
-            switch (inspType)
+            switch(inspType)
             {
                 case InspectType.InspBinary:
                     inspAlgo = new BlobAlgorithm();
@@ -151,22 +101,30 @@ namespace JidamVision.Teach
 
             return true;
         }
-        //#MATCH PROP#6 템플릿 매칭 검사 결과 위치를 Rect 리스트로 반환
-        public int GetMatchRect(out List<Rect> rects)
+
+
+        //#ABSTRACT ALGORITHM#11 알고리즘을 리스트로 관리하므로, 필요한 타입의 알고리즘을 찾는 함수
+        public InspAlgorithm FindInspAlgorithm(InspectType inspType)
         {
-            rects = new List<Rect>();
-
-            int halfWidth = _teachingImage.Width;
-            int halfHeight = _teachingImage.Height;
-
-            foreach (var point in _outPoints)
+            foreach (var algorithm in AlgorithmList)
             {
-                Console.WriteLine($"매칭된 위치: {_outPoints}");
-                rects.Add(new Rect(point.X - halfWidth, point.Y - halfHeight, _teachingImage.Width, _teachingImage.Height));
+                if (algorithm.InspectType == inspType)
+                    return algorithm;
             }
-
-            return rects.Count;
+            return null;
         }
 
+        //#ABSTRACT ALGORITHM#12 클래스 내에서, 인자로 입력된 타입의 알고리즘을 검사하거나,
+        ///모든 알고리즘을 검사하는 옵션을 가지는 검사 함수
+        public bool DoInpsect(InspectType inspType)
+        {
+            foreach( var inspAlgo in AlgorithmList)
+            {
+                if (inspAlgo.InspectType == inspType || inspAlgo.InspectType == InspectType.InspNone)
+                    inspAlgo.DoInspect();
+            }
+
+            return true;
+        }
     }
 }

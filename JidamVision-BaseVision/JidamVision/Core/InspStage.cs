@@ -23,7 +23,7 @@ namespace JidamVision.Core
 
         private ImageSpace _imageSpace = null;
         private GrabModel _grabManager = null;
-        private CameraType _camType = CameraType.HikRobotCam;
+        private CameraType _camType = CameraType.WebCam;
         private PreviewImage _previewImage = null;
 
       
@@ -274,7 +274,8 @@ namespace JidamVision.Core
             //#BINARY FILTER#13 채널 정보가 유지되도록, eImageChannel.None 타입을 추가
             if (imageChannel != eImageChannel.None)
                 SelImageChannel = imageChannel;
-
+            if (Global.Inst.InspStage.ImageSpace is null)
+                return null;
             return Global.Inst.InspStage.ImageSpace.GetBitmap(SelBufferIndex, SelImageChannel);
         }
         public Mat GetMat(int bufferIndex = -1, eImageChannel imageChannel = eImageChannel.Gray)
@@ -306,7 +307,7 @@ namespace JidamVision.Core
             CameraForm cameraForm = MainForm.GetDockForm<CameraForm>();
             if (cameraForm != null)
             {
-               cameraForm.UpdateDiagramEntity();
+                cameraForm.UpdateDiagramEntity();
             }
 
             ModelTreeForm modelTreeForm = MainForm.GetDockForm<ModelTreeForm>();

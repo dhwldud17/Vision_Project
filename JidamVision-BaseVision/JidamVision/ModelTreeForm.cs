@@ -1,5 +1,6 @@
 ﻿using JidamVision.Core;
-using JidamVision.Teach; //네임스페이스 가져옴
+using JidamVision.Teach;
+using OpenCvSharp;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -46,7 +47,7 @@ namespace JidamVision
             if (e.Button == MouseButtons.Right)
             {
                 TreeNode clickedNode = tvModelTree.GetNodeAt(e.X, e.Y);
-                if (clickedNode != null && clickedNode.Text == "Root")
+                if (clickedNode != null && clickedNode.Text == "Root") 
                 {
                     tvModelTree.SelectedNode = clickedNode;
                     _contextMenu.Show(tvModelTree, e.Location);
@@ -74,10 +75,12 @@ namespace JidamVision
                 }
             }
         }
+
+        //imageViewer에 ROI 추가 기능 실행
         private void AddNewROI(InspWindowType inspWindowType)
         {
             CameraForm cameraForm = MainForm.GetDockForm<CameraForm>();
-            if (cameraForm == null)
+            if (cameraForm != null)
             {
                 cameraForm.AddRoi(inspWindowType);
             }
@@ -106,6 +109,8 @@ namespace JidamVision
                 TreeNode node = new TreeNode(uid);
                 rootNode.Nodes.Add(node);
             }
+
+            tvModelTree.ExpandAll();
         }
     }
 }

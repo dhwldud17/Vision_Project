@@ -10,9 +10,10 @@ using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
 using JidamVision.Core;
 using OpenCvSharp.Extensions;
-using OpenCvSharp;
-using System.IO;
+using System.Web;
 using JidamVision.Teach;
+using System.IO;
+using OpenCvSharp;
 
 namespace JidamVision
 {
@@ -22,9 +23,29 @@ namespace JidamVision
         public CameraForm()
         {
             InitializeComponent();
+            imageViewer.ModifyROI += ImageViewer_ModifyROI;
             rbtnColor.Checked = true;
+           
         }
         // GUI상에서 선택된 채널 라디오 버튼에 따른 채널 정보를 반환
+
+        private void ImageViewer_ModifyROI(object sender, DiagramEntityEventArgs e)
+        {
+            switch (e.ActionType)
+            {
+                case EntityActionType.Add:
+                    Global.Inst.InspStage.AddInspWindow(e.WindowType, e.Rect);
+                    break;
+
+                case EntityActionType.Modify:
+                    Global.Inst.InspStage.ModifyInspWindow(e.InspWindow, e.Rect);
+                    break;
+
+                case EntityActionType.Delete:
+                    Global.Inst.InspStage.DelInspWindow(e.InspWindow);
+                    break;
+            }
+        }
         private eImageChannel GetCurrentChannel()
         {
             if (rbtnRedChannel.Checked)
@@ -79,7 +100,7 @@ namespace JidamVision
                 //# SAVE ROI#3 채널 정보 변수에 저장
                 //참고 프로젝트에서 _currentImageChannel를 모두 찾아서, 수정할것
                 _currentImageChannel = GetCurrentChannel();
-                bitmap = Global.Inst.InspStage.GetBitmap(0, _currentImageChannel);//현재 이미지 채널에 맞는 비트맵을 가져옴
+                bitmap = Global.Inst.InspStage.GetBitmap(0, _currentImageChannel);
                 if (bitmap == null)
                     return;
             }
@@ -91,6 +112,20 @@ namespace JidamVision
             Mat curImage = Global.Inst.InspStage.GetMat();
             Global.Inst.InspStage.PreView.SetImage(curImage);
 
+        }
+
+     
+        private void btnGrab_Click(object sender, EventArgs e)
+        {
+            Global.Inst.InspStage.Grab(0);
+        }
+
+        private void btnLive_Click(object sender, EventArgs e)
+        {
+            Global.Inst.InspStage.LiveMode = !Global.Inst.InspStage.LiveMode; //LiveMode가 true면 false로, false면 true로 바꿔줌 -> Toggle모드.On/Off
+            //Global.Inst.InspStage는 애플리케이션 내에서 유일한 InspStage 인스턴스를 의미하며, 이를 통해 카메라나 이미지 캡처, 검사 기능 등을 관리하는 객체에 접근
+            if (Global.Inst.InspStage.LiveMode) //LiveMode가 true면
+                Global.Inst.InspStage.Grab(0); //Grab함수 실행 
         }
 
         private void CameraForm_Resize(object sender, EventArgs e)
@@ -112,20 +147,6 @@ namespace JidamVision
             imageViewer.Location = new System.Drawing.Point(margin, margin);
         }
 
-        private void btnGrab_Click(object sender, EventArgs e)
-        {
-            Global.Inst.InspStage.Grab(0);
-        }
-
-        private void btnLive_Click(object sender, EventArgs e)
-        {
-            Global.Inst.InspStage.LiveMode = !Global.Inst.InspStage.LiveMode; //LiveMode가 true면 false로, false면 true로 바꿔줌 -> Toggle모드.On/Off
-            //Global.Inst.InspStage는 애플리케이션 내에서 유일한 InspStage 인스턴스를 의미하며, 이를 통해 카메라나 이미지 캡처, 검사 기능 등을 관리하는 객체에 접근
-            if (Global.Inst.InspStage.LiveMode) //LiveMode가 true면
-                Global.Inst.InspStage.Grab(0); //Grab함수 실행 
-        }
-
-        
         private void btnSetRoi_Click(object sender, EventArgs e)
         {
             //ROI 토글 설정
@@ -145,7 +166,7 @@ namespace JidamVision
             return Global.Inst.InspStage.ImageSpace.GetMat(0, _currentImageChannel);
         }
 
-        // ROI를 가져오는 공통 함수 (중복 코드 제거)
+        // ROI를 가져오는 공통 함수 
         public bool TryGetROI(out Mat roiImage, out Rect roiRect)
         {
             roiImage = null;
@@ -172,16 +193,13 @@ namespace JidamVision
             {
                 //현재 설정된 ROI 영역을 가져옴
                 Rectangle roiRect = imageViewer.GetRoiRect();
-                // ROI 영역이 설정되지 않았을 경우 예외 처리
-                if (roiRect.Width == 0 || roiRect.Height == 0)
-                {
-                    MessageBox.Show("ROI 영역을 설정하세요.", "알림", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                if (roiRect.IsEmpty == true)
                     return;
-                }
-                //전체 이미지에서 ROI 영역만을 roilImage에 복사
+
+                //전체 이미지에서 ROI 영역만을 roiImage에 저장
                 Mat roiImage = new Mat(currentImage, new Rect(roiRect.X, roiRect.Y, roiRect.Width, roiRect.Height));
 
-                //현재 실행파일이 있는경로에, 저장할 경로 만들기
+                //현재 실행파일이 있는 경로에, 저장할 경로 만들기
                 string savePath = Path.Combine(Directory.GetCurrentDirectory(), Define.ROI_IMAGE_NAME);
                 //이미지 저장
                 Cv2.ImWrite(savePath, roiImage);
@@ -209,7 +227,7 @@ namespace JidamVision
         {
             Model model = Global.Inst.InspStage.CurModel;
             List<InspWindow> windowList = model.InspWindowList;
-            if (windowList.Count <= 0)
+            if(windowList.Count <= 0) 
                 return;
 
             List<DiagramEntity> diagramEntityList = new List<DiagramEntity>();
@@ -220,15 +238,11 @@ namespace JidamVision
                 Rect rect = window.WindowArea;
                 diagramEntity.LinkedWindow = window;
                 diagramEntity.EntityROI = new Rectangle(rect.X, rect.Y, rect.Width, rect.Height);
-           //     diagramEntity.EntityColor = imageViewer.GetWindowColor(window.InspWindowType);
+                diagramEntity.EntityColor = imageViewer.GetWindowColor(window.InspWindowType);
                 diagramEntityList.Add(diagramEntity);
             }
 
-          //  imageViewer.SetDiagramEntityList(diagramEntityList);
-        }
-        private void groupBox1_Enter(object sender, EventArgs e)
-        {
-
+            imageViewer.SetDiagramEntityList(diagramEntityList);
         }
     }
 }
