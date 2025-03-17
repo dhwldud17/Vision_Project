@@ -88,5 +88,10 @@ namespace JidamVision.Property
             else
                 MessageBox.Show("티칭 실패");
         }
+
+        private void txtExtendX_TextChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

@@ -12,6 +12,7 @@ using JidamVision.Core;
 using OpenCvSharp.Extensions;
 using OpenCvSharp;
 using System.IO;
+using JidamVision.Teach;
 
 namespace JidamVision
 {
@@ -194,12 +195,37 @@ namespace JidamVision
             imageViewer.AddRect(rectangles);
 
         }
-
+        public void AddRoi(InspWindowType inspWindowType)
+        {
+            //ROI 추가
+            imageViewer.NewRoi(inspWindowType);
+        }
         private void btnInspect_Click(object sender, EventArgs e)
         {
             Global.Inst.InspStage.InspWorker.RunInspect(); //전체 검사 함수 실행
         }
+        //#MODEL#13 모델 정보를 이용해, ROI 갱신
+        public void UpdateDiagramEntity()
+        {
+            Model model = Global.Inst.InspStage.CurModel;
+            List<InspWindow> windowList = model.InspWindowList;
+            if (windowList.Count <= 0)
+                return;
 
+            List<DiagramEntity> diagramEntityList = new List<DiagramEntity>();
+
+            foreach (InspWindow window in model.InspWindowList)
+            {
+                DiagramEntity diagramEntity = new DiagramEntity();
+                Rect rect = window.WindowArea;
+                diagramEntity.LinkedWindow = window;
+                diagramEntity.EntityROI = new Rectangle(rect.X, rect.Y, rect.Width, rect.Height);
+           //     diagramEntity.EntityColor = imageViewer.GetWindowColor(window.InspWindowType);
+                diagramEntityList.Add(diagramEntity);
+            }
+
+          //  imageViewer.SetDiagramEntityList(diagramEntityList);
+        }
         private void groupBox1_Enter(object sender, EventArgs e)
         {
 

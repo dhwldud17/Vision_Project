@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using JidamVision.Core;
 
 namespace JidamVision
 {
@@ -32,6 +33,14 @@ namespace JidamVision
 
         // 마지막 오프셋 값을 저장하여 마우스 이동을 연속적으로 처리
         private Point LastOffset = new Point(0, 0);
+
+        //새로 추가할 ROI 타입
+        private InspWindowType _newRoiType = InspWindowType.None;
+
+        //여러개 ROI를 관리하기 위한 리스트
+        //private List<DiagramEntity> _diagramEntityList = new List<DiagramEntity>();
+       // private DiagramEntity _selEntity;
+        private Color _selColor = Color.White;
 
         // 현재 로드된 이미지
         private Bitmap Bitmap = null;
@@ -89,6 +98,11 @@ namespace JidamVision
             DoubleBuffered = true;
         }
 
+        public void NewRoi(InspWindowType inspWindowType)
+        {
+            _newRoiType = inspWindowType;
+        //    _selColor = GetWindowColor(inspWindowType);
+        }
         private void ResizeCanas()
         {
             // 캔버스를 UserControl 크기만큼 생성

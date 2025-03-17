@@ -81,7 +81,7 @@ namespace JidamVision
                     break;
                 case InspectType.InspMatch:
                     MatchInspProp matchProp = new MatchInspProp();
-                    //matchProp.LoadInspParam();
+                //    matchProp.LoadInspParam();
                     _inspProp = matchProp;
                     break;
                 case InspectType.InspFilter:

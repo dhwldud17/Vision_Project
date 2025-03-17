@@ -97,7 +97,7 @@ namespace JidamVision.Core
                 return;
 
             // 원본 이미지를 다시 가져와서 작업하도록 수정
-            Mat originalImage = _orinalImage;
+            Mat originalImage = _orinalImage.Clone();
             Mat filteredImage = new Mat();
 
             // ROI가 설정된 경우 또는 설정되지 않은 경우

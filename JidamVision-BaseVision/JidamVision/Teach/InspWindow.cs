@@ -30,7 +30,10 @@ namespace JidamVision.Teach
 
         public MatchAlgorithm MatchAlgorithm => _matchAlgorithm;
 
-
+        public InspWindowType InspWindowType { get; private set; }
+        public Rect WindowArea { get; set; }
+        public string Name { get; private set; }
+        public string UID { get; set; }
         public List<InspAlgorithm> AlgorithmList { get; set; } = new List<InspAlgorithm>();
 
 
@@ -44,7 +47,13 @@ namespace JidamVision.Teach
             //#BINARY FILTER#6 이진화 알고리즘 인스턴스 생성
             _blobAlgorithm = new BlobAlgorithm();
         }
-
+        public InspWindow(InspWindowType windowType, string name)
+        {
+            InspWindowType = windowType;
+            Name = name;
+            AddInspAlgorithm(InspectType.InspMatch);
+            AddInspAlgorithm(InspectType.InspBinary);
+        }
         public bool SetTeachingImage(Mat image, System.Drawing.Rectangle rect)
         {
             _rect = rect;
@@ -120,7 +129,28 @@ namespace JidamVision.Teach
 
             return true;
         }
+        //#ABSTRACT ALGORITHM#10 타입에 따라 알고리즘을 추가하는 함수
+        public bool AddInspAlgorithm(InspectType inspType)
+        {
+            InspAlgorithm inspAlgo = null;
 
+            switch (inspType)
+            {
+                case InspectType.InspBinary:
+                    inspAlgo = new BlobAlgorithm();
+                    break;
+                case InspectType.InspMatch:
+                    inspAlgo = new MatchAlgorithm();
+                    break;
+            }
+
+            if (inspAlgo is null)
+                return false;
+
+            AlgorithmList.Add(inspAlgo);
+
+            return true;
+        }
         //#MATCH PROP#6 템플릿 매칭 검사 결과 위치를 Rect 리스트로 반환
         public int GetMatchRect(out List<Rect> rects)
         {

@@ -23,14 +23,15 @@ namespace JidamVision.Core
 
         private ImageSpace _imageSpace = null;
         private GrabModel _grabManager = null;
-        private CameraType _camType = CameraType.WebCam;
+        private CameraType _camType = CameraType.HikRobotCam;
         private PreviewImage _previewImage = null;
 
       
 
         //#INSP WORKER#6 InspWorker 변수 추가 
         private InspWorker _inspWorker = null;
-
+        //#MODEL#6 모델 변수 선언
+        private Model _model = null;
         private InspWindow _inspWindow = null;
 
         public ImageSpace ImageSpace
@@ -41,6 +42,11 @@ namespace JidamVision.Core
         public PreviewImage PreView
         {
             get => _previewImage;
+        }
+        //#MODEL#7 모델 프로퍼티 만들기//모델 변수에 대한 프로퍼티
+        public Model CurModel
+        {
+            get => _model;
         }
 
         public InspWindow InspWindow
@@ -66,7 +72,10 @@ namespace JidamVision.Core
         {
             _imageSpace = new ImageSpace();
             _previewImage = new PreviewImage();
+            _inspWorker = new InspWorker();
 
+            //#MODEL#8 모델 인스턴스 생성
+            _model = new Model();
             switch (_camType)
             {
                 case CameraType.WebCam:
@@ -98,7 +107,30 @@ namespace JidamVision.Core
             return true;
         }
 
+        //#MODEL#9 ImageViwer에서 ROI를 추가하여, InspWindow생성하는 함수
+        public void AddInspWindow(InspWindowType windowType, Rect rect)
+        {
+            InspWindow inspWindow = _model.AddInspWindow(windowType);
+            if (inspWindow is null)
+                return;
 
+            inspWindow.WindowArea = rect;
+            UpdateDiagramEntity();
+        }
+        //#MODEL#10 기존 ROI 수정되었을때, 그 정보를 InspWindow에 반영
+        public void ModifyInspWindow(InspWindow inspWindow, Rect rect)
+        {
+            if(inspWindow is null)
+                return;
+            inspWindow.WindowArea = rect;
+           
+        }
+        //#MODEL#11 InspWindow 삭제하기
+        public void DelInspWindow(InspWindow inspWindow)
+        {
+            _model.DelInspWindow(InspWindow);
+            UpdateDiagramEntity();
+        }
         public void InitModelGrab(int bufferCount)
         {
             if (_grabManager == null)
@@ -267,6 +299,22 @@ namespace JidamVision.Core
                 propForm.SetInspType(InspectType.InspBinary);
                 propForm.SetInspType(InspectType.InspFilter);
             }
+        }
+        //#MODEL#15 변경된 모델 정보 갱신하여, ImageViewer와 모델트리에 반영
+        public void UpdateDiagramEntity()
+        {
+            CameraForm cameraForm = MainForm.GetDockForm<CameraForm>();
+            if (cameraForm != null)
+            {
+               cameraForm.UpdateDiagramEntity();
+            }
+
+            ModelTreeForm modelTreeForm = MainForm.GetDockForm<ModelTreeForm>();
+            if (modelTreeForm != null)
+            {
+               modelTreeForm.UpdateDiagramEntity();
+            }
+
         }
     }
 }
