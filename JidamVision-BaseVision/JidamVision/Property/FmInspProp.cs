@@ -27,10 +27,12 @@ namespace JidamVision.Property
         public FmInspProp()
         {
             InitializeComponent();
-           
+            LoadInspParam();
         }
         public void LoadInspParam()
         { cb_Color.DataSource = Enum.GetValues(typeof(ColorType)).Cast<ColorType>().ToList();
+
+            //#BINARY FILTER#8 이진화 검사 속성값을 GUI에 설정
             InspWindow inspWindow = Global.Inst.InspStage.InspWindow;
             if (inspWindow is null)
                 return;
@@ -44,7 +46,6 @@ namespace JidamVision.Property
 
             int GV_Value = FMAlgo.GV;
             txtDifferenceGV.Text = Convert.ToString(GV_Value);
-
 
             txt_SizeX.Text = SizeX.ToString();
             txt_SizeY.Text = SizeY.ToString();

@@ -22,7 +22,9 @@ namespace JidamVision.Algorithm
 
         public override bool DoInspect()
         {
-            return true;
+            // 실제 검사 로직 구현
+            
+            return (true);
         }
 
     }
