@@ -57,6 +57,33 @@ namespace JidamVision.Property
     #endregion
     public class FilterFunction
     {
+
+
+        // 필터 목록을 Dictionary로 관리
+        private static readonly Dictionary<string, List<string>> _filterMap = new Dictionary<string, List<string>>()
+    {
+        { "연산", new List<string> { "더하기", "빼기", "곱하기", "나누기", "최대값 비교", "최소값 비교", "절대값 계산", "절대값 차이 계산" } },
+        { "비트연산(Bitwise)", new List<string> { "AND 연산", "OR 연산", "XOR 연산", "NOT 연산" } },
+        { "블러링", new List<string> { "블러 필터", "박스 필터", "미디안 블러", "가우시안 블러", "양방향 필터" } },
+        { "Edge", new List<string> { "Sobel 필터", "Scharr 필터", "Laplacian 필터", "Canny 엣지" } },
+
+          //각 상황에 맞는 필터목록 추가하기
+        {"이진화", new List<string>{"미디안 블러", "가우시안 블러"} },
+        {"매칭", new List<string>{ "Sobel 필터", "Scharr 필터", "Laplacian 필터", "Canny 엣지"} }
+
+    };
+        // 특정 필터 목록 가져오기
+        public static List<string> GetFilters(string filterType)
+        {
+            if (_filterMap.ContainsKey(filterType))
+            {
+                return _filterMap[filterType];
+            }
+
+            return new List<string>();
+        }
+
+
         #region 필터 적용 함수
         public static void ApplyImageOperation(ImageOperation operation, Mat src1, string op_value, out Mat resultImage) // 이미지 연산 코드
                                                                                                                          // 아래 코드는 이미지 연산을 수행하는 코드로, 두 이미지를 연산하여 결과를 보여주는 방식
@@ -214,19 +241,6 @@ namespace JidamVision.Property
             resultImage = dst;
         }
         #endregion
-        // 검사 유형별 적용 가능한 필터 목록
-        private static readonly Dictionary<InspectionType, List<ImageFilter>> _filterMap = new Dictionary<InspectionType, List<ImageFilter>>()
-        {
-            { InspectionType.BINARY, new List<ImageFilter> { ImageFilter.FilterGaussianBlur, ImageFilter.FilterMedianBlur } },
-            { InspectionType.MATCH, new List<ImageFilter> { ImageFilter.FilterBoxFilter, ImageFilter.FilterBilateral } }
-        };
-        // 특정 검사 유형에 필요한 필터만 가져오는 함수
-        public static List<ImageFilter> GetAvailableFilters(InspectionType inspectionType)
-        {
-            if (_filterMap.TryGetValue(inspectionType, out var filters))
-                return filters;
 
-            return new List<ImageFilter>(); // 없는 경우 빈 리스트 반환
-        }
     }
 }

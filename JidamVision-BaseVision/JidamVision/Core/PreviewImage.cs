@@ -111,9 +111,12 @@ namespace JidamVision.Core
                 // ROI가 있을 때는 ROI만 필터 적용
                 imageToProcess = roiImage;
             }
+             if(selected_filter1 == "이진화")
+            {
 
-            // 선택된 필터에 따라 필터 적용
-            switch (selected_filter1)
+            }
+                // 선택된 필터에 따라 필터 적용
+                switch (selected_filter1)
             {
                 case "연산":
                     ImageOperation operation = (ImageOperation)selected_filter2;
