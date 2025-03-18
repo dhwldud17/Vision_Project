@@ -33,56 +33,37 @@ namespace JidamVision.Property
             //만약 이 콤보박스를 눌러서 적용할 효과를 선택하면 각 효과에 따라 밑에 뜨는 콤보박스목록이 달라야함.
             _selected_effect = Convert.ToString(select_effect.SelectedItem); //선택한 효과 적용
             select_effect2.Items.Clear(); // 이전 항목들을 지우고 새 항목을 추가
-            if (_selected_effect == "연산")
+                                          // 선택한 필터 유형에 맞는 옵션을 가져와 추가
+            List<string> filters =GetFilters(_selected_effect);
+            if (filters.Count > 0)
             {
-                select_effect2.Items.Add("더하기");
-                select_effect2.Items.Add("빼기");
-                select_effect2.Items.Add("곱하기");
-                select_effect2.Items.Add("나누기");
-                select_effect2.Items.Add("최대값 비교");
-                select_effect2.Items.Add("최소값 비교");
-                select_effect2.Items.Add("절대값 계산");
-                select_effect2.Items.Add("절대값 차이 계산");
+                select_effect2.Items.AddRange(filters.ToArray());
                 select_effect2.Show();
-                
-            }
-            else if (_selected_effect == "비트연산(Bitwise)")
-            {
-                select_effect2.Items.Add("AND 연산");
-                select_effect2.Items.Add("OR 연산");
-                select_effect2.Items.Add("XOR 연산");
-                select_effect2.Items.Add("NOT 연산");
-                select_effect2.Show();
-               
-            }
-            else if (_selected_effect == "블러링")
-            {
-                select_effect2.Items.Add("블러 필터");
-                select_effect2.Items.Add("박스 필터");
-                select_effect2.Items.Add("미디안 블러");
-                select_effect2.Items.Add("가우시안 블러");
-                select_effect2.Items.Add("양방향 필터");
-                select_effect2.Show();
-                
-            }
-            else if (_selected_effect == "Edge")
-            {
-                select_effect2.Items.Add("Sobel 필터");
-                select_effect2.Items.Add("Scharr 필터");
-                select_effect2.Items.Add("Laplacian 필터");
-                select_effect2.Items.Add("Canny 엣지");
-                select_effect2.Show();
-                
             }
             else
             {
                 select_effect2.Hide();
-                
             }
 
 
-
         }
+
+
+        // 필터 목록을 Dictionary로 관리
+        private static readonly Dictionary<string, List<string>> _filterMap = new Dictionary<string, List<string>>()
+    {
+        { "연산", new List<string> { "더하기", "빼기", "곱하기", "나누기", "최대값 비교", "최소값 비교", "절대값 계산", "절대값 차이 계산" } },
+        { "비트연산(Bitwise)", new List<string> { "AND 연산", "OR 연산", "XOR 연산", "NOT 연산" } },
+        { "블러링", new List<string> { "블러 필터", "박스 필터", "미디안 블러", "가우시안 블러", "양방향 필터" } },
+        { "Edge", new List<string> { "Sobel 필터", "Scharr 필터", "Laplacian 필터", "Canny 엣지" } },
+       
+    };
+        // 특정 필터 목록 가져오기
+        public static List<string> GetFilters(string filterType)
+        {
+            return _filterMap.ContainsKey(filterType) ? _filterMap[filterType] : new List<string>();
+        }
+
 
         private void apply_Click(object sender, EventArgs e)
         {

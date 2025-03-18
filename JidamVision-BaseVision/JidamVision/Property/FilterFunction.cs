@@ -7,6 +7,13 @@ using OpenCvSharp;
 
 namespace JidamVision.Property
 {
+    //검사유형
+    public enum InspectionType
+    {
+        BINARY,
+        MATCH
+    }
+    #region 필터유형
     public enum ImageOperation
     {
         OpAdd = 0,         // 덧셈
@@ -47,11 +54,13 @@ namespace JidamVision.Property
         FilterLaplacian,          // Laplacian 필터
         FilterCanny               // Canny 엣지 검출
     }
+    #endregion
     public class FilterFunction
     {
+        #region 필터 적용 함수
         public static void ApplyImageOperation(ImageOperation operation, Mat src1, string op_value, out Mat resultImage) // 이미지 연산 코드
-                                                                                                                  // 아래 코드는 이미지 연산을 수행하는 코드로, 두 이미지를 연산하여 결과를 보여주는 방식
-                                                                                                                  // 예시: 덧셈, 뺄셈, 곱셈, 나눗셈, 최대값, 최소값 등을 계산할 수 있음
+                                                                                                                         // 아래 코드는 이미지 연산을 수행하는 코드로, 두 이미지를 연산하여 결과를 보여주는 방식
+                                                                                                                         // 예시: 덧셈, 뺄셈, 곱셈, 나눗셈, 최대값, 최소값 등을 계산할 수 있음
         {
             // 공백으로 구분된 값이 3개인지 확인
             string[] values = op_value.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
@@ -133,7 +142,7 @@ namespace JidamVision.Property
         }
 
         public static void ApplyBitwiseOperation(Bitwise operation, Mat src1, out Mat resultImage)  // 이미지 Bitwise 연산 코드
-                                                                                             // 두 이미지를 비트 연산(AND, OR, XOR, NOT 등)으로 결합하는 예시
+                                                                                                    // 두 이미지를 비트 연산(AND, OR, XOR, NOT 등)으로 결합하는 예시
         {
             Mat dst = new Mat();
             Mat src2 = src1.Flip(FlipMode.Y); //Y축 기준으로 반전한 이미지 
@@ -159,7 +168,7 @@ namespace JidamVision.Property
         }
 
         public static void ApplyImageFiltering(ImageFilter filterType, Mat src, out Mat resultImage) // 블러링 효과 코드
-                                                                                              // 다양한 필터를 사용하여 이미지에 흐림 효과를 적용하는 예시
+                                                                                                     // 다양한 필터를 사용하여 이미지에 흐림 효과를 적용하는 예시
         {
             Mat dst = new Mat();
             switch (filterType)
@@ -184,7 +193,7 @@ namespace JidamVision.Property
         }
 
         public static void ApplyEdgeDetection(ImageEdge edgeType, Mat src, out Mat resultImage)// 엣지(가장자리) 검출 코드
-                                                                                        // Sobel, Scharr, Laplacian, Canny 필터를 사용해 이미지의 가장자리를 검출하는 예시
+                                                                                               // Sobel, Scharr, Laplacian, Canny 필터를 사용해 이미지의 가장자리를 검출하는 예시
         {
             Mat dst = new Mat();
             switch (edgeType)
@@ -203,6 +212,21 @@ namespace JidamVision.Property
                     break;
             }
             resultImage = dst;
+        }
+        #endregion
+        // 검사 유형별 적용 가능한 필터 목록
+        private static readonly Dictionary<InspectionType, List<ImageFilter>> _filterMap = new Dictionary<InspectionType, List<ImageFilter>>()
+        {
+            { InspectionType.BINARY, new List<ImageFilter> { ImageFilter.FilterGaussianBlur, ImageFilter.FilterMedianBlur } },
+            { InspectionType.MATCH, new List<ImageFilter> { ImageFilter.FilterBoxFilter, ImageFilter.FilterBilateral } }
+        };
+        // 특정 검사 유형에 필요한 필터만 가져오는 함수
+        public static List<ImageFilter> GetAvailableFilters(InspectionType inspectionType)
+        {
+            if (_filterMap.TryGetValue(inspectionType, out var filters))
+                return filters;
+
+            return new List<ImageFilter>(); // 없는 경우 빈 리스트 반환
         }
     }
 }

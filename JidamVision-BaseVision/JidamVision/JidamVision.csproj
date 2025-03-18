@@ -184,23 +184,23 @@
     <Compile Include="ResultForm.Designer.cs">
       <DependentUpon>ResultForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Setting\CameraSetting.cs">
+    <Compile Include="Property\Setting\CameraSetting.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Setting\CameraSetting.Designer.cs">
+    <Compile Include="Property\Setting\CameraSetting.Designer.cs">
       <DependentUpon>CameraSetting.cs</DependentUpon>
     </Compile>
-    <Compile Include="Setting\PathSetting.cs">
+    <Compile Include="Property\Setting\PathSetting.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Setting\PathSetting.Designer.cs">
+    <Compile Include="Property\Setting\PathSetting.Designer.cs">
       <DependentUpon>PathSetting.cs</DependentUpon>
     </Compile>
-    <Compile Include="Setting\SettingXml.cs" />
-    <Compile Include="Setting\SetupForm.cs">
+    <Compile Include="Property\Setting\SettingXml.cs" />
+    <Compile Include="Property\Setting\SetupForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Setting\SetupForm.Designer.cs">
+    <Compile Include="Property\Setting\SetupForm.Designer.cs">
       <DependentUpon>SetupForm.cs</DependentUpon>
     </Compile>
     <Compile Include="StatisticForm.cs">
@@ -254,13 +254,13 @@
     <EmbeddedResource Include="ResultForm.resx">
       <DependentUpon>ResultForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Setting\CameraSetting.resx">
+    <EmbeddedResource Include="Property\Setting\CameraSetting.resx">
       <DependentUpon>CameraSetting.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Setting\PathSetting.resx">
+    <EmbeddedResource Include="Property\Setting\PathSetting.resx">
       <DependentUpon>PathSetting.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Setting\SetupForm.resx">
+    <EmbeddedResource Include="Property\Setting\SetupForm.resx">
       <DependentUpon>SetupForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />

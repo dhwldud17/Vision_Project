@@ -24,7 +24,7 @@ namespace JidamVision.Core
 
         private ImageSpace _imageSpace = null;
         private GrabModel _grabManager = null;
-        private CameraType _camType = CameraType.WebCam;
+        private CameraType _camType = CameraType.None;
         private PreviewImage _previewImage = null;
 
       
@@ -81,6 +81,8 @@ namespace JidamVision.Core
 
             //#SETUP#7 환경설정에서 설정값 가져오기
             LoadSetting();
+
+
             switch (_camType)
             {
                 case CameraType.WebCam:
