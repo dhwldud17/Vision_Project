@@ -27,7 +27,8 @@ namespace JidamVision.Setting
         private void LoadSetting()
         {//콤보박스 
             cbNetworkType.DataSource =Enum.GetValues(typeof(NetworkType)).Cast<NetworkType>().ToList();
-
+            //환경설정에서 현재 타입 얻기
+            cbNetworkType.SelectedIndex = (int)SettingXml.Inst.NetworkType;
             //IP 입력 받아오기
             txtIPAddress.Text = SettingXml.Inst.IPAddress;
         }
@@ -47,6 +48,11 @@ namespace JidamVision.Setting
         private void btnApply_Click(object sender, EventArgs e)
         {
             SaveSetting();
+        }
+
+        private void txtIPAddress_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

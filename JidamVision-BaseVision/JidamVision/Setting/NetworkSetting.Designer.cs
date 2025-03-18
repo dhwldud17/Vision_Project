@@ -52,6 +52,7 @@
             this.txtIPAddress.Name = "txtIPAddress";
             this.txtIPAddress.Size = new System.Drawing.Size(258, 28);
             this.txtIPAddress.TabIndex = 1;
+            this.txtIPAddress.TextChanged += new System.EventHandler(this.txtIPAddress_TextChanged);
             // 
             // lbCommnicationType
             // 

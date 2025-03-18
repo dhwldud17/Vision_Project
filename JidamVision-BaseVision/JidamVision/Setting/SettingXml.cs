@@ -25,7 +25,7 @@ namespace JidamVision.Setting
         public string IPAddress { get; set; } = "";
         public CameraType CamType { get; set; } = CameraType.WebCam;
 
-        public NetworkType NetworkType { get; set; }
+        public NetworkType NetworkType { get; set; } = NetworkType.WCF;
         public static SettingXml Inst
         {
             get
@@ -83,6 +83,8 @@ namespace JidamVision.Setting
         {
             SettingXml setting = new SettingXml();
             setting.ModelDir = @"d:\Model";
+            setting.IPAddress = @"123.456.789.000";
+            
             return setting;
         }
 
