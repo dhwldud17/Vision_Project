@@ -1,0 +1,25 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using OpenCvSharp;
+using JidamVision.Core;
+namespace JidamVision.Algorithm
+{
+    public class FmInspAlgorithm : InspAlgorithm
+    {
+        public Size ExtSize { get; set; } = new Size(100, 100);
+
+        public FmInspAlgorithm()
+        {
+            //InspectType = InspectType.InspFm;
+        }
+
+        public override bool DoInspect()
+        {
+            return true;
+        }
+
+    }
+}

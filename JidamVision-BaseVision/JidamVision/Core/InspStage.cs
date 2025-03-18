@@ -306,6 +306,7 @@ namespace JidamVision.Core
                 propForm.SetInspType(InspectType.InspMatch);
                 propForm.SetInspType(InspectType.InspBinary);
                 propForm.SetInspType(InspectType.InspFilter);
+                propForm.SetInspType(InspectType.InspFm);
             }
         }
         //#MODEL#15 변경된 모델 정보 갱신하여, ImageViewer와 모델트리에 반영

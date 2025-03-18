@@ -12,7 +12,8 @@ namespace JidamVision.Setting
 { public enum SettingType
         {
             SettingPath = 0,
-            SettingCamera
+            SettingCamera,
+            SettingNetwork
         }
     public partial class SetupForm : Form
     { //#SETUP#2 환경설정창 종류를 구분하기 위한 타입 설정
@@ -35,6 +36,10 @@ namespace JidamVision.Setting
             //경로 설정 페이지 추가
             PathSetting pathSetting = new PathSetting();
             AddTabControl(pathSetting, "Path");
+
+            //경로 설정 페이지 추가
+            NetworkSetting NetworkSetting = new NetworkSetting();
+            AddTabControl(NetworkSetting, "Network");
 
             //기본값으로 카메라 설정 페이지 보이도록 설정
             tabSetting.SelectTab(0);

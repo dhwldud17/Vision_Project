@@ -110,6 +110,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Algorithm\BlobAlgorithm.cs" />
+    <Compile Include="Algorithm\FmInspAlgorithm.cs" />
     <Compile Include="Algorithm\InspAlgorithm.cs" />
     <Compile Include="Algorithm\MatchAlgorithm.cs" />
     <Compile Include="CameraForm.cs">
@@ -172,6 +173,12 @@
     <Compile Include="Property\FilterInsProp.Designer.cs">
       <DependentUpon>FilterInsProp.cs</DependentUpon>
     </Compile>
+    <Compile Include="Property\FmInspProp.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Property\FmInspProp.Designer.cs">
+      <DependentUpon>FmInspProp.cs</DependentUpon>
+    </Compile>
     <Compile Include="Property\MatchInspProp.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -189,6 +196,12 @@
     </Compile>
     <Compile Include="Setting\CameraSetting.Designer.cs">
       <DependentUpon>CameraSetting.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Setting\NetworkSetting.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Setting\NetworkSetting.Designer.cs">
+      <DependentUpon>NetworkSetting.cs</DependentUpon>
     </Compile>
     <Compile Include="Setting\PathSetting.cs">
       <SubType>UserControl</SubType>
@@ -248,6 +261,9 @@
     <EmbeddedResource Include="Property\FilterInsProp.resx">
       <DependentUpon>FilterInsProp.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Property\FmInspProp.resx">
+      <DependentUpon>FmInspProp.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Property\MatchInspProp.resx">
       <DependentUpon>MatchInspProp.cs</DependentUpon>
     </EmbeddedResource>
@@ -256,6 +272,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Setting\CameraSetting.resx">
       <DependentUpon>CameraSetting.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Setting\NetworkSetting.resx">
+      <DependentUpon>NetworkSetting.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Setting\PathSetting.resx">
       <DependentUpon>PathSetting.cs</DependentUpon>

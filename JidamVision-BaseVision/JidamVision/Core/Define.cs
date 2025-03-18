@@ -13,6 +13,8 @@ namespace JidamVision.Core
         Base,
         Sub,
         ID,
+        Head,
+        Body,
         Group
     }
     internal class Define

@@ -13,7 +13,7 @@ namespace JidamVision.Algorithm
 
     //#MATCH PROP#1 InspAlgorithm 클래스를 추가, 여러 알고리즘을 추상화하기 위함
     //추가 내용은 나중에 개발하고, 현재는 비어 있는 상태로 만들것
-
+   
     public abstract class InspAlgorithm
     {
         //#ABSTRACT ALGORITHM#1 검사 알고리즘을 추상화하여, 공통된 값이나, 함수 정의

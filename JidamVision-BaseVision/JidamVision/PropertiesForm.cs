@@ -20,6 +20,7 @@ namespace JidamVision
         InspBinary,
         InspMatch,
         InspFilter,
+        InspFm,
         InspCount //속성창 개수알수있게 추가. 
 
     }
@@ -90,6 +91,11 @@ namespace JidamVision
                     filterProp.FilterSelected += FilterSelect_FilterChanged;
                     _inspProp = filterProp;
                     break;
+                case InspectType.InspFm:
+                    FmInspProp FMProp = new FmInspProp();
+                    //filterProp.LoadInspParam
+                    _inspProp = FMProp;
+                    break;
                 default:
                     MessageBox.Show("유효하지 않은 옵션입니다.");
                     break;
@@ -114,6 +120,11 @@ namespace JidamVision
             bool invert = e.Invert;
             ShowBinaryMode showBinMode = e.ShowBinMode;
             Global.Inst.InspStage.PreView?.SetBinary(lowerValue, upperValue, invert, showBinMode);
+        }
+
+        private void tabPropControl_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
