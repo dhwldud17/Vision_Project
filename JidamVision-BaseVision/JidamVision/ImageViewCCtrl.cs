@@ -138,7 +138,7 @@ namespace JidamVision
 
                 case InspWindowType.Sub:
                     color = Color.Magenta;
-                    break;
+                    break; 
 
                 case InspWindowType.ID:
                     color = Color.Cyan;

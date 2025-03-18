@@ -82,7 +82,7 @@ namespace JidamVision
                     break;
                 case InspectType.InspMatch:
                     MatchInspProp matchProp = new MatchInspProp();
-                //    matchProp.LoadInspParam();
+                     matchProp.LoadInspParam();
                     _inspProp = matchProp;
                     break;
                 case InspectType.InspFilter:
@@ -93,7 +93,7 @@ namespace JidamVision
                     break;
                 case InspectType.InspFm:
                     FmInspProp FMProp = new FmInspProp();
-                    //filterProp.LoadInspParam
+                    FMProp.LoadInspParam();
                     _inspProp = FMProp;
                     break;
                 default:

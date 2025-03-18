@@ -74,6 +74,14 @@ namespace JidamVision.Teach
                     name = "ID";
                     prefix = "ID";
                     break;
+                case InspWindowType.Head:
+                    name = "Head";
+                    prefix = "Head";
+                    break;
+                case InspWindowType.Body:
+                    name = "Body";
+                    prefix = "Body";
+                    break;
                 default:
                     return false;
             }

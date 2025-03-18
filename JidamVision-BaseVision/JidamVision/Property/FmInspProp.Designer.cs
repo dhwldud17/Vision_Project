@@ -96,6 +96,7 @@
             this.txt_SizeX.Name = "txt_SizeX";
             this.txt_SizeX.Size = new System.Drawing.Size(60, 21);
             this.txt_SizeX.TabIndex = 5;
+            this.txt_SizeX.TextChanged += new System.EventHandler(this.txt_SizeX_TextChanged);
             // 
             // txt_SizeY
             // 
@@ -157,6 +158,7 @@
             this.btnSearch.TabIndex = 11;
             this.btnSearch.Text = "찾기";
             this.btnSearch.UseVisualStyleBackColor = true;
+            this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
             // 
             // FmInspProp
             // 

@@ -22,15 +22,15 @@ namespace JidamVision.Property
     }
     public partial class FmInspProp : UserControl
     {
-        private int GV =50;
+
         private String _selected_color;
         public FmInspProp()
         {
             InitializeComponent();
-            LoadSetting();
+           
         }
         public void LoadInspParam()
-        {
+        { cb_Color.DataSource = Enum.GetValues(typeof(ColorType)).Cast<ColorType>().ToList();
             InspWindow inspWindow = Global.Inst.InspStage.InspWindow;
             if (inspWindow is null)
                 return;
@@ -39,21 +39,46 @@ namespace JidamVision.Property
             if (FMAlgo is null)
                 return;
             OpenCvSharp.Size extendSize = FMAlgo.ExtSize;
-            
-            txtDifferenceGV.Text = Convert.ToString(GV);
-            txt_SizeX.Text = extendSize.Width.ToString();
-            txt_SizeY.Text = extendSize.Height.ToString();
+            int SizeX = FMAlgo.SizeX;
+            int SizeY = FMAlgo.SizeY;
+
+            int GV_Value = FMAlgo.GV;
+            txtDifferenceGV.Text = Convert.ToString(GV_Value);
+
+
+            txt_SizeX.Text = SizeX.ToString();
+            txt_SizeY.Text = SizeY.ToString();
         }
-        private void LoadSetting()
-        {
-            cb_Color.DataSource = Enum.GetValues(typeof(ColorType)).Cast<ColorType>().ToList();
-        }
+        
         private void groupBox1_Enter(object sender, EventArgs e)
         {
            
         }
 
         private void txtDifferenceGV_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnSearch_Click(object sender, EventArgs e)
+        {
+            InspWindow inspWindow = Global.Inst.InspStage.InspWindow;
+            if (inspWindow is null)
+                return;
+            //FmInspAlgo에서 찾는 코드
+            FmInspAlgorithm FMAlgo = (FmInspAlgorithm)inspWindow.FindInspAlgorithm(InspectType.InspFm);
+            if (FMAlgo is null)
+                return;
+
+
+            OpenCvSharp.Size extendSize = new OpenCvSharp.Size();
+            int GV_Value = FMAlgo.GV;
+            GV_Value = int.Parse(txtDifferenceGV.Text);
+            extendSize.Width = int.Parse(txt_SizeX.Text);
+            extendSize.Height = int.Parse(txt_SizeY.Text);
+        }
+
+        private void txt_SizeX_TextChanged(object sender, EventArgs e)
         {
 
         }

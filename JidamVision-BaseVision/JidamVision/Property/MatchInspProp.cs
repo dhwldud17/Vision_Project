@@ -32,7 +32,7 @@ namespace JidamVision.Property
         }
 
         //#MATCH PROP#7 템플릿 매칭 속성값을 GUI에 설정
-        private void LoadInspParam()
+        public void LoadInspParam()
         {
             InspWindow inspWindow = Global.Inst.InspStage.InspWindow;
             if (inspWindow is null)
