@@ -37,8 +37,9 @@
             // lbModelDir
             // 
             this.lbModelDir.AutoSize = true;
-            this.lbModelDir.Font = new System.Drawing.Font("굴림", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.lbModelDir.Location = new System.Drawing.Point(20, 48);
+            this.lbModelDir.Font = new System.Drawing.Font("Gulim", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.lbModelDir.Location = new System.Drawing.Point(29, 72);
+            this.lbModelDir.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lbModelDir.Name = "lbModelDir";
             this.lbModelDir.Size = new System.Drawing.Size(76, 16);
             this.lbModelDir.TabIndex = 1;
@@ -46,16 +47,19 @@
             // 
             // txtModelDir
             // 
-            this.txtModelDir.Location = new System.Drawing.Point(115, 44);
+            this.txtModelDir.Location = new System.Drawing.Point(164, 66);
+            this.txtModelDir.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.txtModelDir.Name = "txtModelDir";
-            this.txtModelDir.Size = new System.Drawing.Size(197, 21);
+            this.txtModelDir.Size = new System.Drawing.Size(280, 28);
             this.txtModelDir.TabIndex = 2;
+            this.txtModelDir.TextChanged += new System.EventHandler(this.txtModelDir_TextChanged);
             // 
             // btnSelModelDir
             // 
-            this.btnSelModelDir.Location = new System.Drawing.Point(322, 43);
+            this.btnSelModelDir.Location = new System.Drawing.Point(460, 64);
+            this.btnSelModelDir.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnSelModelDir.Name = "btnSelModelDir";
-            this.btnSelModelDir.Size = new System.Drawing.Size(39, 21);
+            this.btnSelModelDir.Size = new System.Drawing.Size(56, 32);
             this.btnSelModelDir.TabIndex = 3;
             this.btnSelModelDir.Text = "...";
             this.btnSelModelDir.UseVisualStyleBackColor = true;
@@ -63,9 +67,10 @@
             // 
             // btnApply
             // 
-            this.btnApply.Location = new System.Drawing.Point(322, 190);
+            this.btnApply.Location = new System.Drawing.Point(460, 285);
+            this.btnApply.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnApply.Name = "btnApply";
-            this.btnApply.Size = new System.Drawing.Size(98, 31);
+            this.btnApply.Size = new System.Drawing.Size(140, 46);
             this.btnApply.TabIndex = 4;
             this.btnApply.Text = "적용";
             this.btnApply.UseVisualStyleBackColor = true;
@@ -73,14 +78,15 @@
             // 
             // PathSetting
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.btnApply);
             this.Controls.Add(this.btnSelModelDir);
             this.Controls.Add(this.txtModelDir);
             this.Controls.Add(this.lbModelDir);
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "PathSetting";
-            this.Size = new System.Drawing.Size(469, 278);
+            this.Size = new System.Drawing.Size(670, 417);
             this.ResumeLayout(false);
             this.PerformLayout();
 

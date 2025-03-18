@@ -38,24 +38,27 @@
             // cbNetworkType
             // 
             this.cbNetworkType.FormattingEnabled = true;
-            this.cbNetworkType.Location = new System.Drawing.Point(210, 80);
+            this.cbNetworkType.Location = new System.Drawing.Point(300, 120);
+            this.cbNetworkType.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.cbNetworkType.Name = "cbNetworkType";
-            this.cbNetworkType.Size = new System.Drawing.Size(208, 20);
+            this.cbNetworkType.Size = new System.Drawing.Size(295, 26);
             this.cbNetworkType.TabIndex = 0;
             this.cbNetworkType.SelectedIndexChanged += new System.EventHandler(this.cbNetworkType_SelectedIndexChanged);
             // 
             // txtIPAddress
             // 
-            this.txtIPAddress.Location = new System.Drawing.Point(210, 155);
+            this.txtIPAddress.Location = new System.Drawing.Point(300, 232);
+            this.txtIPAddress.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.txtIPAddress.Name = "txtIPAddress";
-            this.txtIPAddress.Size = new System.Drawing.Size(182, 21);
+            this.txtIPAddress.Size = new System.Drawing.Size(258, 28);
             this.txtIPAddress.TabIndex = 1;
             // 
             // lbCommnicationType
             // 
             this.lbCommnicationType.AutoSize = true;
-            this.lbCommnicationType.Font = new System.Drawing.Font("굴림", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.lbCommnicationType.Location = new System.Drawing.Point(25, 82);
+            this.lbCommnicationType.Font = new System.Drawing.Font("Gulim", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.lbCommnicationType.Location = new System.Drawing.Point(36, 123);
+            this.lbCommnicationType.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lbCommnicationType.Name = "lbCommnicationType";
             this.lbCommnicationType.Size = new System.Drawing.Size(179, 18);
             this.lbCommnicationType.TabIndex = 2;
@@ -64,8 +67,9 @@
             // lbIPAddress
             // 
             this.lbIPAddress.AutoSize = true;
-            this.lbIPAddress.Font = new System.Drawing.Font("굴림", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.lbIPAddress.Location = new System.Drawing.Point(27, 153);
+            this.lbIPAddress.Font = new System.Drawing.Font("Gulim", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.lbIPAddress.Location = new System.Drawing.Point(39, 230);
+            this.lbIPAddress.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lbIPAddress.Name = "lbIPAddress";
             this.lbIPAddress.Size = new System.Drawing.Size(96, 18);
             this.lbIPAddress.TabIndex = 3;
@@ -73,24 +77,27 @@
             // 
             // btnApply
             // 
-            this.btnApply.Location = new System.Drawing.Point(327, 214);
+            this.btnApply.Location = new System.Drawing.Point(467, 321);
+            this.btnApply.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnApply.Name = "btnApply";
-            this.btnApply.Size = new System.Drawing.Size(91, 44);
+            this.btnApply.Size = new System.Drawing.Size(130, 66);
             this.btnApply.TabIndex = 4;
             this.btnApply.Text = "적용";
             this.btnApply.UseVisualStyleBackColor = true;
+            this.btnApply.Click += new System.EventHandler(this.btnApply_Click);
             // 
             // NetworkSetting
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.btnApply);
             this.Controls.Add(this.lbIPAddress);
             this.Controls.Add(this.lbCommnicationType);
             this.Controls.Add(this.txtIPAddress);
             this.Controls.Add(this.cbNetworkType);
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "NetworkSetting";
-            this.Size = new System.Drawing.Size(448, 298);
+            this.Size = new System.Drawing.Size(640, 447);
             this.ResumeLayout(false);
             this.PerformLayout();
 

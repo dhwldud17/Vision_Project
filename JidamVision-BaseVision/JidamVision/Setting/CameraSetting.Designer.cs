@@ -36,8 +36,9 @@
             // lbCameraType
             // 
             this.lbCameraType.AutoSize = true;
-            this.lbCameraType.Font = new System.Drawing.Font("굴림", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.lbCameraType.Location = new System.Drawing.Point(21, 54);
+            this.lbCameraType.Font = new System.Drawing.Font("Gulim", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.lbCameraType.Location = new System.Drawing.Point(30, 81);
+            this.lbCameraType.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lbCameraType.Name = "lbCameraType";
             this.lbCameraType.Size = new System.Drawing.Size(92, 16);
             this.lbCameraType.TabIndex = 1;
@@ -47,16 +48,19 @@
             // 
             this.cbCameraType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbCameraType.FormattingEnabled = true;
-            this.cbCameraType.Location = new System.Drawing.Point(119, 50);
+            this.cbCameraType.Location = new System.Drawing.Point(170, 75);
+            this.cbCameraType.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.cbCameraType.Name = "cbCameraType";
-            this.cbCameraType.Size = new System.Drawing.Size(141, 20);
+            this.cbCameraType.Size = new System.Drawing.Size(200, 26);
             this.cbCameraType.TabIndex = 2;
+            this.cbCameraType.SelectedIndexChanged += new System.EventHandler(this.cbCameraType_SelectedIndexChanged);
             // 
             // btnApply
             // 
-            this.btnApply.Location = new System.Drawing.Point(306, 189);
+            this.btnApply.Location = new System.Drawing.Point(437, 284);
+            this.btnApply.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnApply.Name = "btnApply";
-            this.btnApply.Size = new System.Drawing.Size(91, 26);
+            this.btnApply.Size = new System.Drawing.Size(130, 39);
             this.btnApply.TabIndex = 3;
             this.btnApply.Text = "적용";
             this.btnApply.UseVisualStyleBackColor = true;
@@ -64,13 +68,14 @@
             // 
             // CameraSetting
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.btnApply);
             this.Controls.Add(this.cbCameraType);
             this.Controls.Add(this.lbCameraType);
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "CameraSetting";
-            this.Size = new System.Drawing.Size(450, 269);
+            this.Size = new System.Drawing.Size(643, 404);
             this.ResumeLayout(false);
             this.PerformLayout();
 

@@ -22,8 +22,10 @@ namespace JidamVision.Setting
         public SettingXml() { }
 
         public string ModelDir { get; set; } = "";
-
+        public string IPAddress { get; set; } = "";
         public CameraType CamType { get; set; } = CameraType.WebCam;
+
+        public NetworkType NetworkType { get; set; }
         public static SettingXml Inst
         {
             get

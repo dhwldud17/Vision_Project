@@ -54,5 +54,10 @@ namespace JidamVision.Setting
         {
             SaveSetting();
         }
+
+        private void txtModelDir_TextChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }
