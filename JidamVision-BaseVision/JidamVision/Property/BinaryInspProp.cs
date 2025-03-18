@@ -18,7 +18,7 @@ namespace JidamVision.Property
     #BINARY FILTER# - <<<이진화 검사 개발>>> 
     입력된 lower, upper 임계값을 이용해, 영상을 이진화한 후, Filter(area)등을 이용해, 원하는 영역을 찾는다.
      */
-
+    
 
     //#BINARY FILTER#7 이진화 하이라이트, 이외에, 이진화 이미지를 보기 위한 옵션
     public enum ShowBinaryMode
@@ -31,23 +31,28 @@ namespace JidamVision.Property
 
     public partial class BinaryInspProp : UserControl
     {
+        
+        private bool SetAreaRange = false;
+    private bool SetHeightRange = false;
+    private bool SetWidthRange = false;
         public event EventHandler<RangeChangedEventArgs> RangeChanged;
 
         // 속성값을 이용하여 이진화 임계값 설정
-
+        
         public int LowerValue => trackBarLower.Value; //trackBarLower의 Value값을 가져옴
         public int UpperValue => trackBarUpper.Value; //trackBarUpper의 Value값을 가져옴
         public BinaryInspProp()
         {
             InitializeComponent();
 
-            ////TrackBar 초기설정
+            txtArea_min.Visible = false;
+            txtArea_max.Visible = false;
 
-            //trackBarLower.ValueChanged += OnValueChanged; //trackBarLower의 ValueChanged 이벤트가 발생하면 OnValueChanged 함수 실행
-            //trackBarUpper.ValueChanged += OnValueChanged; //trackBarUpper의 ValueChanged 이벤트가 발생하면 OnValueChanged 함수 실행
+            txtWidth_min.Visible = false;
+            txtWidth_max.Visible = false;
 
-            //trackBarLower.Value = 0; //trackBarLower의 Value값을 0으로 초기화
-            //trackBarUpper.Value = 255; //trackBarUpper의 Value값을 255로 초기화
+            txtHeight_min.Visible = false;
+            txtHeight_max.Visible = false;
         }
 
         //#BIN PROP# 이진화 검사 속성값을 GUI에 설정
@@ -58,7 +63,7 @@ namespace JidamVision.Property
             trackBarUpper.ValueChanged += OnValueChanged; //trackBarUpper의 ValueChanged 이벤트가 발생하면 OnValueChanged 함수 실행
 
             trackBarLower.Value = 0; //trackBarLower의 Value값을 0으로 초기화
-            trackBarUpper.Value = 255; //trackBarUpper의 Value값을 128
+            trackBarUpper.Value =128; //trackBarUpper의 Value값을 128
 
             //#BINARY FILTER#8 이진화 검사 속성값을 GUI에 설정
             InspWindow inspWindow = Global.Inst.InspStage.InspWindow;
@@ -67,6 +72,7 @@ namespace JidamVision.Property
                 BlobAlgorithm blobAlgo = (BlobAlgorithm)inspWindow.FindInspAlgorithm(InspectType.InspBinary);
                 if (blobAlgo != null)
                 {
+                    //알고리즘에서 지정된값 가져옴
                     // FilterAreaMin, FilterAreaMax, FilterWidthMin, FilterWidthMax, FilterHeightMin, FilterHeightMax
                     int filterAreaMin = blobAlgo.FilterAreaMin;
                     int filterAreaMax = blobAlgo.FilterAreaMax;
@@ -75,7 +81,7 @@ namespace JidamVision.Property
                     int filterHeightMin = blobAlgo.FilterHeightMin;
                     int filterHeightMax = blobAlgo.FilterHeightMax;
 
-                    // 텍스트 박스에 필터링 값 설정
+                    // 텍스트 박스에 기존값 보여줌
                     txtArea_min.Text = filterAreaMin.ToString();
                     txtArea_max.Text = filterAreaMax.ToString();
                     txtWidth_min.Text = filterWidthMin.ToString();
@@ -156,14 +162,47 @@ namespace JidamVision.Property
             threshold.invert = chkInvert.Checked;
 
             blobAlgo.BinThreshold = threshold;
+            //끄면 값 기본으로 돌아가게 해야됨. 
+            if (ckb_Area.Checked)
+            {
+                blobAlgo.SetArea = true;
+                blobAlgo.FilterAreaMin = int.Parse(txtArea_min.Text);
+                blobAlgo.FilterAreaMax = int.Parse(txtArea_max.Text);
+            }
+            else
+            {   
+                blobAlgo.SetArea = false;
+                blobAlgo.FilterAreaMin = 1;
+                blobAlgo.FilterAreaMax = 5000000;
+            }
 
-            int filterArea_min = int.Parse(txtArea_min.Text);
-            int filterArea_max = int.Parse(txtArea_max.Text);
-            int filterHeight_min = int.Parse(txtHeight_min.Text);
-            int filterHeight_max = int.Parse(txtHeight_max.Text);
-            int filterWidth_min = int.Parse(txtWidth_min.Text);
-            int filterWidth_max = int.Parse(txtWidth_max.Text);
-           
+            if (ckb_Height.Checked)
+            {
+                blobAlgo.SetHeight = true;
+                blobAlgo.FilterHeightMin = int.Parse(txtHeight_min.Text);
+                blobAlgo.FilterHeightMax= int.Parse(txtHeight_max.Text);
+            }
+            else
+            {
+                blobAlgo.SetHeight = false;
+                blobAlgo.FilterHeightMin = 1;
+                blobAlgo.FilterHeightMax = 5000;
+            }
+
+            if (ckb_Width.Checked)
+            {
+                blobAlgo.SetWidth = true;
+                blobAlgo.FilterWidthMin = int.Parse(txtWidth_min.Text);
+                blobAlgo.FilterWidthMax = int.Parse(txtWidth_max.Text);
+            }
+            else
+            {
+                blobAlgo.SetWidth = false;
+                blobAlgo.FilterWidthMin = 1;
+                blobAlgo.FilterWidthMax = 5000;
+            }
+
+
 
             //#INSP WORKER#10 이진화 검사시, 해당 InspWindow와 이진화 알고리즘만 실행
             Global.Inst.InspStage.InspWorker.TryInspect(inspWindow, InspectType.InspBinary);
@@ -182,6 +221,27 @@ namespace JidamVision.Property
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void ckb_Area_CheckedChanged(object sender, EventArgs e)
+        {
+            //Area 값 조절할수있도록.
+          
+            txtArea_min.Visible = ckb_Area.Checked;
+            txtArea_max.Visible = ckb_Area.Checked;
+        }
+
+        private void ckb_Width_CheckedChanged(object sender, EventArgs e)
+        {
+            
+            txtWidth_min.Visible = ckb_Width.Checked;
+            txtWidth_max.Visible = ckb_Width.Checked;
+        }
+
+        private void ckb_Height_CheckedChanged(object sender, EventArgs e)
+        {
+            txtHeight_min.Visible = ckb_Height.Checked;
+            txtHeight_max.Visible = ckb_Height.Checked;
         }
     }
     //#BINARY FILTER#9 이진화 관련 이벤트 발생시, 전달할 값 추가

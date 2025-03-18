@@ -11,8 +11,7 @@ namespace JidamVision.Algorithm
     {
         public Size ExtSize { get; set; } = new Size(100, 100);
 
-        public int SizeX { get; set; } = 10;   // 최소 면적
-        public int SizeY { get; set; } = 10; // 최대 면적
+        
 
         public int GV { get; set; } =50;
         public FmInspAlgorithm()

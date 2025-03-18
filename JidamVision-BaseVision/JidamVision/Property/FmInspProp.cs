@@ -27,7 +27,7 @@ namespace JidamVision.Property
         public FmInspProp()
         {
             InitializeComponent();
-            LoadInspParam();
+          
         }
         public void LoadInspParam()
         { cb_Color.DataSource = Enum.GetValues(typeof(ColorType)).Cast<ColorType>().ToList();
@@ -41,14 +41,13 @@ namespace JidamVision.Property
             if (FMAlgo is null)
                 return;
             OpenCvSharp.Size extendSize = FMAlgo.ExtSize;
-            int SizeX = FMAlgo.SizeX;
-            int SizeY = FMAlgo.SizeY;
+            
 
             int GV_Value = FMAlgo.GV;
             txtDifferenceGV.Text = Convert.ToString(GV_Value);
 
-            txt_SizeX.Text = SizeX.ToString();
-            txt_SizeY.Text = SizeY.ToString();
+            txt_SizeX.Text = extendSize.Width.ToString();
+            txt_SizeY.Text = extendSize.Height.ToString();
         }
         
         private void groupBox1_Enter(object sender, EventArgs e)

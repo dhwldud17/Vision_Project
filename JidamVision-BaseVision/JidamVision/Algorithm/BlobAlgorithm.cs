@@ -7,7 +7,7 @@ using System.Collections.Generic;
 namespace JidamVision.Algorithm
 {
     //#BINARY FILTER#1 이진화 필터를 위한 클래스
-    
+
 
     //이진화 임계값 설정을 구조체로 만들기
     public struct BinaryThreshold
@@ -23,16 +23,19 @@ namespace JidamVision.Algorithm
         private List<Rect> _findArea;
 
         public BinaryThreshold BinThreshold { get; set; } = new BinaryThreshold();
+        public bool SetArea = false;
+        public bool SetHeight = false;
+        public bool SetWidth = false;
 
         //픽셀 영역으로 이진화 필터
-        public int FilterAreaMin { get; set; } = 0;   // 최소 면적
-        public int FilterAreaMax { get; set; } = 300; // 최대 면적
+        public int FilterAreaMin { get; set; } = 1;   // 최소 면적
+        public int FilterAreaMax { get; set; } = 5000000;// 최대 면적
 
-        public int FilterWidthMin { get; set; } = 0;   // 최소 너비
-        public int FilterWidthMax { get; set; } = 300; // 최대 너비
+        public int FilterWidthMin { get; set; } = 1;   // 최소 너비
+        public int FilterWidthMax { get; set; } = 5000;// 최대 너비
 
-        public int FilterHeightMin { get; set; } = 0;  // 최소 높이
-        public int FilterHeightMax { get; set; } = 300; // 최대 높이
+        public int FilterHeightMin { get; set; } = 1;  // 최소 높이
+        public int FilterHeightMax { get; set; } = 5000;// 최대 높이
 
 
         public BlobAlgorithm()
@@ -52,7 +55,7 @@ namespace JidamVision.Algorithm
 
             if (_srcImage == null)
                 return false;
-
+          
             Mat grayImage = new Mat();
             if (_srcImage.Type() == MatType.CV_8UC3)
                 Cv2.CvtColor(_srcImage, grayImage, ColorConversionCodes.BGR2GRAY);
@@ -68,7 +71,7 @@ namespace JidamVision.Algorithm
 
             if (FilterAreaMin > 0)
             {
-                if (!BlobFilter(binaryImage, FilterAreaMin))
+                if (!BlobFilter(binaryImage, FilterAreaMin)) //만약 
                     return false;
             }
 
@@ -95,7 +98,7 @@ namespace JidamVision.Algorithm
             {
                 double area = Cv2.ContourArea(contour);
                 // 면적 필터 적용
-                
+
                 // 필터링된 객체를 이미지에 그림
                 //Cv2.DrawContours(filteredImage, new Point[][] { contour }, -1, Scalar.White, -1);
 
@@ -105,14 +108,24 @@ namespace JidamVision.Algorithm
                 // RotatedRect 정보 계산 
                 //RotatedRect rotatedRect = Cv2.MinAreaRect(contour);//최소 회전된 사각형
                 Rect boundingRect = Cv2.BoundingRect(contour);
-                if (area < FilterAreaMin || area > FilterAreaMax)
-                    continue;
-
+                if (SetArea)
+                { //
+                    if(area < FilterAreaMin || area > FilterAreaMax)
+                        continue;
+                }
+                if (SetWidth)
+                {
+                    if(boundingRect.Width < FilterWidthMin || boundingRect.Width > FilterWidthMax)
+                        continue;
+                }
+                if (SetHeight)
+                {
+                    if (boundingRect.Height < FilterHeightMin || boundingRect.Height > FilterHeightMax)
+                        continue;
+                }
                 // 너비, 높이 필터 적용
-                if (boundingRect.Width < FilterWidthMin || boundingRect.Width > FilterWidthMax)
-                    continue;
-                if (boundingRect.Height < FilterHeightMin || boundingRect.Height > FilterHeightMax)
-                    continue;
+
+
 
                 _findArea.Add(boundingRect);
 

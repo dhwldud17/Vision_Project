@@ -41,18 +41,21 @@
             this.trackBarUpper = new System.Windows.Forms.TrackBar();
             this.trackBarLower = new System.Windows.Forms.TrackBar();
             this.grpFilter = new System.Windows.Forms.GroupBox();
+            this.ckb_Width = new System.Windows.Forms.CheckBox();
+            this.ckb_Height = new System.Windows.Forms.CheckBox();
+            this.ckb_Area = new System.Windows.Forms.CheckBox();
+            this.txtWidth_max = new System.Windows.Forms.TextBox();
+            this.txtHeight_max = new System.Windows.Forms.TextBox();
+            this.txtWidth_min = new System.Windows.Forms.TextBox();
+            this.txtHeight_min = new System.Windows.Forms.TextBox();
+            this.lbMax = new System.Windows.Forms.Label();
+            this.lbMin = new System.Windows.Forms.Label();
+            this.lbWidth = new System.Windows.Forms.Label();
+            this.lbHeight = new System.Windows.Forms.Label();
+            this.txtArea_max = new System.Windows.Forms.TextBox();
             this.btnFilter = new System.Windows.Forms.Button();
             this.txtArea_min = new System.Windows.Forms.TextBox();
             this.lbArea = new System.Windows.Forms.Label();
-            this.txtArea_max = new System.Windows.Forms.TextBox();
-            this.lbHeight = new System.Windows.Forms.Label();
-            this.lbWidth = new System.Windows.Forms.Label();
-            this.lbMin = new System.Windows.Forms.Label();
-            this.lbMax = new System.Windows.Forms.Label();
-            this.txtHeight_min = new System.Windows.Forms.TextBox();
-            this.txtWidth_min = new System.Windows.Forms.TextBox();
-            this.txtHeight_max = new System.Windows.Forms.TextBox();
-            this.txtWidth_max = new System.Windows.Forms.TextBox();
             this.grpBinary.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarUpper)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarLower)).BeginInit();
@@ -134,6 +137,9 @@
             // 
             // grpFilter
             // 
+            this.grpFilter.Controls.Add(this.ckb_Width);
+            this.grpFilter.Controls.Add(this.ckb_Height);
+            this.grpFilter.Controls.Add(this.ckb_Area);
             this.grpFilter.Controls.Add(this.txtWidth_max);
             this.grpFilter.Controls.Add(this.txtHeight_max);
             this.grpFilter.Controls.Add(this.txtWidth_min);
@@ -155,6 +161,117 @@
             this.grpFilter.TabStop = false;
             this.grpFilter.Text = "필터";
             // 
+            // ckb_Width
+            // 
+            this.ckb_Width.AutoSize = true;
+            this.ckb_Width.Location = new System.Drawing.Point(18, 130);
+            this.ckb_Width.Name = "ckb_Width";
+            this.ckb_Width.Size = new System.Drawing.Size(22, 21);
+            this.ckb_Width.TabIndex = 14;
+            this.ckb_Width.UseVisualStyleBackColor = true;
+            this.ckb_Width.CheckedChanged += new System.EventHandler(this.ckb_Width_CheckedChanged);
+            // 
+            // ckb_Height
+            // 
+            this.ckb_Height.AutoSize = true;
+            this.ckb_Height.Location = new System.Drawing.Point(18, 84);
+            this.ckb_Height.Name = "ckb_Height";
+            this.ckb_Height.Size = new System.Drawing.Size(22, 21);
+            this.ckb_Height.TabIndex = 13;
+            this.ckb_Height.UseVisualStyleBackColor = true;
+            this.ckb_Height.CheckedChanged += new System.EventHandler(this.ckb_Height_CheckedChanged);
+            // 
+            // ckb_Area
+            // 
+            this.ckb_Area.AutoSize = true;
+            this.ckb_Area.Location = new System.Drawing.Point(18, 43);
+            this.ckb_Area.Name = "ckb_Area";
+            this.ckb_Area.Size = new System.Drawing.Size(22, 21);
+            this.ckb_Area.TabIndex = 12;
+            this.ckb_Area.UseVisualStyleBackColor = true;
+            this.ckb_Area.CheckedChanged += new System.EventHandler(this.ckb_Area_CheckedChanged);
+            // 
+            // txtWidth_max
+            // 
+            this.txtWidth_max.Location = new System.Drawing.Point(243, 130);
+            this.txtWidth_max.Margin = new System.Windows.Forms.Padding(4);
+            this.txtWidth_max.Name = "txtWidth_max";
+            this.txtWidth_max.Size = new System.Drawing.Size(63, 28);
+            this.txtWidth_max.TabIndex = 11;
+            // 
+            // txtHeight_max
+            // 
+            this.txtHeight_max.Location = new System.Drawing.Point(243, 84);
+            this.txtHeight_max.Margin = new System.Windows.Forms.Padding(4);
+            this.txtHeight_max.Name = "txtHeight_max";
+            this.txtHeight_max.Size = new System.Drawing.Size(63, 28);
+            this.txtHeight_max.TabIndex = 10;
+            // 
+            // txtWidth_min
+            // 
+            this.txtWidth_min.Location = new System.Drawing.Point(147, 127);
+            this.txtWidth_min.Margin = new System.Windows.Forms.Padding(4);
+            this.txtWidth_min.Name = "txtWidth_min";
+            this.txtWidth_min.Size = new System.Drawing.Size(63, 28);
+            this.txtWidth_min.TabIndex = 9;
+            // 
+            // txtHeight_min
+            // 
+            this.txtHeight_min.Location = new System.Drawing.Point(147, 84);
+            this.txtHeight_min.Margin = new System.Windows.Forms.Padding(4);
+            this.txtHeight_min.Name = "txtHeight_min";
+            this.txtHeight_min.Size = new System.Drawing.Size(63, 28);
+            this.txtHeight_min.TabIndex = 8;
+            // 
+            // lbMax
+            // 
+            this.lbMax.AutoSize = true;
+            this.lbMax.Location = new System.Drawing.Point(250, 25);
+            this.lbMax.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lbMax.Name = "lbMax";
+            this.lbMax.Size = new System.Drawing.Size(43, 18);
+            this.lbMax.TabIndex = 7;
+            this.lbMax.Text = "max";
+            // 
+            // lbMin
+            // 
+            this.lbMin.AutoSize = true;
+            this.lbMin.Location = new System.Drawing.Point(159, 24);
+            this.lbMin.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lbMin.Name = "lbMin";
+            this.lbMin.Size = new System.Drawing.Size(36, 18);
+            this.lbMin.TabIndex = 6;
+            this.lbMin.Text = "min";
+            // 
+            // lbWidth
+            // 
+            this.lbWidth.AutoSize = true;
+            this.lbWidth.Location = new System.Drawing.Point(64, 133);
+            this.lbWidth.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lbWidth.Name = "lbWidth";
+            this.lbWidth.Size = new System.Drawing.Size(51, 18);
+            this.lbWidth.TabIndex = 5;
+            this.lbWidth.Text = "Width";
+            // 
+            // lbHeight
+            // 
+            this.lbHeight.AutoSize = true;
+            this.lbHeight.Location = new System.Drawing.Point(64, 87);
+            this.lbHeight.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lbHeight.Name = "lbHeight";
+            this.lbHeight.Size = new System.Drawing.Size(57, 18);
+            this.lbHeight.TabIndex = 4;
+            this.lbHeight.Text = "Height";
+            // 
+            // txtArea_max
+            // 
+            this.txtArea_max.Location = new System.Drawing.Point(243, 46);
+            this.txtArea_max.Margin = new System.Windows.Forms.Padding(4);
+            this.txtArea_max.Name = "txtArea_max";
+            this.txtArea_max.Size = new System.Drawing.Size(63, 28);
+            this.txtArea_max.TabIndex = 3;
+            this.txtArea_max.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
+            // 
             // btnFilter
             // 
             this.btnFilter.Location = new System.Drawing.Point(113, 192);
@@ -168,7 +285,7 @@
             // 
             // txtArea_min
             // 
-            this.txtArea_min.Location = new System.Drawing.Point(113, 46);
+            this.txtArea_min.Location = new System.Drawing.Point(147, 46);
             this.txtArea_min.Margin = new System.Windows.Forms.Padding(4);
             this.txtArea_min.Name = "txtArea_min";
             this.txtArea_min.Size = new System.Drawing.Size(63, 28);
@@ -178,94 +295,13 @@
             // lbArea
             // 
             this.lbArea.AutoSize = true;
-            this.lbArea.Location = new System.Drawing.Point(14, 46);
+            this.lbArea.Location = new System.Drawing.Point(64, 46);
             this.lbArea.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lbArea.Name = "lbArea";
             this.lbArea.Size = new System.Drawing.Size(46, 18);
             this.lbArea.TabIndex = 0;
             this.lbArea.Text = "Area";
             this.lbArea.Click += new System.EventHandler(this.lbArea_Click);
-            // 
-            // txtArea_max
-            // 
-            this.txtArea_max.Location = new System.Drawing.Point(243, 46);
-            this.txtArea_max.Margin = new System.Windows.Forms.Padding(4);
-            this.txtArea_max.Name = "txtArea_max";
-            this.txtArea_max.Size = new System.Drawing.Size(63, 28);
-            this.txtArea_max.TabIndex = 3;
-            this.txtArea_max.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
-            // 
-            // lbHeight
-            // 
-            this.lbHeight.AutoSize = true;
-            this.lbHeight.Location = new System.Drawing.Point(9, 84);
-            this.lbHeight.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.lbHeight.Name = "lbHeight";
-            this.lbHeight.Size = new System.Drawing.Size(57, 18);
-            this.lbHeight.TabIndex = 4;
-            this.lbHeight.Text = "Height";
-            // 
-            // lbWidth
-            // 
-            this.lbWidth.AutoSize = true;
-            this.lbWidth.Location = new System.Drawing.Point(9, 130);
-            this.lbWidth.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.lbWidth.Name = "lbWidth";
-            this.lbWidth.Size = new System.Drawing.Size(51, 18);
-            this.lbWidth.TabIndex = 5;
-            this.lbWidth.Text = "Width";
-            // 
-            // lbMin
-            // 
-            this.lbMin.AutoSize = true;
-            this.lbMin.Location = new System.Drawing.Point(125, 24);
-            this.lbMin.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.lbMin.Name = "lbMin";
-            this.lbMin.Size = new System.Drawing.Size(36, 18);
-            this.lbMin.TabIndex = 6;
-            this.lbMin.Text = "min";
-            // 
-            // lbMax
-            // 
-            this.lbMax.AutoSize = true;
-            this.lbMax.Location = new System.Drawing.Point(250, 25);
-            this.lbMax.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.lbMax.Name = "lbMax";
-            this.lbMax.Size = new System.Drawing.Size(43, 18);
-            this.lbMax.TabIndex = 7;
-            this.lbMax.Text = "max";
-            // 
-            // txtHeight_min
-            // 
-            this.txtHeight_min.Location = new System.Drawing.Point(113, 84);
-            this.txtHeight_min.Margin = new System.Windows.Forms.Padding(4);
-            this.txtHeight_min.Name = "txtHeight_min";
-            this.txtHeight_min.Size = new System.Drawing.Size(63, 28);
-            this.txtHeight_min.TabIndex = 8;
-            // 
-            // txtWidth_min
-            // 
-            this.txtWidth_min.Location = new System.Drawing.Point(113, 127);
-            this.txtWidth_min.Margin = new System.Windows.Forms.Padding(4);
-            this.txtWidth_min.Name = "txtWidth_min";
-            this.txtWidth_min.Size = new System.Drawing.Size(63, 28);
-            this.txtWidth_min.TabIndex = 9;
-            // 
-            // txtHeight_max
-            // 
-            this.txtHeight_max.Location = new System.Drawing.Point(243, 84);
-            this.txtHeight_max.Margin = new System.Windows.Forms.Padding(4);
-            this.txtHeight_max.Name = "txtHeight_max";
-            this.txtHeight_max.Size = new System.Drawing.Size(63, 28);
-            this.txtHeight_max.TabIndex = 10;
-            // 
-            // txtWidth_max
-            // 
-            this.txtWidth_max.Location = new System.Drawing.Point(243, 130);
-            this.txtWidth_max.Margin = new System.Windows.Forms.Padding(4);
-            this.txtWidth_max.Name = "txtWidth_max";
-            this.txtWidth_max.Size = new System.Drawing.Size(63, 28);
-            this.txtWidth_max.TabIndex = 11;
             // 
             // BinaryInspProp
             // 
@@ -307,5 +343,8 @@
         private System.Windows.Forms.Label lbMin;
         private System.Windows.Forms.Label lbWidth;
         private System.Windows.Forms.Label lbHeight;
+        private System.Windows.Forms.CheckBox ckb_Width;
+        private System.Windows.Forms.CheckBox ckb_Height;
+        private System.Windows.Forms.CheckBox ckb_Area;
     }
 }

@@ -94,6 +94,9 @@ namespace JidamVision.Teach
                 case InspectType.InspMatch:
                     inspAlgo = new MatchAlgorithm();
                     break;
+                case InspectType.InspFm:
+                    inspAlgo = new FmInspAlgorithm();
+                    break;
             }
 
             if (inspAlgo is null)
