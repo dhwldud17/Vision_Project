@@ -1,4 +1,5 @@
 ﻿using JidamVision.Core;
+using JidamVision.Setting;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -49,7 +50,7 @@ namespace JidamVision
 
             //모델트리창 추가
             var modelTreeWindow = new ModelTreeForm();
-            modelTreeWindow.Show(resultWindow.Pane,DockAlignment.Right, 0.3);
+            modelTreeWindow.Show(resultWindow.Pane, DockAlignment.Right, 0.3);
             //결과창 우측에 40% 비율로 추가
 
 
@@ -121,6 +122,14 @@ namespace JidamVision
         private void imageFilterToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
+        }
+
+        //#SETUP#8 메인메뉴에 Setup 메뉴 추가하고, 아래 함수로 환경설정창 띄우기
+
+        private void setupToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SetupForm setupForm = new SetupForm();
+            setupForm.ShowDialog();
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using JidamVision.Grab;
 using JidamVision.Inspect;
+using JidamVision.Setting;
 using JidamVision.Teach;
 using OpenCvSharp;
 using OpenCvSharp.Extensions;
@@ -76,6 +77,10 @@ namespace JidamVision.Core
 
             //#MODEL#8 모델 인스턴스 생성
             _model = new Model();
+
+
+            //#SETUP#7 환경설정에서 설정값 가져오기
+            LoadSetting();
             switch (_camType)
             {
                 case CameraType.WebCam:
@@ -317,5 +322,15 @@ namespace JidamVision.Core
             }
 
         }
+
+
+
+        //#SETUP#6 환경설정에서 설정값 가져오기
+        private void LoadSetting()
+        {
+            //카메라 설정 타입 얻기
+            _camType = SettingXml.Inst.CamType;
+        }
+
     }
 }
