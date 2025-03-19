@@ -60,7 +60,7 @@ namespace JidamVision.Property
 
 
         // 필터 목록을 Dictionary로 관리
-        private static readonly Dictionary<string, List<string>> _filterMap = new Dictionary<string, List<string>>()
+       public static readonly Dictionary<string, List<string>> _filterMap = new Dictionary<string, List<string>>()
     {
         { "연산", new List<string> { "더하기", "빼기", "곱하기", "나누기", "최대값 비교", "최소값 비교", "절대값 계산", "절대값 차이 계산" } },
         { "비트연산(Bitwise)", new List<string> { "AND 연산", "OR 연산", "XOR 연산", "NOT 연산" } },

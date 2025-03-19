@@ -58,11 +58,6 @@
             // select_effect
             // 
             this.select_effect.FormattingEnabled = true;
-            this.select_effect.Items.AddRange(new object[] {
-            "연산",
-            "비트연산(Bitwise)",
-            "블러링",
-            "Edge"});
             this.select_effect.Location = new System.Drawing.Point(17, 43);
             this.select_effect.Name = "select_effect";
             this.select_effect.Size = new System.Drawing.Size(248, 26);

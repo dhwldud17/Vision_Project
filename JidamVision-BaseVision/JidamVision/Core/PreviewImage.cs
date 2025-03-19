@@ -111,10 +111,7 @@ namespace JidamVision.Core
                 // ROI가 있을 때는 ROI만 필터 적용
                 imageToProcess = roiImage;
             }
-             if(selected_filter1 == "이진화")
-            {
-
-            }
+            
                 // 선택된 필터에 따라 필터 적용
                 switch (selected_filter1)
             {
@@ -135,6 +132,36 @@ namespace JidamVision.Core
                     ImageEdge edge = (ImageEdge)selected_filter2;
                     FilterFunction.ApplyEdgeDetection(edge, imageToProcess, out filteredImage);
                     break;
+
+                case "이진화":
+                    // selected_filter2가 0이면 "미디안 블러", 1이면 "가우시안 블러"
+                    if (selected_filter2 == 0)
+                    {
+                        FilterFunction.ApplyImageFiltering(ImageFilter.FilterMedianBlur, imageToProcess, out filteredImage);
+                    }
+                    else if (selected_filter2 == 1)
+                    {
+                        FilterFunction.ApplyImageFiltering(ImageFilter.FilterGaussianBlur, imageToProcess, out filteredImage);
+                    }
+                    break;
+                case "매칭":
+                    switch (selected_filter2)
+                    {
+                        case 0: // Sobel
+                            FilterFunction.ApplyEdgeDetection(ImageEdge.FilterSobel, imageToProcess, out filteredImage);
+                            break;
+                        case 1: // Scharr
+                            FilterFunction.ApplyEdgeDetection(ImageEdge.FilterScharr, imageToProcess, out filteredImage);
+                            break;
+                        case 2: // Laplacian
+                            FilterFunction.ApplyEdgeDetection(ImageEdge.FilterLaplacian, imageToProcess, out filteredImage);
+                            break;
+                        case 3: // Canny
+                            FilterFunction.ApplyEdgeDetection(ImageEdge.FilterCanny, imageToProcess, out filteredImage);
+                            break;
+                    }
+                    break;
+
                 default:
                     return;
             }
