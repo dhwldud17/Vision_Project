@@ -89,96 +89,19 @@ namespace JidamVision.Core
 
         public void ApplyFilter(string selected_filter1, int selected_filter2)
         {
-            if (_orinalImage == null)
-                return;
+            if (_orinalImage == null) return;
 
             var cameraForm = MainForm.GetDockForm<CameraForm>();
-            if (cameraForm == null)
-                return;
+            if (cameraForm == null) return;
 
-            // 원본 이미지를 다시 가져와서 작업하도록 수정
-            Mat originalImage = _orinalImage.Clone();  //깊은복사. 원본이미지를 보존하기 위해
-            //Clone()을 사용하지 않으면 얉은 복사가 되서 원본이 같이 변경됨. 우리는 원본이미지를 보존해야함. 
-            Mat filteredImage = new Mat();
+            // ROI 정보 가져오기
+            cameraForm.TryGetROI(out _, out Rect roiRect);
 
-            // ROI가 설정된 경우 또는 설정되지 않은 경우
-            Rect roiRect = new Rect();  // roiRect를 여기에 한 번만 선언
-            Mat imageToProcess = originalImage; // 기본적으로 원본 이미지로 설정
-
-           //ROI영역이 존재하면 
-            if (cameraForm.TryGetROI(out Mat roiImage, out roiRect))
-            {
-                // ROI가 있을 때는 ROI만 필터 적용
-                imageToProcess = roiImage;
-            }
-            
-                // 선택된 필터에 따라 필터 적용
-                switch (selected_filter1)
-            {
-                case "연산":
-                    ImageOperation operation = (ImageOperation)selected_filter2;
-                    string op_values = "30 30 30";
-                    FilterFunction.ApplyImageOperation(operation, imageToProcess, op_values, out filteredImage);
-                    break;
-                case "비트연산(Bitwise)":
-                    Bitwise bitwise = (Bitwise)selected_filter2;
-                    FilterFunction.ApplyBitwiseOperation(bitwise, imageToProcess, out filteredImage);
-                    break;
-                case "블러링":
-                    ImageFilter filter = (ImageFilter)selected_filter2;
-                    FilterFunction.ApplyImageFiltering(filter, imageToProcess, out filteredImage);
-                    break;
-                case "Edge":
-                    ImageEdge edge = (ImageEdge)selected_filter2;
-                    FilterFunction.ApplyEdgeDetection(edge, imageToProcess, out filteredImage);
-                    break;
-
-                case "이진화":
-                    // selected_filter2가 0이면 "미디안 블러", 1이면 "가우시안 블러"
-                    if (selected_filter2 == 0)
-                    {
-                        FilterFunction.ApplyImageFiltering(ImageFilter.FilterMedianBlur, imageToProcess, out filteredImage);
-                    }
-                    else if (selected_filter2 == 1)
-                    {
-                        FilterFunction.ApplyImageFiltering(ImageFilter.FilterGaussianBlur, imageToProcess, out filteredImage);
-                    }
-                    break;
-                case "매칭":
-                    switch (selected_filter2)
-                    {
-                        case 0: // Sobel
-                            FilterFunction.ApplyEdgeDetection(ImageEdge.FilterSobel, imageToProcess, out filteredImage);
-                            break;
-                        case 1: // Scharr
-                            FilterFunction.ApplyEdgeDetection(ImageEdge.FilterScharr, imageToProcess, out filteredImage);
-                            break;
-                        case 2: // Laplacian
-                            FilterFunction.ApplyEdgeDetection(ImageEdge.FilterLaplacian, imageToProcess, out filteredImage);
-                            break;
-                        case 3: // Canny
-                            FilterFunction.ApplyEdgeDetection(ImageEdge.FilterCanny, imageToProcess, out filteredImage);
-                            break;
-                    }
-                    break;
-
-                default:
-                    return;
-            }
-
-            //// ROI가 설정된 경우, 필터링된 이미지를 해당 영역에만 반영
-            if (cameraForm.TryGetROI(out _, out roiRect))
-            {
-                filteredImage.CopyTo(originalImage[roiRect]);
-            }
-            else
-            {
-                // ROI가 없으면 필터링된 이미지를 원본 이미지 전체에 반영
-                originalImage = filteredImage.Clone(); // Clone()을 사용하여 새로운 이미지로 대체
-            }
+            // 필터 적용
+            Mat resultImage = FilterFunction.ApplyFilter(_orinalImage, selected_filter1, selected_filter2, roiRect);
 
             // 필터링된 이미지를 화면에 표시
-            _previewImage = originalImage;
+            _previewImage = resultImage;
             Bitmap bmpImage = BitmapConverter.ToBitmap(_previewImage);
             cameraForm.UpdateDisplay(bmpImage);
         }

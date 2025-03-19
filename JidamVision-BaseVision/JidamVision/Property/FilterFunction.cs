@@ -84,6 +84,80 @@ namespace JidamVision.Property
         }
 
 
+        //ex)
+        ///Mat filteredImage = FilterFunction.ApplyFilter(inputImage, "블러링", 1); 으로 사용
+        public static Mat ApplyFilter(Mat originalImage, string selectedFilter1, int selectedFilter2, Rect? roiRect = null)
+        {
+            if (originalImage == null)
+                return null;
+
+            Mat filteredImage = new Mat();
+            Mat imageToProcess = originalImage.Clone(); // 원본 보호를 위해 깊은 복사
+
+            // ROI가 설정된 경우 해당 영역만 필터 적용
+            if (roiRect != null && roiRect.Value.Width > 0 && roiRect.Value.Height > 0)
+            {
+                imageToProcess = new Mat(originalImage, roiRect.Value);
+            }
+
+            switch (selectedFilter1)
+            {
+                case "연산":
+                    ImageOperation operation = (ImageOperation)selectedFilter2;
+                    string opValues = "30 30 30";
+                    FilterFunction.ApplyImageOperation(operation, imageToProcess, opValues, out filteredImage);
+                    break;
+                case "비트연산(Bitwise)":
+                    Bitwise bitwise = (Bitwise)selectedFilter2;
+                    FilterFunction.ApplyBitwiseOperation(bitwise, imageToProcess, out filteredImage);
+                    break;
+                case "블러링":
+                    ImageFilter filter = (ImageFilter)selectedFilter2;
+                    FilterFunction.ApplyImageFiltering(filter, imageToProcess, out filteredImage);
+                    break;
+                case "Edge":
+                    ImageEdge edge = (ImageEdge)selectedFilter2;
+                    FilterFunction.ApplyEdgeDetection(edge, imageToProcess, out filteredImage);
+                    break;
+                case "이진화":
+                    if (selectedFilter2 == 0)
+                    {
+                        FilterFunction.ApplyImageFiltering(ImageFilter.FilterMedianBlur, imageToProcess, out filteredImage);
+                    }
+                    else if (selectedFilter2 == 1)
+                    {
+                        FilterFunction.ApplyImageFiltering(ImageFilter.FilterGaussianBlur, imageToProcess, out filteredImage);
+                    }
+                    break;
+                case "매칭":
+                    switch (selectedFilter2)
+                    {
+                        case 0: FilterFunction.ApplyEdgeDetection(ImageEdge.FilterSobel, imageToProcess, out filteredImage); break;
+                        case 1: FilterFunction.ApplyEdgeDetection(ImageEdge.FilterScharr, imageToProcess, out filteredImage); break;
+                        case 2: FilterFunction.ApplyEdgeDetection(ImageEdge.FilterLaplacian, imageToProcess, out filteredImage); break;
+                        case 3: FilterFunction.ApplyEdgeDetection(ImageEdge.FilterCanny, imageToProcess, out filteredImage); break;
+                    }
+                    break;
+                default:
+                    return originalImage.Clone(); // 필터가 없으면 원본 유지
+            }
+
+            // ROI 적용: 필터링된 이미지를 원본에 반영
+            if (roiRect != null && roiRect.Value.Width > 0 && roiRect.Value.Height > 0)
+            {
+                filteredImage.CopyTo(originalImage[roiRect.Value]);
+                return originalImage;
+            }
+
+            return filteredImage.Clone(); // 전체 이미지 변환 시 반환
+        }
+
+
+
+
+
+
+
         #region 필터 적용 함수
         public static void ApplyImageOperation(ImageOperation operation, Mat src1, string op_value, out Mat resultImage) // 이미지 연산 코드
                                                                                                                          // 아래 코드는 이미지 연산을 수행하는 코드로, 두 이미지를 연산하여 결과를 보여주는 방식
