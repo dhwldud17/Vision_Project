@@ -47,7 +47,7 @@
             // txtDifferenceGV
             // 
             this.txtDifferenceGV.Location = new System.Drawing.Point(209, 56);
-            this.txtDifferenceGV.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtDifferenceGV.Margin = new System.Windows.Forms.Padding(4);
             this.txtDifferenceGV.Name = "txtDifferenceGV";
             this.txtDifferenceGV.Size = new System.Drawing.Size(171, 28);
             this.txtDifferenceGV.TabIndex = 0;
@@ -56,7 +56,7 @@
             // lb_GV
             // 
             this.lb_GV.AutoSize = true;
-            this.lb_GV.Font = new System.Drawing.Font("Gulim", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.lb_GV.Font = new System.Drawing.Font("굴림", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.lb_GV.Location = new System.Drawing.Point(9, 56);
             this.lb_GV.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lb_GV.Name = "lb_GV";
@@ -67,7 +67,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Gulim", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.label2.Font = new System.Drawing.Font("굴림", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.label2.Location = new System.Drawing.Point(33, 112);
             this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
@@ -79,15 +79,16 @@
             // 
             this.cb_Color.FormattingEnabled = true;
             this.cb_Color.Location = new System.Drawing.Point(203, 109);
-            this.cb_Color.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cb_Color.Margin = new System.Windows.Forms.Padding(4);
             this.cb_Color.Name = "cb_Color";
             this.cb_Color.Size = new System.Drawing.Size(171, 26);
             this.cb_Color.TabIndex = 3;
+            this.cb_Color.SelectedIndexChanged += new System.EventHandler(this.cb_Color_SelectedIndexChanged);
             // 
             // lb_Size
             // 
             this.lb_Size.AutoSize = true;
-            this.lb_Size.Font = new System.Drawing.Font("Gulim", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.lb_Size.Font = new System.Drawing.Font("굴림", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.lb_Size.Location = new System.Drawing.Point(43, 217);
             this.lb_Size.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lb_Size.Name = "lb_Size";
@@ -98,7 +99,7 @@
             // txt_SizeX
             // 
             this.txt_SizeX.Location = new System.Drawing.Point(150, 219);
-            this.txt_SizeX.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txt_SizeX.Margin = new System.Windows.Forms.Padding(4);
             this.txt_SizeX.Name = "txt_SizeX";
             this.txt_SizeX.Size = new System.Drawing.Size(84, 28);
             this.txt_SizeX.TabIndex = 5;
@@ -107,7 +108,7 @@
             // txt_SizeY
             // 
             this.txt_SizeY.Location = new System.Drawing.Point(310, 219);
-            this.txt_SizeY.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txt_SizeY.Margin = new System.Windows.Forms.Padding(4);
             this.txt_SizeY.Name = "txt_SizeY";
             this.txt_SizeY.Size = new System.Drawing.Size(90, 28);
             this.txt_SizeY.TabIndex = 6;
@@ -121,7 +122,7 @@
             // lb_SizeX
             // 
             this.lb_SizeX.AutoSize = true;
-            this.lb_SizeX.Font = new System.Drawing.Font("Gulim", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.lb_SizeX.Font = new System.Drawing.Font("굴림", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.lb_SizeX.Location = new System.Drawing.Point(153, 163);
             this.lb_SizeX.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lb_SizeX.Name = "lb_SizeX";
@@ -132,7 +133,7 @@
             // lb_SizeY
             // 
             this.lb_SizeY.AutoSize = true;
-            this.lb_SizeY.Font = new System.Drawing.Font("Gulim", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.lb_SizeY.Font = new System.Drawing.Font("굴림", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.lb_SizeY.Location = new System.Drawing.Point(306, 163);
             this.lb_SizeY.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lb_SizeY.Name = "lb_SizeY";
@@ -152,9 +153,9 @@
             this.groupBox1.Controls.Add(this.lb_Size);
             this.groupBox1.Controls.Add(this.txt_SizeX);
             this.groupBox1.Location = new System.Drawing.Point(21, 24);
-            this.groupBox1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox1.Margin = new System.Windows.Forms.Padding(4);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox1.Padding = new System.Windows.Forms.Padding(4);
             this.groupBox1.Size = new System.Drawing.Size(452, 277);
             this.groupBox1.TabIndex = 10;
             this.groupBox1.TabStop = false;
@@ -164,7 +165,7 @@
             // btnSearch
             // 
             this.btnSearch.Location = new System.Drawing.Point(287, 323);
-            this.btnSearch.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnSearch.Margin = new System.Windows.Forms.Padding(4);
             this.btnSearch.Name = "btnSearch";
             this.btnSearch.Size = new System.Drawing.Size(177, 44);
             this.btnSearch.TabIndex = 11;
@@ -178,7 +179,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.btnSearch);
             this.Controls.Add(this.groupBox1);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "FmInspProp";
             this.Size = new System.Drawing.Size(513, 411);
             this.groupBox1.ResumeLayout(false);
