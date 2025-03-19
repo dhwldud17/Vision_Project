@@ -54,6 +54,15 @@ namespace JidamVision.Property
         FilterLaplacian,          // Laplacian 필터
         FilterCanny               // Canny 엣지 검출
     }
+
+    //모폴로지 연산 추가
+    public enum Mopology
+    {
+        Erode = 0,          // 침식
+        Dilate,             // 팽창
+        Open,               // 열기
+        Close               // 닫기
+    }
     #endregion
     public class FilterFunction
     {
@@ -316,5 +325,27 @@ namespace JidamVision.Property
         }
         #endregion
 
+        //모폴로지 연산 추가
+        public static void ApplyMopology(Mopology operation, Mat src, out Mat resultImage)
+        {
+            Mat dst = new Mat();
+            Mat kernel = Cv2.GetStructuringElement(MorphShapes.Rect, new OpenCvSharp.Size(3, 3));
+            switch (operation)
+            {
+                case Mopology.Erode:
+                    Cv2.Erode(src, dst, kernel);  // 침식
+                    break;
+                case Mopology.Dilate:
+                    Cv2.Dilate(src, dst, kernel);  // 팽창
+                    break;
+                case Mopology.Open:
+                    Cv2.MorphologyEx(src, dst, MorphTypes.Open, kernel);  // 열기
+                    break;
+                case Mopology.Close:
+                    Cv2.MorphologyEx(src, dst, MorphTypes.Close, kernel);  // 닫기
+                    break;
+            }
+            resultImage = dst;
+        }
     }
 }
