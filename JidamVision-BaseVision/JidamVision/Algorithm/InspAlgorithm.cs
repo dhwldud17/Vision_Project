@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 using OpenCvSharp;
 
 namespace JidamVision.Algorithm
@@ -13,7 +14,11 @@ namespace JidamVision.Algorithm
 
     //#MATCH PROP#1 InspAlgorithm 클래스를 추가, 여러 알고리즘을 추상화하기 위함
     //추가 내용은 나중에 개발하고, 현재는 비어 있는 상태로 만들것
-   
+   //#MODEL SAVE#7 Xml Serialize를 위해서, 아래 코드 추가
+    //XmlSerialize는 추상화된 상태를 알수 없어, 상속된 클래스를 명시적으로 포함해야 함.
+    [XmlInclude(typeof(MatchAlgorithm))]
+    [XmlInclude(typeof(BlobAlgorithm))]
+    [XmlInclude(typeof(FmInspAlgorithm))]
     public abstract class InspAlgorithm
     {
         //#ABSTRACT ALGORITHM#1 검사 알고리즘을 추상화하여, 공통된 값이나, 함수 정의

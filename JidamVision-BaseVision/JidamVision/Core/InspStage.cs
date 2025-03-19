@@ -335,5 +335,20 @@ namespace JidamVision.Core
             _camType = SettingXml.Inst.CamType;
         }
 
+
+        //#MODEL SAVE#3 Mainform에서 호출되는 모델 열기와 저장 함수
+        public void LoadModel(string filePath)
+        {
+            _model = _model.Load(filePath);
+            UpdateDiagramEntity();
+        }
+
+        public void SaveModel(string filePath)
+        {
+           
+                Global.Inst.InspStage.CurModel.Save();
+            
+        }
+
     }
 }

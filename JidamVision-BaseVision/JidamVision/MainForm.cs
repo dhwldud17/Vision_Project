@@ -87,7 +87,13 @@ namespace JidamVision
                 Console.WriteLine($"Docked Form: {form.Text}");
             }
         }
-
+        //#MODEL SAVE#4 아래 메뉴 추가 
+        /*
+            Model New : 신규 모델 생성
+            Model Open : 모델 열기
+            Model Save : 모델 저장
+            Model Save As : 모델 다른 이름으로 저장
+         */
         private void loadToolStripMenuItem_Click(object sender, EventArgs e)
         {
             using (OpenFileDialog openFileDialog = new OpenFileDialog())
@@ -131,5 +137,56 @@ namespace JidamVision
             SetupForm setupForm = new SetupForm();
             setupForm.ShowDialog();
         }
+
+        private void modelNewToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //신규 모델 추가를 위한 모델 정보를 받기 위한 창 띄우기
+            NewModel newModel = new NewModel();  //newModle Form 띄움
+            newModel.ShowDialog();
+        }
+
+        private void ModelOpenMenuItem_Click(object sender, EventArgs e)
+        {
+            //모델 파일 열기
+            using (OpenFileDialog openFileDialog = new OpenFileDialog())
+            {
+                openFileDialog.Title = "모델 파일 선택";
+                openFileDialog.Filter = "Model Files|*.xml";
+                openFileDialog.Multiselect = false;
+                openFileDialog.InitialDirectory = SettingXml.Inst.ModelDir;
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    string filePath = openFileDialog.FileName;
+                    Global.Inst.InspStage.LoadModel(filePath);
+                }
+            }
+        }
+        private void ModelSaveMenuItem_Click(object sender, EventArgs e)
+        {
+            //모델 파일 저장
+            Global.Inst.InspStage.SaveModel("");
+
+        }
+
+        private void ModelSaveAsMenuItem_Click(object sender, EventArgs e)
+        {
+            //다른 이름으로 모델 파일 저장
+            using (SaveFileDialog saveFileDialog = new SaveFileDialog())
+            {
+                saveFileDialog.InitialDirectory = SettingXml.Inst.ModelDir;
+                saveFileDialog.Title = "모델 파일 저장";
+                saveFileDialog.Filter = "Model Files|*.xml";
+                saveFileDialog.DefaultExt = "xml";
+
+                if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    string filePath = saveFileDialog.FileName;
+                    Global.Inst.InspStage.SaveModel(filePath);
+                }
+            }
+        }
+
+
+
     }
 }

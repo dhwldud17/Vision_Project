@@ -9,6 +9,7 @@ using JidamVision.Core;
 using System.Security.Policy;
 using System.Drawing;
 using System.IO;
+using System.Xml.Serialization;
 
 namespace JidamVision.Teach
 {
@@ -23,8 +24,9 @@ namespace JidamVision.Teach
         private Mat _teachingImage;
 
         public InspWindowType InspWindowType {  get; private set; }
-
-        public string Name {  get; private set; }
+        //#MODEL SAVE#5 모델 저장을 위한 Serialize를 위해서, prvate set -> set으로 변경
+        //public string Name {  get; private set; }
+        public string Name {  get; set; }
         public string UID { get; set; }
 
         public Rect WindowArea { get; set; }
@@ -32,6 +34,9 @@ namespace JidamVision.Teach
         //#ABSTRACT ALGORITHM#9 개별 변수로 있던, MatchAlgorithm과 BlobAlgorithm을
         //InspAlgorithm으로 추상화하여 리스트로 관리하도록 변경
 
+
+        //#MODEL SAVE#6 Xml Serialize를 위해서, Element을 명확하게 알려줘야 함
+        [XmlElement("InspAlgorithm")]
         public List<InspAlgorithm> AlgorithmList { get; set; } = new List<InspAlgorithm>();
 
         public InspWindow()

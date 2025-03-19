@@ -26,6 +26,9 @@ namespace JidamVision.Setting
         public CameraType CamType { get; set; } = CameraType.WebCam;
 
         public NetworkType NetworkType { get; set; } = NetworkType.WCF;
+
+
+
         public static SettingXml Inst
         {
             get
