@@ -120,7 +120,7 @@ namespace JidamVision.Inspect
                     totalArea.AddRange(resultArea); //찾은 위치를 totalArea에 추가
             }
 
-            if (totalArea.Count > 0) //찾은 위치가 있다면
+            if (totalArea.Count >= 0) //찾은 위치가 있다면
             {   //찾은 위치를 이미지상에서 표시 
                 var cameraForm = MainForm.GetDockForm<CameraForm>(); //CameraForm을 가져옴
                 if (cameraForm != null) //CameraForm이 있다면
