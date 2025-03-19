@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Xml.Serialization;
 using Common.Util.Helpers;
 using System.IO;
+using System.Windows.Forms;
 namespace JidamVision.Teach
 {
     /*
@@ -28,8 +29,9 @@ namespace JidamVision.Teach
 
 
         //#MODEL#1 InspStage에 있던 InspWindowList 위치를 이곳으로 변경
-        public List<InspWindow> InspWindowList {  get; set; } 
-            
+        [XmlElement("InspWindow")]
+        public List<InspWindow> InspWindowList { get; set; }
+
         public Model()
         {
             InspWindowList = new List<InspWindow>();
@@ -47,7 +49,7 @@ namespace JidamVision.Teach
         //#MODEL#5 기존 InspWindow를 삭제할때
         public bool DelInspWindow(InspWindow inspWindow)
         {
-            if(InspWindowList.Contains(inspWindow))
+            if (InspWindowList.Contains(inspWindow))
             {
                 InspWindowList.Remove(inspWindow);
                 return true;
@@ -79,18 +81,30 @@ namespace JidamVision.Teach
         public void Save()
         {
             //모델 저장
+            if (string.IsNullOrWhiteSpace(ModelName))
+            {
+                MessageBox.Show("생성된 모델이 없습니다. 먼저 모델을 생성해주세요.");
+                return;
+            }
             XmlHelper.SaveXml(ModelPath, this);
         }
+
+
+
+
         //모델 다른이름으로 저장함수 
-        public void SaveAs(string filePath)
-        {
-           string fileName = Path.GetFileName(filePath);
-            if(Directory.Exists(filePath) ==false)
-            {
-                ModelPath = Path.Combine(filePath, fileName + ".xml");
-                ModelName = fileName;
-                Save();
-            }
-        }
+        //일단 안쓰고 있음
+        //public void SaveAs(string filePath)
+        //{
+        //    string fileName = Path.GetFileName(filePath);
+        //    if (Directory.Exists(filePath) == false)
+        //    {
+        //        ModelPath = Path.Combine(filePath, fileName + ".xml");
+        //        ModelName = fileName;
+        //        Save();
+        //    }
+
+           
+        //}
     }
 }

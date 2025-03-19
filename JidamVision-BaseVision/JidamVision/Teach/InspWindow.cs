@@ -23,7 +23,7 @@ namespace JidamVision.Teach
         //템플릿 매칭 이미지
         private Mat _teachingImage;
 
-        public InspWindowType InspWindowType {  get; private set; }
+        public InspWindowType InspWindowType {  get;  set; }
         //#MODEL SAVE#5 모델 저장을 위한 Serialize를 위해서, prvate set -> set으로 변경
         //public string Name {  get; private set; }
         public string Name {  get; set; }

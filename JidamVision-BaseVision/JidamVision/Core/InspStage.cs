@@ -343,7 +343,7 @@ namespace JidamVision.Core
             UpdateDiagramEntity();
         }
 
-        public void SaveModel(string filePath)
+        public void SaveModel()
         {
            
                 Global.Inst.InspStage.CurModel.Save();
