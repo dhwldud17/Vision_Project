@@ -35,6 +35,8 @@ namespace JidamVision.Property
         private bool SetAreaRange = false;
     private bool SetHeightRange = false;
     private bool SetWidthRange = false;
+
+        private int _selected_effect = 0;
         public event EventHandler<RangeChangedEventArgs> RangeChanged;
 
         // 속성값을 이용하여 이진화 임계값 설정
@@ -90,6 +92,17 @@ namespace JidamVision.Property
                     txtHeight_max.Text = filterHeightMax.ToString();
                 }
             }
+
+
+            //모폴로지 필터 콤보박스 목록 추가
+
+            FilterFunction._filterMap.TryGetValue("Mopology", out var initialFilterTypes);//"Mopology" 키가 있으면 리스트 값을 가져오고 initialFilterTypes에 저장
+            foreach (var filterType in initialFilterTypes)
+            {
+                cbSetFilter.Items.Add(filterType);
+            }
+
+
         }
 
         //#BINARY FILTER#10 이진화 옵션을 선택할때마다, 이진화 이미지가 갱신되도록 하는 함수
@@ -242,6 +255,47 @@ namespace JidamVision.Property
         {
             txtHeight_min.Visible = ckb_Height.Checked;
             txtHeight_max.Visible = ckb_Height.Checked;
+        }
+
+        private void cbSetFilter_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            _selected_effect = Convert.ToInt32(cbSetFilter.SelectedIndex);// 선택된 인덱스를 저장
+        }
+
+        private void btnSetFilter_Click(object sender, EventArgs e)
+        {
+            InspWindow inspWindow = Global.Inst.InspStage.InspWindow;
+            if (inspWindow is null)
+                return;
+
+            // BlobAlgorithm에서 이진화된 이미지 가져오기
+            BlobAlgorithm blobAlgo = (BlobAlgorithm)inspWindow.FindInspAlgorithm(InspectType.InspBinary);
+            if (blobAlgo is null)
+                return;
+
+
+            if (inputImage.Empty())
+            {
+                MessageBox.Show("이진화된 이미지가 없습니다.");
+                return;
+            }
+
+            //여기서 사용하는 이미지넣고 필터 적용 한 후 내보내게 해야함.
+            Mat filteredImage = FilterFunction.ApplyFilter(inputImage, "Mopology", _selected_effect);
+
+            //여기 아님. preivew에서 뿌리기.
+
+
+
+            // 필터링된 이미지를 BlobAlgorithm에 설정
+            blobAlgo.SetImage(filteredImage);
+
+
+            // 이진화 수행
+            blobAlgo.DoInspect();
+
+            // InspWindow를 새로고침하여 업데이트된 이미지 표시
+            inspWindow.UpdateDisplay();
         }
     }
     //#BINARY FILTER#9 이진화 관련 이벤트 발생시, 전달할 값 추가

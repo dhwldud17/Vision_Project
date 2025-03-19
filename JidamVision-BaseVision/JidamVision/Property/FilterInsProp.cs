@@ -55,20 +55,14 @@ namespace JidamVision.Property
             // 콤보박스를 비운 후, 선택한 카테고리에 맞는 항목을 추가
             select_effect.Items.Clear();
 
-            // 카테고리 값에 맞는 항목이 있으면 해당 항목만 추가
-            if (FilterFunction._filterMap.ContainsKey(category))
-            {
-                select_effect.Items.Add(category);
-            }
-            else
-            {
+           
                 // 카테고리가 없으면 처음 4개의 키만 추가
                 var initialFilterTypes = FilterFunction._filterMap.Keys.Take(4);
                 foreach (var filterType in initialFilterTypes)
                 {
                     select_effect.Items.Add(filterType);
                 }
-            }
+            
         }
 
 

@@ -75,7 +75,7 @@ namespace JidamVision.Property
         { "비트연산(Bitwise)", new List<string> { "AND 연산", "OR 연산", "XOR 연산", "NOT 연산" } },
         { "블러링", new List<string> { "블러 필터", "박스 필터", "미디안 블러", "가우시안 블러", "양방향 필터" } },
         { "Edge", new List<string> { "Sobel 필터", "Scharr 필터", "Laplacian 필터", "Canny 엣지" } },
-
+           {"Mopology", new List<string> { "침식", "팽창", "열기", "닫기" } },
           //각 상황에 맞는 필터목록 추가하기
         {"이진화", new List<string>{"미디안 블러", "가우시안 블러"} },
         {"매칭", new List<string>{ "Sobel 필터", "Scharr 필터", "Laplacian 필터", "Canny 엣지"} }
@@ -128,25 +128,29 @@ namespace JidamVision.Property
                     ImageEdge edge = (ImageEdge)selectedFilter2;
                     FilterFunction.ApplyEdgeDetection(edge, imageToProcess, out filteredImage);
                     break;
-                case "이진화":
-                    if (selectedFilter2 == 0)
-                    {
-                        FilterFunction.ApplyImageFiltering(ImageFilter.FilterMedianBlur, imageToProcess, out filteredImage);
-                    }
-                    else if (selectedFilter2 == 1)
-                    {
-                        FilterFunction.ApplyImageFiltering(ImageFilter.FilterGaussianBlur, imageToProcess, out filteredImage);
-                    }
+                case "모폴로지":
+                    Mopology mopology = (Mopology)selectedFilter2;
+                    FilterFunction.ApplyMopology(mopology, imageToProcess, out filteredImage);
                     break;
-                case "매칭":
-                    switch (selectedFilter2)
-                    {
-                        case 0: FilterFunction.ApplyEdgeDetection(ImageEdge.FilterSobel, imageToProcess, out filteredImage); break;
-                        case 1: FilterFunction.ApplyEdgeDetection(ImageEdge.FilterScharr, imageToProcess, out filteredImage); break;
-                        case 2: FilterFunction.ApplyEdgeDetection(ImageEdge.FilterLaplacian, imageToProcess, out filteredImage); break;
-                        case 3: FilterFunction.ApplyEdgeDetection(ImageEdge.FilterCanny, imageToProcess, out filteredImage); break;
-                    }
-                    break;
+                //case "이진화":
+                //    if (selectedFilter2 == 0)
+                //    {
+                //        FilterFunction.ApplyImageFiltering(ImageFilter.FilterMedianBlur, imageToProcess, out filteredImage);
+                //    }
+                //    else if (selectedFilter2 == 1)
+                //    {
+                //        FilterFunction.ApplyImageFiltering(ImageFilter.FilterGaussianBlur, imageToProcess, out filteredImage);
+                //    }
+                //    break;
+                //case "매칭":
+                //    switch (selectedFilter2)
+                //    {
+                //        case 0: FilterFunction.ApplyEdgeDetection(ImageEdge.FilterSobel, imageToProcess, out filteredImage); break;
+                //        case 1: FilterFunction.ApplyEdgeDetection(ImageEdge.FilterScharr, imageToProcess, out filteredImage); break;
+                //        case 2: FilterFunction.ApplyEdgeDetection(ImageEdge.FilterLaplacian, imageToProcess, out filteredImage); break;
+                //        case 3: FilterFunction.ApplyEdgeDetection(ImageEdge.FilterCanny, imageToProcess, out filteredImage); break;
+                //    }
+                //    break;
                 default:
                     return originalImage.Clone(); // 필터가 없으면 원본 유지
             }

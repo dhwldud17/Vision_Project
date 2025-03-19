@@ -56,10 +56,14 @@
             this.btnFilter = new System.Windows.Forms.Button();
             this.txtArea_min = new System.Windows.Forms.TextBox();
             this.lbArea = new System.Windows.Forms.Label();
+            this.grpSetFilter = new System.Windows.Forms.GroupBox();
+            this.btnSetFilter = new System.Windows.Forms.Button();
+            this.cbSetFilter = new System.Windows.Forms.ComboBox();
             this.grpBinary.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarUpper)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarLower)).BeginInit();
             this.grpFilter.SuspendLayout();
+            this.grpSetFilter.SuspendLayout();
             this.SuspendLayout();
             // 
             // grpBinary
@@ -152,7 +156,7 @@
             this.grpFilter.Controls.Add(this.btnFilter);
             this.grpFilter.Controls.Add(this.txtArea_min);
             this.grpFilter.Controls.Add(this.lbArea);
-            this.grpFilter.Location = new System.Drawing.Point(6, 288);
+            this.grpFilter.Location = new System.Drawing.Point(5, 390);
             this.grpFilter.Margin = new System.Windows.Forms.Padding(4);
             this.grpFilter.Name = "grpFilter";
             this.grpFilter.Padding = new System.Windows.Forms.Padding(4);
@@ -303,21 +307,53 @@
             this.lbArea.Text = "Area";
             this.lbArea.Click += new System.EventHandler(this.lbArea_Click);
             // 
+            // grpSetFilter
+            // 
+            this.grpSetFilter.Controls.Add(this.btnSetFilter);
+            this.grpSetFilter.Controls.Add(this.cbSetFilter);
+            this.grpSetFilter.Location = new System.Drawing.Point(5, 270);
+            this.grpSetFilter.Name = "grpSetFilter";
+            this.grpSetFilter.Size = new System.Drawing.Size(356, 113);
+            this.grpSetFilter.TabIndex = 2;
+            this.grpSetFilter.TabStop = false;
+            this.grpSetFilter.Text = "Mophology 필터";
+            // 
+            // btnSetFilter
+            // 
+            this.btnSetFilter.Location = new System.Drawing.Point(270, 72);
+            this.btnSetFilter.Name = "btnSetFilter";
+            this.btnSetFilter.Size = new System.Drawing.Size(75, 35);
+            this.btnSetFilter.TabIndex = 1;
+            this.btnSetFilter.Text = "적용";
+            this.btnSetFilter.UseVisualStyleBackColor = true;
+            this.btnSetFilter.Click += new System.EventHandler(this.btnSetFilter_Click);
+            // 
+            // cbSetFilter
+            // 
+            this.cbSetFilter.FormattingEnabled = true;
+            this.cbSetFilter.Location = new System.Drawing.Point(58, 27);
+            this.cbSetFilter.Name = "cbSetFilter";
+            this.cbSetFilter.Size = new System.Drawing.Size(248, 26);
+            this.cbSetFilter.TabIndex = 0;
+            this.cbSetFilter.SelectedIndexChanged += new System.EventHandler(this.cbSetFilter_SelectedIndexChanged);
+            // 
             // BinaryInspProp
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.grpSetFilter);
             this.Controls.Add(this.grpFilter);
             this.Controls.Add(this.grpBinary);
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "BinaryInspProp";
-            this.Size = new System.Drawing.Size(387, 572);
+            this.Size = new System.Drawing.Size(387, 739);
             this.grpBinary.ResumeLayout(false);
             this.grpBinary.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarUpper)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarLower)).EndInit();
             this.grpFilter.ResumeLayout(false);
             this.grpFilter.PerformLayout();
+            this.grpSetFilter.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -346,5 +382,8 @@
         private System.Windows.Forms.CheckBox ckb_Width;
         private System.Windows.Forms.CheckBox ckb_Height;
         private System.Windows.Forms.CheckBox ckb_Area;
+        private System.Windows.Forms.GroupBox grpSetFilter;
+        private System.Windows.Forms.Button btnSetFilter;
+        private System.Windows.Forms.ComboBox cbSetFilter;
     }
 }

@@ -44,6 +44,17 @@ namespace JidamVision.Algorithm
             InspectType = InspectType.InspBinary;
         }
 
+
+        public void SetImage(Mat newImage)
+        {
+            if (newImage is null || newImage.Empty())
+                return;
+
+            _srcImage = newImage.Clone(); // 새로운 이미지로 업데이트
+        }
+
+
+
         //#BINARY FILTER#2 이진화 후, 필터를 이용해 원하는 영역을 얻음 
 
         //#ABSTRACT ALGORITHM#6 
@@ -68,6 +79,12 @@ namespace JidamVision.Algorithm
 
             if (BinThreshold.invert)
                 binaryImage = ~binaryImage;
+
+
+            //실제 필터 구현  //버튼 사용X   //버튼 사용해서 나오는 결과는 검사에 사용하는 이미지가 아니라 우리한테 보여줄려는 이미지를 그때 만들어서 보여주는거임. 따로!!!!
+            //버튼 사용해서 나오는건 preview에 뿌리면됨
+
+
 
             if (FilterAreaMin > 0)
             {
