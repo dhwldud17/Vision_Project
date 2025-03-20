@@ -18,7 +18,7 @@ namespace JidamVision.Property
     #BINARY FILTER# - <<<이진화 검사 개발>>> 
     입력된 lower, upper 임계값을 이용해, 영상을 이진화한 후, Filter(area)등을 이용해, 원하는 영역을 찾는다.
      */
-    
+
 
     //#BINARY FILTER#7 이진화 하이라이트, 이외에, 이진화 이미지를 보기 위한 옵션
     public enum ShowBinaryMode
@@ -31,16 +31,16 @@ namespace JidamVision.Property
 
     public partial class BinaryInspProp : UserControl
     {
-        
+
         private bool SetAreaRange = false;
-    private bool SetHeightRange = false;
-    private bool SetWidthRange = false;
+        private bool SetHeightRange = false;
+        private bool SetWidthRange = false;
 
         private int _selected_effect = 0;
         public event EventHandler<RangeChangedEventArgs> RangeChanged;
 
         // 속성값을 이용하여 이진화 임계값 설정
-        
+
         public int LowerValue => trackBarLower.Value; //trackBarLower의 Value값을 가져옴
         public int UpperValue => trackBarUpper.Value; //trackBarUpper의 Value값을 가져옴
         public BinaryInspProp()
@@ -65,7 +65,7 @@ namespace JidamVision.Property
             trackBarUpper.ValueChanged += OnValueChanged; //trackBarUpper의 ValueChanged 이벤트가 발생하면 OnValueChanged 함수 실행
 
             trackBarLower.Value = 0; //trackBarLower의 Value값을 0으로 초기화
-            trackBarUpper.Value =128; //trackBarUpper의 Value값을 128
+            trackBarUpper.Value = 128; //trackBarUpper의 Value값을 128
 
             //#BINARY FILTER#8 이진화 검사 속성값을 GUI에 설정
             InspWindow inspWindow = Global.Inst.InspStage.InspWindow;
@@ -183,7 +183,7 @@ namespace JidamVision.Property
                 blobAlgo.FilterAreaMax = int.Parse(txtArea_max.Text);
             }
             else
-            {   
+            {
                 blobAlgo.SetArea = false;
                 blobAlgo.FilterAreaMin = 1;
                 blobAlgo.FilterAreaMax = 5000000;
@@ -193,7 +193,7 @@ namespace JidamVision.Property
             {
                 blobAlgo.SetHeight = true;
                 blobAlgo.FilterHeightMin = int.Parse(txtHeight_min.Text);
-                blobAlgo.FilterHeightMax= int.Parse(txtHeight_max.Text);
+                blobAlgo.FilterHeightMax = int.Parse(txtHeight_max.Text);
             }
             else
             {
@@ -239,14 +239,14 @@ namespace JidamVision.Property
         private void ckb_Area_CheckedChanged(object sender, EventArgs e)
         {
             //Area 값 조절할수있도록.
-          
+
             txtArea_min.Visible = ckb_Area.Checked;
             txtArea_max.Visible = ckb_Area.Checked;
         }
 
         private void ckb_Width_CheckedChanged(object sender, EventArgs e)
         {
-            
+
             txtWidth_min.Visible = ckb_Width.Checked;
             txtWidth_max.Visible = ckb_Width.Checked;
         }
@@ -274,46 +274,46 @@ namespace JidamVision.Property
                 return;
 
 
-            if (inputImage.Empty())
-            {
-                MessageBox.Show("이진화된 이미지가 없습니다.");
-                return;
-            }
+            //if (inputImage.Empty())
+            //{
+            //    MessageBox.Show("이진화된 이미지가 없습니다.");
+            //    return;
+            //}
 
-            //여기서 사용하는 이미지넣고 필터 적용 한 후 내보내게 해야함.
-            Mat filteredImage = FilterFunction.ApplyFilter(inputImage, "Mopology", _selected_effect);
+            ////여기서 사용하는 이미지넣고 필터 적용 한 후 내보내게 해야함.
+            //Mat filteredImage = FilterFunction.ApplyFilter(inputImage, "Mopology", _selected_effect);
 
             //여기 아님. preivew에서 뿌리기.
 
 
 
             // 필터링된 이미지를 BlobAlgorithm에 설정
-            blobAlgo.SetImage(filteredImage);
+          //  blobAlgo.SetImage(filteredImage);
 
 
             // 이진화 수행
             blobAlgo.DoInspect();
 
             // InspWindow를 새로고침하여 업데이트된 이미지 표시
-            inspWindow.UpdateDisplay();
+         //   inspWindow.UpdateDisplay();
         }
     }
     //#BINARY FILTER#9 이진화 관련 이벤트 발생시, 전달할 값 추가
     public class RangeChangedEventArgs : EventArgs //RangeChanged 이벤트를 위한 클래스
+    {
+        public int LowerValue { get; }
+        public int UpperValue { get; }
+        public bool Invert { get; }
+        public ShowBinaryMode ShowBinMode { get; }
+
+        public RangeChangedEventArgs(int lowerValue, int upperValue, bool invert, ShowBinaryMode showBinaryMode)
         {
-            public int LowerValue { get; }
-            public int UpperValue { get; }
-            public bool Invert { get; }
-            public ShowBinaryMode ShowBinMode { get; }
 
-            public RangeChangedEventArgs(int lowerValue, int upperValue, bool invert, ShowBinaryMode showBinaryMode)
-            {
-
-                LowerValue = lowerValue;
-                UpperValue = upperValue;
-                Invert = invert;
-                ShowBinMode = showBinaryMode;
-            }
+            LowerValue = lowerValue;
+            UpperValue = upperValue;
+            Invert = invert;
+            ShowBinMode = showBinaryMode;
         }
     }
+}
 

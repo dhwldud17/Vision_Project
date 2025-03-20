@@ -30,8 +30,12 @@
       "DocumentGroups": [
         {
           "DockedWidth": 171,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 2,
           "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:129:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
             {
               "$type": "Document",
               "DocumentIndex": 1,
@@ -42,8 +46,7 @@
               "RelativeToolTip": "JidamVision-BaseVision\\JidamVision\\MainForm.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-06T01:52:23.589Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-06T01:52:23.589Z"
             },
             {
               "$type": "Document",
@@ -68,8 +71,7 @@
               "RelativeToolTip": "JidamVision-BaseVision\\JidamVision\\CameraForm.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-06T01:52:05.992Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-06T01:52:05.992Z"
             },
             {
               "$type": "Document",
@@ -81,8 +83,7 @@
               "RelativeToolTip": "JidamVision-BaseVision\\JidamVision\\Core\\InspStage.cs",
               "ViewState": "AgIAABUAAAAAAAAAAAAAAB4AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-28T06:59:45.467Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-02-28T06:59:45.467Z"
             },
             {
               "$type": "Document",
@@ -94,8 +95,7 @@
               "RelativeToolTip": "JidamVision-BaseVision\\JidamVision\\Grab\\WebCam.cs",
               "ViewState": "AgIAABIAAAAAAAAAAAAAAMUAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-28T06:59:28.054Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-02-28T06:59:28.054Z"
             }
           ]
         }
