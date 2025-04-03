@@ -14,6 +14,8 @@ namespace JidamVision
         [STAThread]
         static void Main()
         {
+            //#LOGFORM#2 log4net 설정 파일을 읽어들임
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new MainForm());

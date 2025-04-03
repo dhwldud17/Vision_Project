@@ -28,32 +28,35 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.listBoxLogs = new System.Windows.Forms.ListBox();
             this.SuspendLayout();
             // 
-            // textBox1
+            // listBoxLogs
             // 
-            this.textBox1.Location = new System.Drawing.Point(51, 30);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(188, 21);
-            this.textBox1.TabIndex = 0;
+            this.listBoxLogs.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.listBoxLogs.FormattingEnabled = true;
+            this.listBoxLogs.ItemHeight = 18;
+            this.listBoxLogs.Location = new System.Drawing.Point(0, 0);
+            this.listBoxLogs.Name = "listBoxLogs";
+            this.listBoxLogs.Size = new System.Drawing.Size(492, 386);
+            this.listBoxLogs.TabIndex = 1;
             // 
             // LogForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.textBox1);
+            this.ClientSize = new System.Drawing.Size(492, 386);
+            this.Controls.Add(this.listBoxLogs);
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "LogForm";
             this.TabText = "LogForm";
             this.Text = "LogForm";
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
         #endregion
 
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.ListBox listBoxLogs;
     }
 }
